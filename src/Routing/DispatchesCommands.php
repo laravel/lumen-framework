@@ -4,7 +4,6 @@ use ArrayAccess;
 
 trait DispatchesCommands
 {
-
     /**
      * Dispatch a command to its appropriate handler.
      *

@@ -7,7 +7,6 @@ use Illuminate\Http\Exception\HttpResponseException;
 
 trait ValidatesRequests
 {
-
     /**
      * Validate the given request with the given rules.
      *
@@ -16,7 +15,7 @@ trait ValidatesRequests
      * @param  array  $messages
      * @return void
      */
-    public function validate(Request $request, array $rules, array $messages = array())
+    public function validate(Request $request, array $rules, array $messages = [])
     {
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages);
 

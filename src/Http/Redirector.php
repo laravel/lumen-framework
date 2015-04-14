@@ -5,7 +5,6 @@ use Illuminate\Http\RedirectResponse;
 
 class Redirector
 {
-
     /**
      * The application instance.
      *
@@ -33,9 +32,9 @@ class Redirector
      * @param  bool    $secure
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function to($path, $status = 302, $headers = array(), $secure = null)
+    public function to($path, $status = 302, $headers = [], $secure = null)
     {
-        $path = $this->app->make('url')->to($path, array(), $secure);
+        $path = $this->app->make('url')->to($path, [], $secure);
 
         return $this->createRedirect($path, $status, $headers);
     }
@@ -49,7 +48,7 @@ class Redirector
      * @param  array   $headers
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function route($route, $parameters = array(), $status = 302, $headers = array())
+    public function route($route, $parameters = [], $status = 302, $headers = [])
     {
         $path = $this->app->make('url')->route($route, $parameters);
 
@@ -63,7 +62,7 @@ class Redirector
      * @param  array  $headers
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function back($status = 302, $headers = array())
+    public function back($status = 302, $headers = [])
     {
         $referrer = $this->app->make('request')
                                 ->headers->get('referer');

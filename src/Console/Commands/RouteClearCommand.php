@@ -4,7 +4,6 @@ use Illuminate\Console\Command;
 
 class RouteClearCommand extends Command
 {
-
     /**
      * The console command name.
      *
