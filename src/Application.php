@@ -69,13 +69,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $resourcePath;
 
     /**
-     * The container instance.
-     *
-     * @var Container
-     */
-    public $container;
-
-    /**
      * All of the loaded configuration files.
      *
      * @var array
