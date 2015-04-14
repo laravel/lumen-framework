@@ -753,6 +753,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         if (! static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
+            class_alias('Illuminate\Support\Facades\App', 'App');
             class_alias('Illuminate\Support\Facades\Auth', 'Auth');
             class_alias('Illuminate\Support\Facades\Bus', 'Bus');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
