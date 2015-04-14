@@ -151,8 +151,8 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->group(['namespace' => ''], function ($app) {
-            $app->get('/', 'Laravel\Lumen\Tests\TestController@action');
+        $app->group(['namespace' => 'Laravel\Lumen\Tests'], function ($app) {
+            $app->get('/', 'TestController@action');
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
