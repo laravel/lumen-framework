@@ -33,7 +33,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestMiddleware']);
+        $app->middleware(['Laravel\Lumen\Tests\LumenTestMiddleware']);
 
         $app->get('/', function () {
             return response('Hello World');
@@ -41,7 +41,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $response = $app->handle(Request::create('/', 'GET'));
 
-        var_dump($response->getContent());
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Middleware', $response->getContent());
     }
@@ -51,7 +50,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
+        $app->routeMiddleware(['foo' => 'Laravel\Lumen\Tests\LumenTestMiddleware']);
 
         $app->get('/', function () {
             return response('Hello World');
@@ -75,7 +74,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
+        $app->routeMiddleware(['foo' => 'Laravel\Lumen\Tests\LumenTestMiddleware']);
 
         $app->group(['middleware' => 'foo'], function ($app) {
             $app->get('/', function () {
@@ -139,12 +138,12 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', 'LumenTestController@action');
+        $app->get('/', 'Laravel\Lumen\Tests\LumenTestController@action');
 
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('LumenTestController', $response->getContent());
+        $this->assertEquals('Laravel\Lumen\Tests\LumenTestController', $response->getContent());
     }
 
 
@@ -152,16 +151,14 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-//        require_once __DIR__.'/fixtures/TestController.php';
-
-        $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
-            $app->get('/', 'TestController@action');
+        $app->group(['namespace' => ''], function ($app) {
+            $app->get('/', 'Laravel\Lumen\Tests\TestController@action');
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
+        $this->assertEquals('Laravel\Lumen\Tests\TestController', $response->getContent());
     }
 
 
