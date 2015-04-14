@@ -54,7 +54,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Laravel\\Lumen\\": "src/"
+            "Laravel\\Lumen\\": "src/",
+            "Laravel\\Lumen\\Tests\\": "tests/"
         },
         "classmap": [
             "src/Foundation"
