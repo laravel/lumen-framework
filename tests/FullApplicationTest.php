@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
 use PHPUnit_Framework_TestCase;
 
-class ExampleTest extends PHPUnit_Framework_TestCase
+class FullApplicationTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
