@@ -172,7 +172,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.0)';
+        return 'Lumen (5.0.*)';
     }
 
     /**
