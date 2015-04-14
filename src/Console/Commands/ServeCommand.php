@@ -3,7 +3,8 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
-class ServeCommand extends Command {
+class ServeCommand extends Command
+{
 
     /**
      * The console command name.
@@ -52,5 +53,4 @@ class ServeCommand extends Command {
             array('port', null, InputOption::VALUE_OPTIONAL, 'The port to serve the application on.', 8000),
         );
     }
-
 }
