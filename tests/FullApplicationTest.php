@@ -1,10 +1,12 @@
 <?php
+namespace Laravel\Lumen\Tests;
 
 use Mockery as m;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
+use PHPUnit_Framework_TestCase;
 
-class ExampleTest extends PHPUnit_Framework_TestCase
+class FullApplicationTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
@@ -31,7 +33,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestMiddleware']);
+        $app->middleware(['Laravel\Lumen\Tests\LumenTestMiddleware']);
 
         $app->get('/', function () {
             return response('Hello World');
@@ -48,13 +50,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
+        $app->routeMiddleware(['foo' => 'Laravel\Lumen\Tests\LumenTestMiddleware']);
 
         $app->get('/', function () {
             return response('Hello World');
         });
 
-        $app->get('/foo', ['middleware' => 'foo', function() {
+        $app->get('/foo', ['middleware' => 'foo', function () {
             return response('Hello World');
         }]);
 
@@ -72,15 +74,15 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
+        $app->routeMiddleware(['foo' => 'Laravel\Lumen\Tests\LumenTestMiddleware']);
 
-        $app->group(['middleware' => 'foo'], function($app) {
+        $app->group(['middleware' => 'foo'], function ($app) {
             $app->get('/', function () {
                 return response('Hello World');
             });
         });
 
-        $app->get('/foo', function() {
+        $app->get('/foo', function () {
             return response('Hello World');
         });
 
@@ -97,7 +99,10 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     public function testNotFoundResponse()
     {
         $app = new Application;
-        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(
+            'Illuminate\Contracts\Debug\ExceptionHandler',
+            $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]')
+        );
         $mock->shouldIgnoreMissing();
 
         $app->get('/', function () {
@@ -113,7 +118,10 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     public function testMethodNotAllowedResponse()
     {
         $app = new Application;
-        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(
+            'Illuminate\Contracts\Debug\ExceptionHandler',
+            $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]')
+        );
         $mock->shouldIgnoreMissing();
 
         $app->post('/', function () {
@@ -130,12 +138,12 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', 'LumenTestController@action');
+        $app->get('/', 'Laravel\Lumen\Tests\LumenTestController@action');
 
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('LumenTestController', $response->getContent());
+        $this->assertEquals('Laravel\Lumen\Tests\LumenTestController', $response->getContent());
     }
 
 
@@ -143,16 +151,14 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        require_once __DIR__.'/fixtures/TestController.php';
-
-        $app->group(['namespace' => 'Lumen\Tests'], function($app) {
+        $app->group(['namespace' => 'Laravel\Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
+        $this->assertEquals('Laravel\Lumen\Tests\TestController', $response->getContent());
     }
 
 
@@ -162,11 +168,11 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
@@ -182,15 +188,15 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
             //
         }]);
 
@@ -198,23 +204,5 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
-    }
-}
-
-class LumenTestService {}
-
-class LumenTestMiddleware {
-    public function handle($request, $next) {
-          return response('Middleware');
-    }
-}
-
-class LumenTestController {
-    public $service;
-    public function __construct(LumenTestService $service) {
-        $this->service = $service;
-    }
-    public function action() {
-        return response(__CLASS__);
     }
 }
