@@ -40,7 +40,7 @@
         "monolog/monolog": "~1.0",
         "mtdowling/cron-expression": "~1.0",
         "nikic/fast-route": "0.4.*",
-        "symfony/http-kernel": "2.6.*",
+        "symfony/http-kernel": "2.7.*",
         "symfony/http-foundation": "2.7.*",
         "symfony/security-core": "2.7.*",
         "symfony/var-dumper": "2.7.*"
@@ -67,5 +67,7 @@
         "branch-alias": {
             "dev-master": "5.1-dev"
         }
-    }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
