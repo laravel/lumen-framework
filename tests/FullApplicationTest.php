@@ -54,7 +54,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             return response('Hello World');
         });
 
-        $app->get('/foo', ['middleware' => 'foo', function() {
+        $app->get('/foo', ['middleware' => 'foo', function () {
             return response('Hello World');
         }]);
 
@@ -74,13 +74,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
 
-        $app->group(['middleware' => 'foo'], function($app) {
+        $app->group(['middleware' => 'foo'], function ($app) {
             $app->get('/', function () {
                 return response('Hello World');
             });
         });
 
-        $app->get('/foo', function() {
+        $app->get('/foo', function () {
             return response('Hello World');
         });
 
@@ -145,7 +145,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         require_once __DIR__.'/fixtures/TestController.php';
 
-        $app->group(['namespace' => 'Lumen\Tests'], function($app) {
+        $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
         });
 
@@ -162,11 +162,11 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
@@ -182,15 +182,15 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
             //
         }]);
 
@@ -201,20 +201,27 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 }
 
-class LumenTestService {}
+class LumenTestService
+{
+}
 
-class LumenTestMiddleware {
-    public function handle($request, $next) {
-          return response('Middleware');
+class LumenTestMiddleware
+{
+    public function handle($request, $next)
+    {
+        return response('Middleware');
     }
 }
 
-class LumenTestController {
+class LumenTestController
+{
     public $service;
-    public function __construct(LumenTestService $service) {
+    public function __construct(LumenTestService $service)
+    {
         $this->service = $service;
     }
-    public function action() {
+    public function action()
+    {
         return response(__CLASS__);
     }
 }

@@ -35,9 +35,7 @@ class RouteCacheCommand extends Command
             return $this->error("Your application doesn't have any routes.");
         }
 
-        file_put_contents(
-            $this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes)
-        );
+        file_put_contents($this->laravel->getCachedRoutesPath(), $this->buildRouteCacheFile($routes));
 
         $this->info('Routes cached successfully!');
     }

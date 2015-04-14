@@ -70,8 +70,15 @@ trait ApplicationTrait
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
-    public function callSecure($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-    {
+    public function callSecure(
+        $method,
+        $uri,
+        $parameters = [],
+        $cookies = [],
+        $files = [],
+        $server = [],
+        $content = null
+    ) {
         $uri = 'https://localhost/'.ltrim($uri, '/');
 
         return $this->response = $this->call($method, $uri, $parameters, $cookies, $files, $server, $content);
@@ -90,8 +97,16 @@ trait ApplicationTrait
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
-    public function route($method, $name, $routeParameters = [], $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-    {
+    public function route(
+        $method,
+        $name,
+        $routeParameters = [],
+        $parameters = [],
+        $cookies = [],
+        $files = [],
+        $server = [],
+        $content = null
+    ) {
         $uri = $this->app['url']->route($name, $routeParameters);
 
         return $this->response = $this->call($method, $uri, $parameters, $cookies, $files, $server, $content);
