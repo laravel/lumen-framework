@@ -164,6 +164,7 @@ class Kernel implements KernelContract
                 'Illuminate\Console\Scheduling\ScheduleRunCommand',
                 'Laravel\Lumen\Console\Commands\MakeCommand',
                 'Laravel\Lumen\Console\Commands\ServeCommand',
+                'Laravel\Lumen\Console\Commands\KeyGenerateCommand',
             ]);
         } else {
             return $this->commands;
