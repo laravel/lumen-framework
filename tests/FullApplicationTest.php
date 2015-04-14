@@ -199,9 +199,21 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
     }
+    
+    public function testRegisterServiceProvider()
+    {
+        $app = new Application;
+        $provider = new LumenTestServiceProvider($app);
+        $app->register($provider);
+    }
 }
 
 class LumenTestService {}
+
+class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider 
+{
+    public function register() {}
+}
 
 class LumenTestMiddleware {
     public function handle($request, $next) {

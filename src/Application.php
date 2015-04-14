@@ -209,19 +209,20 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function register($provider, $options = array(), $force = false)
     {
-        if (array_key_exists($provider, $this->loadedProviders)) {
+        if (!$provider instanceof \Illuminate\Support\ServiceProvider) {
+            $provider = new $provider($this);
+        }
+        
+        $class = new \ReflectionClass($provider);
+        $name = $class->getName();
+        if (array_key_exists($name, $this->loadedProviders)) {
             return;
         }
 
-        $this->loadedProviders[$provider] = true;
-
-        $provider = new $provider($this);
+        $this->loadedProviders[$name] = true;
 
         $provider->register();
-
-        if (method_exists($provider, 'boot')) {
-            $provider->boot();
-        }
+        $provider->boot();
     }
 
     /**
