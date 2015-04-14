@@ -1052,13 +1052,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function dispatch($request = null)
     {
-        if ($request) {
-            $method = $request->getMethod();
-            $pathInfo = $request->getPathInfo();
-        } else {
-            $method = $this->getMethod();
-            $pathInfo = $this->getPathInfo();
+        if ($request === null) {
+            $request = $this->make('request');
         }
+        $method = $request->getMethod();
+        $pathInfo = $request->getPathInfo();
 
         try {
             if (isset($this->routes[$method.$pathInfo])) {
@@ -1307,32 +1305,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         return $response;
-    }
-
-    /**
-     * Get the current HTTP request method.
-     *
-     * @return string
-     */
-    protected function getMethod()
-    {
-        if (isset($_POST['_method'])) {
-            return strtoupper($_POST['_method']);
-        } else {
-            return $_SERVER['REQUEST_METHOD'];
-        }
-    }
-
-    /**
-     * Get the current HTTP path info.
-     *
-     * @return string
-     */
-    public function getPathInfo()
-    {
-        $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
-
-        return '/'.ltrim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
     }
 
     /**
