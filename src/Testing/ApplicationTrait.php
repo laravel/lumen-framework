@@ -5,7 +5,6 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 trait ApplicationTrait
 {
-
     /**
      * The application instance.
      *

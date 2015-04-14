@@ -47,7 +47,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "~0.9"
+        "mockery/mockery": "~0.9",
+        "fabpot/php-cs-fixer": "~1.6"
     },
     "suggest": {
         "vlucas/phpdotenv": "Required to use .env files (~1.0)."

@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Util\StringUtils;
 
 class VerifyCsrfToken implements Middleware
 {
-
     /**
      * The encrypter implementation.
      *

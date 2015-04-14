@@ -7,7 +7,6 @@ use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 class Handler implements ExceptionHandler
 {
-
     /**
      * A list of the exception types that should not be reported.
      *

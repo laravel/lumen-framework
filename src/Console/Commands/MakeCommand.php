@@ -5,7 +5,6 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class MakeCommand extends Command
 {
-
     /**
      * The console command name.
      *
@@ -139,8 +138,8 @@ class MakeCommand extends Command
      */
     protected function getArguments()
     {
-        return array(
-            array('name', InputArgument::REQUIRED, 'The section of the application to scaffold'),
-        );
+        return [
+            ['name', InputArgument::REQUIRED, 'The section of the application to scaffold'],
+        ];
     }
 }

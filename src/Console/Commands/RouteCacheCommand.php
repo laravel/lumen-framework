@@ -5,7 +5,6 @@ use Illuminate\Routing\RouteCollection;
 
 class RouteCacheCommand extends Command
 {
-
     /**
      * The console command name.
      *
