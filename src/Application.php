@@ -370,7 +370,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         });
 
         $this->singleton('auth.password', function () {
-            return $this->loadComponent('auth', 'Illuminate\Auth\Passwords\PasswordResetServiceProvider', 'auth.password');
+            return $this->loadComponent(
+                'auth',
+                'Illuminate\Auth\Passwords\PasswordResetServiceProvider',
+                'auth.password'
+            );
         });
     }
 
@@ -445,9 +449,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->singleton('db', function () {
             return $this->loadComponent(
-                'database', [
-                    'Illuminate\Database\DatabaseServiceProvider',
-                    'Illuminate\Pagination\PaginationServiceProvider'],
+                'database',
+                ['Illuminate\Database\DatabaseServiceProvider', 'Illuminate\Pagination\PaginationServiceProvider'],
                 'db'
             );
         });
@@ -487,9 +490,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected function registerErrorBindings()
     {
         if (! $this->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
-            $this->singleton(
-                'Illuminate\Contracts\Debug\ExceptionHandler', 'Laravel\Lumen\Exceptions\Handler'
-            );
+            $this->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'Laravel\Lumen\Exceptions\Handler');
         }
     }
 
@@ -1030,9 +1031,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $instance = $this->make($middleware);
 
             if ($instance instanceof TerminableMiddleware) {
-                $instance->terminate(
-                    $this->make('request'), $response
-                );
+                $instance->terminate($this->make('request'), $response);
             }
         }
     }
@@ -1188,9 +1187,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         if ($instance instanceof Routing\Controller) {
             return $this->callLumenController($instance, $method, $routeInfo);
         } else {
-            return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
-            );
+            return $this->callControllerCallable([$instance, $method], array_values($routeInfo[2]));
         }
     }
 
@@ -1204,18 +1201,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function callLumenController($instance, $method, $routeInfo)
     {
-        $middleware = $instance->getMiddlewareForMethod(
-            $this->make('request'), $method
-        );
+        $middleware = $instance->getMiddlewareForMethod($this->make('request'), $method);
 
         if (count($middleware) > 0) {
-            return $this->callLumenControllerWithMiddleware(
-                $instance, $method, $routeInfo, $middleware
-            );
+            return $this->callLumenControllerWithMiddleware($instance, $method, $routeInfo, $middleware);
         } else {
-            return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
-            );
+            return $this->callControllerCallable([$instance, $method], array_values($routeInfo[2]));
         }
     }
 
@@ -1233,9 +1224,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $middleware = $this->gatherMiddlewareClassNames($middleware);
 
         return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
-            return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
-            );
+            return $this->callControllerCallable([$instance, $method], array_values($routeInfo[2]));
         });
     }
 
