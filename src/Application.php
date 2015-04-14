@@ -8,8 +8,8 @@ use RuntimeException;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use InvalidArgumentException;
 use Illuminate\Http\Response;
+use InvalidArgumentException;
 use Illuminate\Pipeline\Pipeline;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
@@ -172,7 +172,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.0)';
+        return 'Lumen (5.0.0) (Laravel Components 5.0.*)';
     }
 
     /**
@@ -753,6 +753,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         if (! static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
+            class_alias('Illuminate\Support\Facades\App', 'App');
             class_alias('Illuminate\Support\Facades\Auth', 'Auth');
             class_alias('Illuminate\Support\Facades\Bus', 'Bus');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
@@ -1557,4 +1558,61 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
     ];
+
+    /**
+     * Get the HTML from the Lumen welcome screen.
+     *
+     * @return string
+     */
+    public function welcome()
+    {
+        return "<html>
+            <head>
+                <title>Lumen</title>
+
+                <link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        width: 100%;
+                        height: 100%;
+                        color: #B0BEC5;
+                        display: table;
+                        font-weight: 100;
+                        font-family: 'Lato';
+                    }
+
+                    .container {
+                        text-align: center;
+                        display: table-cell;
+                        vertical-align: middle;
+                    }
+
+                    .content {
+                        text-align: center;
+                        display: inline-block;
+                    }
+
+                    .title {
+                        font-size: 96px;
+                        margin-bottom: 40px;
+                    }
+
+                    .quote {
+                        font-size: 24px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class=\"container\">
+                    <div class=\"content\">
+                        <div class=\"title\">Lumen.</div>
+                    </div>
+                </div>
+            </body>
+        </html>
+        ";
+    }
 }
