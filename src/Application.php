@@ -29,6 +29,8 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use ReflectionClass;
+use Illuminate\Support\ServiceProvider;
 
 class Application extends Container implements ApplicationContract, HttpKernelInterface
 {
@@ -209,11 +211,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function register($provider, $options = array(), $force = false)
     {
-        if (!$provider instanceof \Illuminate\Support\ServiceProvider) {
+        if (!$provider instanceof ServiceProvider) {
             $provider = new $provider($this);
         }
         
-        $class = new \ReflectionClass($provider);
+        $class = new ReflectionClass($provider);
         $name = $class->getName();
         if (array_key_exists($name, $this->loadedProviders)) {
             return;
