@@ -159,7 +159,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     public function testGeneratingUrls()
     {
         $app = new Application;
-        $app->instance('request', Request::create('http://lumen.com', 'GET'));
+        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
         $app->get('/foo-bar', ['as' => 'foo', function() {
@@ -170,16 +170,16 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             //
         }]);
 
-        $this->assertEquals('http://lumen.com/something', url('something'));
-        $this->assertEquals('http://lumen.com/foo-bar', route('foo'));
-        $this->assertEquals('http://lumen.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/something', url('something'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
     }
 
 
     public function testGeneratingUrlsForRegexParameters()
     {
         $app = new Application;
-        $app->instance('request', Request::create('http://lumen.com', 'GET'));
+        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
         $app->get('/foo-bar', ['as' => 'foo', function() {
@@ -194,10 +194,10 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             //
         }]);
 
-        $this->assertEquals('http://lumen.com/something', url('something'));
-        $this->assertEquals('http://lumen.com/foo-bar', route('foo'));
-        $this->assertEquals('http://lumen.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/something', url('something'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
     }
 }
 
