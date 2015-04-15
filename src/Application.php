@@ -1045,13 +1045,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function dispatch($request = null)
     {
-        if ($request) {
-            $method = $request->getMethod();
-            $pathInfo = $request->getPathInfo();
-        } else {
-            $method = $this->getMethod();
-            $pathInfo = $this->getPathInfo();
+        
+        if (!$request) {
+            $request = app('request');
         }
+        
+        $method = $request->getMethod();
+        $pathInfo = $request->getPathInfo();
 
         try {
             if (isset($this->routes[$method.$pathInfo])) {
