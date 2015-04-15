@@ -17,6 +17,7 @@ use Illuminate\Foundation\Composer;
 use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
@@ -29,8 +30,6 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use ReflectionClass;
-use Illuminate\Support\ServiceProvider;
 
 class Application extends Container implements ApplicationContract, HttpKernelInterface
 {
@@ -214,14 +213,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         if (!$provider instanceof ServiceProvider) {
             $provider = new $provider($this);
         }
-        
-        $class = new ReflectionClass($provider);
-        $name = $class->getName();
-        if (array_key_exists($name, $this->loadedProviders)) {
+
+        if (array_key_exists($providerName = get_class($provider), $this->loadedProviders)) {
             return;
         }
 
-        $this->loadedProviders[$name] = true;
+        $this->loadedProviders[$providerName] = true;
 
         $provider->register();
         $provider->boot();
