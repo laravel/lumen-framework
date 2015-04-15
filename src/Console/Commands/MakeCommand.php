@@ -140,7 +140,7 @@ class MakeCommand extends Command
     protected function getArguments()
     {
         return array(
-            array('name', InputArgument::REQUIRED, 'The section of the application to scaffold'),
+            array('name', InputArgument::REQUIRED, 'The section of the application to scaffold. Available values: foundation, database, lang, resources, views'),
         );
     }
 }
