@@ -29,7 +29,7 @@ class KeyGenerateCommand extends Command {
 	{
 		$key = $this->getRandomKey();
 
-		if($this->confirm('You have uncomment Dotenv::load in boostrap/app.php? [yes|no]')) {
+		if($this->confirm('Have you uncommented Dotenv::load in bootstrap/app.php? [yes|no]')) {
 			if ($this->option('show')) {
 				return $this->line('<comment>'.$key.'</comment>');
 			}
