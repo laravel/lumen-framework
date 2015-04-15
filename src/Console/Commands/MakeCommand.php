@@ -18,7 +18,7 @@ class MakeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Scaffold various parts of your application';
+    protected $description = 'Scaffold various parts of your application. Available options: foundation, database, lang, resources, views.';
 
     /**
      * Execute the console command.
