@@ -1519,7 +1519,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
         'config' => 'registerConfigBindings',
         'composer' => 'registerComposerBindings',
-        'config' => 'registerConfigBindings',
         'cookie' => 'registerCookieBindings',
         'Illuminate\Contracts\Cookie\Factory' => 'registerCookieBindings',
         'Illuminate\Contracts\Cookie\QueueingFactory' => 'registerCookieBindings',
