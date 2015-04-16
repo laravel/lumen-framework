@@ -1,5 +1,6 @@
 <?php namespace Laravel\Lumen\Http;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Support\Arrayable;
