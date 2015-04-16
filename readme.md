@@ -1,7 +1,7 @@
 ## Lumen Framework (Kernel)
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![HHVM Status](https://img.shields.io/hhvm/symfony/symfony.svg?style=plastic)](http://hhvm.h4cc.de/package/laravel/lumen-framework)
+[![HHVM Status](https://img.shields.io/hhvm/laravel/lumen-framework.svg?style=plastic)](http://hhvm.h4cc.de/package/laravel/lumen-framework)
 [![Total Downloads](https://poser.pugx.org/laravel/lumen-framework/downloads.svg)](https://packagist.org/packages/laravel/lumen-framework)
 [![Latest Stable Version](https://poser.pugx.org/laravel/lumen-framework/v/stable.svg)](https://packagist.org/packages/laravel/lumen-framework)
 [![Latest Unstable Version](https://poser.pugx.org/laravel/lumen-framework/v/unstable.svg)](https://packagist.org/packages/laravel/lumen-framework)
