@@ -17,6 +17,7 @@ use Illuminate\Foundation\Composer;
 use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
@@ -67,13 +68,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @var string
      */
     protected $resourcePath;
-
-    /**
-     * The container instance.
-     *
-     * @var Container
-     */
-    public $container;
 
     /**
      * All of the loaded configuration files.
@@ -172,7 +166,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.0) (Laravel Components 5.0.*)';
+        return 'Lumen (5.0.1) (Laravel Components 5.0.*)';
     }
 
     /**
@@ -216,19 +210,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function register($provider, $options = array(), $force = false)
     {
-        if (array_key_exists($provider, $this->loadedProviders)) {
+        if (!$provider instanceof ServiceProvider) {
+            $provider = new $provider($this);
+        }
+
+        if (array_key_exists($providerName = get_class($provider), $this->loadedProviders)) {
             return;
         }
 
-        $this->loadedProviders[$provider] = true;
-
-        $provider = new $provider($this);
+        $this->loadedProviders[$providerName] = true;
 
         $provider->register();
-
-        if (method_exists($provider, 'boot')) {
-            $provider->boot();
-        }
+        $provider->boot();
     }
 
     /**
@@ -942,12 +935,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function mergeNamespaceGroup(array $action)
     {
-        if (isset($this->groupAttributes['middleware'])) {
-            if (isset($action['middleware'])) {
-                $action['middleware'] .= '|'.$this->groupAttributes['middleware'];
-            } else {
-                $action['middleware'] = $this->groupAttributes['middleware'];
-            }
+        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
+            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
         }
 
         return $action;
@@ -961,8 +950,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function mergeMiddlewareGroup($action)
     {
-        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
-            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
+        if (isset($this->groupAttributes['middleware'])) {
+            if (isset($action['middleware'])) {
+                $action['middleware'] .= '|'.$this->groupAttributes['middleware'];
+            } else {
+                $action['middleware'] = $this->groupAttributes['middleware'];
+            }
         }
 
         return $action;
@@ -1526,7 +1519,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
         'config' => 'registerConfigBindings',
         'composer' => 'registerComposerBindings',
-        'config' => 'registerConfigBindings',
         'cookie' => 'registerCookieBindings',
         'Illuminate\Contracts\Cookie\Factory' => 'registerCookieBindings',
         'Illuminate\Contracts\Cookie\QueueingFactory' => 'registerCookieBindings',
