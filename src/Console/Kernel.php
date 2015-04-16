@@ -162,7 +162,6 @@ class Kernel implements KernelContract
         if ($this->includeDefaultCommands) {
             return array_merge($this->commands, [
                 'Illuminate\Console\Scheduling\ScheduleRunCommand',
-                'Laravel\Lumen\Console\Commands\MakeCommand',
                 'Laravel\Lumen\Console\Commands\ServeCommand',
             ]);
         } else {
