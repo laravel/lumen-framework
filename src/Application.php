@@ -1324,9 +1324,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function getPathInfo()
     {
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
-        $folder = dirname($_SERVER['SCRIPT_NAME']).'/';
+        $folder = dirname($_SERVER['SCRIPT_NAME']);
         $uri = $_SERVER['REQUEST_URI'];
-        if (strpos($uri, $folder) === 0) {
+        if ($folder != $uri && strpos($uri, $folder) === 0) {
             $uri = substr($uri, strlen($folder));
         }
         return '/'.ltrim(str_replace('?'.$query, '', $uri), '/');
