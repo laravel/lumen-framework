@@ -77,6 +77,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $loadedConfigurations = [];
 
     /**
+     * The base url relative to the domain root.
+     *
+     * @var string
+     */
+    protected $baseUrl = '/';
+
+    /**
      * All of the routes waiting to be registered.
      *
      * @var array
@@ -718,6 +725,20 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * Get or set the base url relative to the domain root.
+     *
+     * @param  string|null  $url
+     * @return string
+     */
+    public function baseUrl($url = null)
+    {
+        if(is_string($url)){
+            $this->baseUrl = '/'.trim($url, '/').'/';
+        }
+        return $this->baseUrl;
+    }
+
+    /**
      * Get the path to the given configuration file.
      *
      * @param  string  $name
@@ -1324,8 +1345,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function getPathInfo()
     {
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
+        $url = ltrim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
 
-        return '/'.ltrim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
+        $url = substr($url, strlen($this->baseUrl) - 1);
+
+        return '/'.$url;
     }
 
     /**
