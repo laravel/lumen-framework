@@ -4,12 +4,9 @@ use Closure;
 use Exception;
 use ErrorException;
 use Monolog\Logger;
-use RuntimeException;
 use FastRoute\Dispatcher;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use InvalidArgumentException;
 use Illuminate\Pipeline\Pipeline;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
@@ -18,7 +15,6 @@ use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
@@ -807,7 +803,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function post($uri, $action)
@@ -821,7 +817,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function put($uri, $action)
@@ -835,7 +831,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function patch($uri, $action)
@@ -849,7 +845,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function delete($uri, $action)
@@ -863,7 +859,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function options($uri, $action)

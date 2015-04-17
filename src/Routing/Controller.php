@@ -14,7 +14,7 @@ abstract class Controller
     protected $middleware = [];
 
     /**
-     * Define a middleawre on the controller.
+     * Define a middleware on the controller.
      *
      * @param  string  $middleware
      * @param  array  $options
