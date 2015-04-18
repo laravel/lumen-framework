@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 
 if (! function_exists('abort')) {
+    
     /**
      * Throw an HttpException with the given data.
      *
@@ -22,6 +23,7 @@ if (! function_exists('abort')) {
 }
 
 if (! function_exists('app')) {
+    
     /**
      * Get the available container instance.
      *
@@ -40,6 +42,7 @@ if (! function_exists('app')) {
 }
 
 if (! function_exists('base_path')) {
+    
     /**
      * Get the path to the base of the install.
      *
@@ -53,6 +56,7 @@ if (! function_exists('base_path')) {
 }
 
 if (! function_exists('bcrypt')) {
+    
     /**
      * Hash the given value.
      *
@@ -67,6 +71,7 @@ if (! function_exists('bcrypt')) {
 }
 
 if (! function_exists('config')) {
+    
     /**
      * Get / set the specified configuration value.
      *
@@ -91,6 +96,7 @@ if (! function_exists('config')) {
 }
 
 if (! function_exists('cookie')) {
+    
     /**
      * Create a new cookie instance.
      *
@@ -116,6 +122,7 @@ if (! function_exists('cookie')) {
 }
 
 if (! function_exists('csrf_token')) {
+    
     /**
      * Get the CSRF token value.
      *
@@ -134,6 +141,7 @@ if (! function_exists('csrf_token')) {
 }
 
 if (! function_exists('env')) {
+    
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
      *
@@ -176,6 +184,7 @@ if (! function_exists('env')) {
 }
 
 if (! function_exists('event')) {
+    
     /**
      * Fire an event and call the listeners.
      *
@@ -191,6 +200,7 @@ if (! function_exists('event')) {
 }
 
 if (! function_exists('info')) {
+    
     /**
      * Write some information to the log.
      *
@@ -205,6 +215,7 @@ if (! function_exists('info')) {
 }
 
 if (! function_exists('old')) {
+    
     /**
      * Retrieve an old input item.
      *
@@ -219,6 +230,7 @@ if (! function_exists('old')) {
 }
 
 if (! function_exists('redirect')) {
+    
     /**
      * Get an instance of the redirector.
      *
@@ -241,6 +253,7 @@ if (! function_exists('redirect')) {
 }
 
 if (! function_exists('response')) {
+    
     /**
      * Return a new response from the application.
      *
@@ -262,6 +275,7 @@ if (! function_exists('response')) {
 }
 
 if (! function_exists('route')) {
+    
     /**
      * Generate a URL to a named route.
      *
@@ -277,6 +291,7 @@ if (! function_exists('route')) {
 }
 
 if (! function_exists('session')) {
+    
     /**
      * Get / set the specified session value.
      *
@@ -299,6 +314,7 @@ if (! function_exists('session')) {
 }
 
 if (! function_exists('storage_path')) {
+    
     /**
      * Get the path to the storage folder.
      *
@@ -312,6 +328,7 @@ if (! function_exists('storage_path')) {
 }
 
 if (! function_exists('trans')) {
+    
     /**
      * Translate the given message.
      *
@@ -332,6 +349,7 @@ if (! function_exists('trans')) {
 }
 
 if (! function_exists('trans_choice')) {
+    
     /**
      * Translates the given message based on a count.
      *
@@ -349,6 +367,7 @@ if (! function_exists('trans_choice')) {
 }
 
 if (! function_exists('url')) {
+    
     /**
      * Generate a url for the application.
      *
@@ -365,6 +384,7 @@ if (! function_exists('url')) {
 }
 
 if (! function_exists('view')) {
+    
     /**
      * Get the evaluated view contents for the given view.
      *
