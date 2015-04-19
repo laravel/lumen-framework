@@ -1491,12 +1491,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Filesystem\Factory' => 'filesystem',
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',
+            'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Mail\Mailer' => 'mailer',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
             'Illuminate\Session\SessionManager' => 'session',
             'Illuminate\Contracts\View\Factory' => 'view',
-            'log' => 'Psr\Log\LoggerInterface',
         ];
     }
 
@@ -1530,8 +1530,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesBindings',
         'hash' => 'registerHashBindings',
         'Illuminate\Contracts\Hashing\Hasher' => 'registerHashBindings',
-        'Psr\Log\LoggerInterface' => 'registerLogBindings',
         'log' => 'registerLogBindings',
+        'Psr\Log\LoggerInterface' => 'registerLogBindings',
         'mailer' => 'registerMailBindings',
         'Illuminate\Contracts\Mail\Mailer' => 'registerMailBindings',
         'queue' => 'registerQueueBindings',
