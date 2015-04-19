@@ -526,7 +526,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function registerLogBindings()
     {
-        $this->singleton('Psr\Log\LoggerInterface', function () {
+        $this->singleton('log', function () {
             return new Logger('lumen', [$this->getMonologHandler()]);
         });
     }
@@ -1529,7 +1529,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesBindings',
         'hash' => 'registerHashBindings',
         'Illuminate\Contracts\Hashing\Hasher' => 'registerHashBindings',
-        'Psr\Log\LoggerInterface' => 'registerLogBindings',
+        'log' => 'registerLogBindings',
         'mailer' => 'registerMailBindings',
         'Illuminate\Contracts\Mail\Mailer' => 'registerMailBindings',
         'queue' => 'registerQueueBindings',
