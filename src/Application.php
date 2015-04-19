@@ -274,7 +274,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         error_reporting(-1);
 
         set_error_handler(function ($level, $message, $file = '', $line = 0) {
-            throw new ErrorException($message, 0, $level, $file, $line);
+            if (error_reporting() & $level) {
+                throw new ErrorException($message, 0, $level, $file, $line);
+            }
         });
 
         set_exception_handler(function ($e) {
