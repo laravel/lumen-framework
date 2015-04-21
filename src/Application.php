@@ -1338,11 +1338,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->basePath.($path ? '/'.$path : $path);
         }
 
-        if ($this->runningInConsole() || php_sapi_name() === 'cli-server') {
-            $this->basePath = getcwd();
-        } else {
-            $this->basePath = realpath(getcwd().'/../');
-        }
+        $this->basePath = realpath(getcwd().'/../');
 
         return $this->basePath($path);
     }
