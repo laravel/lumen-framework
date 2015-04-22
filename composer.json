@@ -32,6 +32,7 @@
         "illuminate/http": "5.0.*",
         "illuminate/pagination": "5.0.*",
         "illuminate/queue": "5.0.*",
+        "illuminate/redis": "5.0.*",
         "illuminate/session": "5.0.*",
         "illuminate/support": "5.0.*",
         "illuminate/translation": "5.0.*",

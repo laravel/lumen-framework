@@ -396,6 +396,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $this->singleton('cache', function () {
             return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider');
         });
+
+        $this->singleton('cache.store', function () {
+            return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider', 'cache.store');
+        });
     }
 
     /**
@@ -571,6 +575,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $this->singleton('queue.connection', function () {
             return $this->loadComponent('queue', 'Illuminate\Queue\QueueServiceProvider', 'queue.connection');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRedisBindings()
+    {
+        $this->singleton('redis', function () {
+            return $this->loadComponent('redis', 'Illuminate\Redis\RedisServiceProvider');
         });
     }
 
@@ -1497,6 +1513,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             'Illuminate\Contracts\Mail\Mailer' => 'mailer',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Illuminate\Contracts\Redis\Database' => 'redis',
             'Illuminate\Session\SessionManager' => 'session',
             'Illuminate\Contracts\View\Factory' => 'view',
         ];
@@ -1539,6 +1556,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'queue' => 'registerQueueBindings',
         'queue.connection' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
+        'redis' => 'registerRedisBindings',
         'request' => 'registerRequestBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'session' => 'registerSessionBindings',
