@@ -1443,6 +1443,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function prepareForConsoleCommand()
     {
+        $this->withFacades();
+
         $this->make('cache');
         $this->make('queue');
 
