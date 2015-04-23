@@ -794,6 +794,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function group(array $attributes, Closure $callback)
     {
+        if($this->groupAttributes['prefix']){
+            $attributes['prefix']=$this->groupAttributes['prefix'].'/'.$attributes['prefix'];
+        }
+        
         $this->groupAttributes = $attributes;
 
         call_user_func($callback, $this);
@@ -903,6 +907,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         if (isset($this->groupAttributes)) {
+
+            if(isset($this->groupAttributes['prefix'])){
+                $uri = rtrim('/'.$this->groupAttributes['prefix'].$uri, '/');
+            }
+            
             $action = $this->mergeGroupAttributes($action);
         }
 
