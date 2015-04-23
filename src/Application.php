@@ -903,6 +903,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         if (isset($this->groupAttributes)) {
+            if (isset($this->groupAttributes['prefix'])) {
+                $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
+            }
+
             $action = $this->mergeGroupAttributes($action);
         }
 
