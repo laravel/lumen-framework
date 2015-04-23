@@ -131,12 +131,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Create a new Lumen application instance.
      *
+     * @param  string|null  $basePath
      * @return void
      */
-    public function __construct()
+    public function __construct($basePath = null)
     {
         date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
+        $this->basePath = $basePath;
         $this->bootstrapContainer();
         $this->registerErrorHandling();
     }
