@@ -581,6 +581,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return void
      */
+    protected function registerRedisBindings()
+    {
+        $this->singleton('redis', function() {
+            return $this->loadComponent('database', 'Illuminate\Redis\RedisServiceProvider', 'redis');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerRequestBindings()
     {
         $this->singleton('Illuminate\Http\Request', function () {
@@ -1500,6 +1512,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Mail\Mailer' => 'mailer',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
+            'Illuminate\Redis\Database' => 'redis',
+            'Illuminate\Contracts\Redis\Database' => 'redis',
             'request' => 'Illuminate\Http\Request',
             'Illuminate\Session\SessionManager' => 'session',
             'Illuminate\Contracts\View\Factory' => 'view',
@@ -1543,6 +1557,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'queue' => 'registerQueueBindings',
         'queue.connection' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
+        'redis' => 'registerRedisBindings',
         'request' => 'registerRequestBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'session' => 'registerSessionBindings',
