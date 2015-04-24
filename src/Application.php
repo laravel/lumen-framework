@@ -164,7 +164,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.5) (Laravel Components 5.0.*)';
+        return 'Lumen (5.0.6) (Laravel Components 5.0.*)';
     }
 
     /**
@@ -367,6 +367,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->singleton('auth', function () {
             return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth');
+        });
+
+        $this->singleton('auth.driver', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
         });
 
         $this->singleton('auth.password', function () {
@@ -1503,7 +1507,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->aliases = [
             'Illuminate\Contracts\Foundation\Application' => 'app',
-            'Illuminate\Contracts\Auth\Guard' => 'auth',
+            'Illuminate\Contracts\Auth\Guard' => 'auth.driver',
             'Illuminate\Contracts\Auth\PasswordBroker' => 'auth.password',
             'Illuminate\Contracts\Cache\Factory' => 'cache',
             'Illuminate\Contracts\Cache\Repository' => 'cache.store',
@@ -1531,6 +1535,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public $availableBindings = [
         'auth' => 'registerAuthBindings',
+        'auth.driver' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'auth.password' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\PasswordBroker' => 'registerAuthBindings',
