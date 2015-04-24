@@ -164,7 +164,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.4) (Laravel Components 5.0.*)';
+        return 'Lumen (5.0.5) (Laravel Components 5.0.*)';
     }
 
     /**
