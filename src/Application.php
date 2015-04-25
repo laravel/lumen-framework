@@ -1511,6 +1511,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             'Illuminate\Contracts\Auth\PasswordBroker' => 'auth.password',
             'Illuminate\Contracts\Cache\Factory' => 'cache',
             'Illuminate\Contracts\Cache\Repository' => 'cache.store',
+            'Illuminate\Container\Container' => 'app',
+            'Illuminate\Contracts\Container\Container' => 'app',
             'Illuminate\Contracts\Cookie\Factory' => 'cookie',
             'Illuminate\Contracts\Cookie\QueueingFactory' => 'cookie',
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
