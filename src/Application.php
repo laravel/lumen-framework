@@ -1209,7 +1209,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->callLumenController($instance, $method, $routeInfo);
         } else {
             return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
+                [$instance, $method], $routeInfo[2]
             );
         }
     }
