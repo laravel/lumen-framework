@@ -28,6 +28,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     
     
     public function testCallbackRouteWithDefaultParameter()
+    {
         $app = new Application;
         $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
           return response($baz);
@@ -40,6 +41,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
     
     public function testControllerRouteWithDefaultParameter()
+    {
         $app = new Application;
         $app->get('/foo-bar/{baz}', 'LumenTestController@actionWithDefaultParameter');
         
