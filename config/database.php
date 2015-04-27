@@ -53,7 +53,7 @@ return [
 
         'sqlite' => [
             'driver'   => 'sqlite',
-            'database' => storage_path('database.sqlite'),
+            'database' => env('DB_DATABASE', storage_path('database.sqlite')),
             'prefix'   => env('DB_PREFIX', ''),
         ],
 
@@ -66,7 +66,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => env('DB_PREFIX', ''),
-            'timezone'  => '+00:00',
+            'timezone'  => env('DB_TIMEZONE','+00:00'),
             'strict'    => false,
         ],
 

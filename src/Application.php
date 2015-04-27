@@ -4,12 +4,9 @@ use Closure;
 use Exception;
 use ErrorException;
 use Monolog\Logger;
-use RuntimeException;
 use FastRoute\Dispatcher;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use InvalidArgumentException;
 use Illuminate\Pipeline\Pipeline;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
@@ -18,7 +15,6 @@ use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
@@ -135,12 +131,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Create a new Lumen application instance.
      *
+     * @param  string|null  $basePath
      * @return void
      */
-    public function __construct()
+    public function __construct($basePath = null)
     {
         date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
+        $this->basePath = $basePath;
         $this->bootstrapContainer();
         $this->registerErrorHandling();
     }
@@ -166,7 +164,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.1) (Laravel Components 5.0.*)';
+        return 'Lumen (5.0.8) (Laravel Components 5.0.*)';
     }
 
     /**
@@ -278,7 +276,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         error_reporting(-1);
 
         set_error_handler(function ($level, $message, $file = '', $line = 0) {
-            throw new ErrorException($message, 0, $level, $file, $line);
+            if (error_reporting() & $level) {
+                throw new ErrorException($message, 0, $level, $file, $line);
+            }
         });
 
         set_exception_handler(function ($e) {
@@ -367,6 +367,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->singleton('auth', function () {
             return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth');
+        });
+
+        $this->singleton('auth.driver', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
         });
 
         $this->singleton('auth.password', function () {
@@ -573,6 +577,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $this->singleton('queue.connection', function () {
             return $this->loadComponent('queue', 'Illuminate\Queue\QueueServiceProvider', 'queue.connection');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRedisBindings()
+    {
+        $this->singleton('redis', function() {
+            return $this->loadComponent('database', 'Illuminate\Redis\RedisServiceProvider', 'redis');
         });
     }
 
@@ -807,7 +823,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function post($uri, $action)
@@ -821,7 +837,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function put($uri, $action)
@@ -835,7 +851,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function patch($uri, $action)
@@ -849,7 +865,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function delete($uri, $action)
@@ -863,7 +879,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a route with the application.
      *
      * @param  string  $uri
-     * @param  callable  $action
+     * @param  mixed  $action
      * @return $this
      */
     public function options($uri, $action)
@@ -891,6 +907,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         if (isset($this->groupAttributes)) {
+            if (isset($this->groupAttributes['prefix'])) {
+                $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
+            }
+
             $action = $this->mergeGroupAttributes($action);
         }
 
@@ -1343,7 +1363,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->basePath.($path ? '/'.$path : $path);
         }
 
-        if ($this->runningInConsole()) {
+        if ($this->runningInConsole() || php_sapi_name() === 'cli-server') {
             $this->basePath = getcwd();
         } else {
             $this->basePath = realpath(getcwd().'/../');
@@ -1448,6 +1468,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function prepareForConsoleCommand()
     {
+        $this->withFacades();
+
         $this->make('cache');
         $this->make('queue');
 
@@ -1488,18 +1510,23 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->aliases = [
             'Illuminate\Contracts\Foundation\Application' => 'app',
-            'Illuminate\Contracts\Auth\Guard' => 'auth',
+            'Illuminate\Contracts\Auth\Guard' => 'auth.driver',
             'Illuminate\Contracts\Auth\PasswordBroker' => 'auth.password',
             'Illuminate\Contracts\Cache\Factory' => 'cache',
             'Illuminate\Contracts\Cache\Repository' => 'cache.store',
+            'Illuminate\Container\Container' => 'app',
+            'Illuminate\Contracts\Container\Container' => 'app',
             'Illuminate\Contracts\Cookie\Factory' => 'cookie',
             'Illuminate\Contracts\Cookie\QueueingFactory' => 'cookie',
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Filesystem\Factory' => 'filesystem',
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',
+            'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Mail\Mailer' => 'mailer',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
+            'Illuminate\Redis\Database' => 'redis',
+            'Illuminate\Contracts\Redis\Database' => 'redis',
             'request' => 'Illuminate\Http\Request',
             'Illuminate\Session\SessionManager' => 'session',
             'Illuminate\Contracts\View\Factory' => 'view',
@@ -1513,6 +1540,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public $availableBindings = [
         'auth' => 'registerAuthBindings',
+        'auth.driver' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'auth.password' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\PasswordBroker' => 'registerAuthBindings',
@@ -1536,12 +1564,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesBindings',
         'hash' => 'registerHashBindings',
         'Illuminate\Contracts\Hashing\Hasher' => 'registerHashBindings',
+        'log' => 'registerLogBindings',
         'Psr\Log\LoggerInterface' => 'registerLogBindings',
         'mailer' => 'registerMailBindings',
         'Illuminate\Contracts\Mail\Mailer' => 'registerMailBindings',
         'queue' => 'registerQueueBindings',
         'queue.connection' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
+        'redis' => 'registerRedisBindings',
         'request' => 'registerRequestBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'session' => 'registerSessionBindings',

@@ -94,6 +94,38 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testGroupPrefixRoutes()
+    {
+        $app = new Application;
+
+        $app->group(['prefix' => 'user'], function($app) {
+            $app->get('/', function () {
+                return response('User Index');
+            });
+
+            $app->get('profile', function () {
+                return response('User Profile');
+            });
+
+            $app->get('/show', function () {
+                return response('User Show');
+            });
+        });
+
+        $response = $app->handle(Request::create('/user', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('User Index', $response->getContent());
+
+        $response = $app->handle(Request::create('/user/profile', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('User Profile', $response->getContent());
+
+        $response = $app->handle(Request::create('/user/show', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('User Show', $response->getContent());
+    }
+
+
     public function testNotFoundResponse()
     {
         $app = new Application;
@@ -199,7 +231,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
     }
-    
+
     public function testRegisterServiceProvider()
     {
         $app = new Application;
@@ -210,7 +242,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
 class LumenTestService {}
 
-class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider 
+class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
     public function register() {}
 }

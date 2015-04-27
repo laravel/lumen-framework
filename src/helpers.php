@@ -27,7 +27,7 @@ if (! function_exists('app')) {
      *
      * @param  string  $make
      * @param  array   $parameters
-     * @return mixed|\Illuminate\Foundation\Application
+     * @return mixed|\Laravel\Lumen\Application
      */
     function app($make = null, $parameters = [])
     {
