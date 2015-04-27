@@ -346,7 +346,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, array $parameters = [])
+    public function make($abstract, $parameters = array())
     {
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
@@ -1046,6 +1046,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function dispatch($request = null)
     {
         if ($request) {
+            $this->instance('Illuminate\Http\Request', $request);
+            $this->ranServiceBinders['registerRequestBindings'] = true;
+
             $method = $request->getMethod();
             $pathInfo = $request->getPathInfo();
         } else {
