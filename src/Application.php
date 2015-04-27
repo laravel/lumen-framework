@@ -91,7 +91,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @var array|null
      */
-    protected $groupAttributes;
+    protected $groupAttributes = [];
 
     /**
      * All of the global middleware for the application.
@@ -798,11 +798,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function group(array $attributes, Closure $callback)
     {
-        $this->groupAttributes = $attributes;
+        $this->groupAttributes = array_merge($this->groupAttributes, $attributes);
 
         call_user_func($callback, $this);
 
-        $this->groupAttributes = null;
+        $this->groupAttributes = [];
     }
 
     /**
@@ -906,7 +906,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $this->namedRoutes[$action['as']] = $uri;
         }
 
-        if (isset($this->groupAttributes)) {
+        if (!empty($this->groupAttributes)) {
             if (isset($this->groupAttributes['prefix'])) {
                 $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
             }
