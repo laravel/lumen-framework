@@ -39,6 +39,26 @@ class UrlGenerator
     }
 
     /**
+     * Get the full URL for the current request.
+     *
+     * @return string
+     */
+    public function full()
+    {
+        return $this->app->make('request')->fullUrl();
+    }
+
+    /**
+     * Get the current URL for the request.
+     *
+     * @return string
+     */
+    public function current()
+    {
+        return $this->to($this->app->make('request')->getPathInfo());
+    }    
+
+    /**
      * Generate a url for the application
      *
      * @param  string  $path
