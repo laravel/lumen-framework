@@ -1188,7 +1188,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         try {
-            return $this->call($closure, array_values($routeInfo[2]));
+            return $this->call($closure, $routeInfo[2]);
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
@@ -1212,7 +1212,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->callLumenController($instance, $method, $routeInfo);
         } else {
             return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
+                [$instance, $method], $routeInfo[2]
             );
         }
     }
@@ -1237,7 +1237,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             );
         } else {
             return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
+                [$instance, $method], $routeInfo[2]
             );
         }
     }
@@ -1257,7 +1257,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
             return $this->callControllerCallable(
-                [$instance, $method], array_values($routeInfo[2])
+                [$instance, $method], $routeInfo[2]
             );
         });
     }
