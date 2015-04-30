@@ -1348,7 +1348,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
-        return '/'.ltrim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
+        return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
     }
 
     /**
