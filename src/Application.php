@@ -1291,7 +1291,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $middleware = is_string($middleware) ? explode('|', $middleware) : (array) $middleware;
 
         return array_map(function ($name) {
-            return $this->routeMiddleware[$name];
+	        list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+	        return array_get($this->routeMiddleware, $name, $name).($parameters ? ':'.$parameters : '');
         }, $middleware);
     }
 
