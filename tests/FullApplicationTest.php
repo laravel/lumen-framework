@@ -27,6 +27,100 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testRequestWithoutSymfonyClass()
+    {
+        $app = new Application;
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $response = $app->dispatch();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+
+        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+    }
+
+
+    public function testRequestWithoutSymfonyClassTrailingSlash()
+    {
+        $app = new Application;
+
+        $app->get('/foo', function () {
+            return response('Hello World');
+        });
+
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/foo/';
+
+        $response = $app->dispatch();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+
+        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+    }
+
+
+    public function testRequestWithParameters()
+    {
+        $app = new Application;
+
+        $app->get('/foo/{bar}/{baz}', function ($bar, $baz) {
+            return response($bar.$baz);
+        });
+
+        $response = $app->handle(Request::create('/foo/1/2', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('12', $response->getContent());
+    }
+
+
+    public function testRequestToControllerWithParameters()
+    {
+        $app = new Application;
+
+        $app->get('/foo/{bar}', 'LumenTestController@actionWithParameter');
+
+        $response = $app->handle(Request::create('/foo/1', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('1', $response->getContent());
+    }
+
+
+    public function testCallbackRouteWithDefaultParameter()
+    {
+        $app = new Application;
+        $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
+          return response($baz);
+        });
+
+        $response = $app->handle(Request::create('/foo-bar/something', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('something', $response->getContent());
+    }
+
+
+    public function testControllerRouteWithDefaultParameter()
+    {
+        $app = new Application;
+        $app->get('/foo-bar/{baz}', 'LumenTestController@actionWithDefaultParameter');
+
+        $response = $app->handle(Request::create('/foo-bar/something2', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('something2', $response->getContent());
+    }
+
+
     public function testGlobalMiddleware()
     {
         $app = new Application;
@@ -232,6 +326,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
     }
 
+
     public function testRegisterServiceProvider()
     {
         $app = new Application;
@@ -260,5 +355,11 @@ class LumenTestController {
     }
     public function action() {
         return response(__CLASS__);
+    }
+    public function actionWithParameter($baz) {
+        return response($baz);
+    }
+    public function actionWithDefaultParameter($baz = 'default-value') {
+        return response($baz);
     }
 }
