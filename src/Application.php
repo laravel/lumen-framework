@@ -903,16 +903,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $uri = $uri === '/' ? $uri : '/'.trim($uri, '/');
 
-        if (isset($action['as'])) {
-            $this->namedRoutes[$action['as']] = $uri;
-        }
-
         if (isset($this->groupAttributes)) {
             if (isset($this->groupAttributes['prefix'])) {
                 $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
             }
 
             $action = $this->mergeGroupAttributes($action);
+        }
+
+        if (isset($action['as'])) {
+            $this->namedRoutes[$action['as']] = $uri;
         }
 
         $this->routes[$method.$uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
