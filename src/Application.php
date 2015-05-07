@@ -129,6 +129,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $ranServiceBinders = [];
 
     /**
+     * The FastRoute dispatcher.
+     *
+     * @var \FastRoute\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -1098,11 +1105,22 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function createDispatcher()
     {
-        return \FastRoute\simpleDispatcher(function ($r) {
+        return $this->dispatcher ?: \FastRoute\simpleDispatcher(function ($r) {
             foreach ($this->routes as $route) {
                 $r->addRoute($route['method'], $route['uri'], $route['action']);
             }
         });
+    }
+
+    /**
+     * Set the FastRoute dispatcher instance.
+     *
+     * @param  \FastRoute\Dispatcher  $dispatcher
+     * @return void
+     */
+    public function setDispatcher(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
 
     /**

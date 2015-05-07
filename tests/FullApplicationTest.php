@@ -333,6 +333,25 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $provider = new LumenTestServiceProvider($app);
         $app->register($provider);
     }
+
+
+    public function testUsingCustomDispatcher()
+    {
+        $routes = new FastRoute\RouteCollector(new FastRoute\RouteParser\Std, new FastRoute\DataGenerator\GroupCountBased);
+
+        $routes->addRoute('GET', '/', [function () {
+            return response('Hello World');
+        }]);
+
+        $app = new Application;
+
+        $app->setDispatcher(new FastRoute\Dispatcher\GroupCountBased($routes->getData()));
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+    }
 }
 
 class LumenTestService {}
