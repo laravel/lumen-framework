@@ -774,6 +774,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             class_alias('Illuminate\Support\Facades\Bus', 'Bus');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
             class_alias('Illuminate\Support\Facades\Cache', 'Cache');
+            class_alias('Illuminate\Support\Facades\Cookie', 'Cookie');
             class_alias('Illuminate\Support\Facades\Crypt', 'Crypt');
             class_alias('Illuminate\Support\Facades\Event', 'Event');
             class_alias('Illuminate\Support\Facades\Hash', 'Hash');
