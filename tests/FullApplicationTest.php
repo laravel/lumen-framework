@@ -299,6 +299,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
     }
 
 
@@ -324,6 +325,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
     }
 
 

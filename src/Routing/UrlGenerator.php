@@ -108,11 +108,17 @@ class UrlGenerator
 
         $uri = $this->app->namedRoutes[$name];
 
-        foreach ($parameters as $key => $value) {
-            $uri = preg_replace('/\{'.$key.'.*?\}/', $value, $uri);
+        $uri = preg_replace_callback('/\{(.*?)(:.*?)?\}/', function ($m) use (&$parameters) {
+            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+        }, $uri);
+
+        $uri = $this->to($uri, []);
+
+        if (! empty($parameters)) {
+            $uri .= '?'.http_build_query($parameters);
         }
 
-        return $this->to($uri, []);
+        return $uri;
     }
 
     /**
