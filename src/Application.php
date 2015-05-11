@@ -1087,13 +1087,15 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         try {
-            if (isset($this->routes[$method.$pathInfo])) {
-                return $this->handleFoundRoute([true, $this->routes[$method.$pathInfo]['action'], []]);
-            }
+            return $this->sendThroughPipeline($this->middleware, function () use ($method, $pathInfo) {
+                if (isset($this->routes[$method.$pathInfo])) {
+                    return $this->handleFoundRoute([true, $this->routes[$method.$pathInfo]['action'], []]);
+                }
 
-            return $this->handleDispatcherResponse(
-                $this->createDispatcher()->dispatch($method, $pathInfo)
-            );
+                return $this->handleDispatcherResponse(
+                    $this->createDispatcher()->dispatch($method, $pathInfo)
+                );
+            });
         } catch (Exception $e) {
             return $this->sendExceptionToHandler($e);
         }
@@ -1145,7 +1147,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Handle a route that was found by the dispatcher.
+     * Handle a route found by the dispatcher.
      *
      * @param  array  $routeInfo
      * @return mixed
@@ -1154,24 +1156,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->currentRoute = $routeInfo;
 
-        // Pipe through global middleware...
-        if (count($this->middleware) > 0) {
-            return $this->prepareResponse($this->sendThroughPipeline($this->middleware, function () use ($routeInfo) {
-                return $this->prepareResponse($this->handleArrayBasedFoundRoute($routeInfo));
-            }));
-        }
-
-        return $this->handleArrayBasedFoundRoute($routeInfo);
-    }
-
-    /**
-     * Handle an array based route that was found by the dispatcher.
-     *
-     * @param  array  $routeInfo
-     * @return mixed
-     */
-    protected function handleArrayBasedFoundRoute($routeInfo)
-    {
         $action = $routeInfo[1];
 
         // Pipe through route middleware...
@@ -1179,7 +1163,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $middleware = $this->gatherMiddlewareClassNames($action['middleware']);
 
             return $this->prepareResponse($this->sendThroughPipeline($middleware, function () use ($routeInfo) {
-                return $this->prepareResponse($this->callActionOnArrayBasedRoute($routeInfo));
+                return $this->callActionOnArrayBasedRoute($routeInfo);
             }));
         }
 
@@ -1325,10 +1309,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
     {
-        return (new Pipeline($this))
-            ->send($this->make('request'))
-            ->through($middleware)
-            ->then($then);
+        if (count($middleware) > 0) {
+            return (new Pipeline($this))
+                ->send($this->make('request'))
+                ->through($middleware)
+                ->then($then);
+        }
+
+        return $then();
     }
 
     /**
