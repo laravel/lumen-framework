@@ -1331,6 +1331,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $response = new Response($response);
         }
 
+        $response->prepare(Request::capture());
+
         return $response;
     }
 
