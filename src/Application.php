@@ -20,6 +20,7 @@ use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Illuminate\Contracts\Routing\TerminableMiddleware;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -1329,9 +1330,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (! $response instanceof SymfonyResponse) {
             $response = new Response($response);
-        }
-
-        if ($response instanceof BinaryFileResponse) {
+        } elseif ($response instanceof BinaryFileResponse) {
             $response = $response->prepare(Request::capture());
         }
 
