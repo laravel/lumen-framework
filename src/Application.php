@@ -1331,7 +1331,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $response = new Response($response);
         }
 
-        $response->prepare(Request::capture());
+        if ($response instanceof BinaryFileResponse) {
+            $response = $response->prepare(Request::capture());
+        }
 
         return $response;
     }
