@@ -186,16 +186,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Determine if the application is currently down for maintenance.
-     *
-     * @return bool
-     */
-    public function isDownForMaintenance()
-    {
-        return false;
-    }
-
-    /**
      * Register all of the configured providers.
      *
      * @return void
