@@ -163,6 +163,17 @@ class UrlGenerator
     }
 
     /**
+     * Force the schema for URLs.
+     *
+     * @param  string  $schema
+     * @return void
+     */
+    public function forceSchema($schema)
+    {
+        $this->forceSchema = $schema.'://';
+    }
+
+    /**
      * Get the URL to a named route.
      *
      * @param  string  $name
