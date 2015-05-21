@@ -92,6 +92,88 @@ class UrlGenerator
     }
 
     /**
+     * Generate a secure, absolute URL to the given path.
+     *
+     * @param  string  $path
+     * @param  array   $parameters
+     * @return string
+     */
+    public function secure($path, $parameters = array())
+    {
+        return $this->to($path, $parameters, true);
+    }
+
+    /**
+     * Generate a URL to an application asset.
+     *
+     * @param  string  $path
+     * @param  bool|null  $secure
+     * @return string
+     */
+    public function asset($path, $secure = null)
+    {
+        if ($this->isValidUrl($path)) return $path;
+
+        // Once we get the root URL, we will check to see if it contains an index.php
+        // file in the paths. If it does, we will remove it since it is not needed
+        // for asset paths, but only for routes to endpoints in the application.
+        $root = $this->getRootUrl($this->getScheme($secure));
+
+        return $this->removeIndex($root).'/'.trim($path, '/');
+    }
+
+    /**
+     * Remove the index.php file from a path.
+     *
+     * @param  string  $root
+     * @return string
+     */
+    protected function removeIndex($root)
+    {
+        $i = 'index.php';
+
+        return str_contains($root, $i) ? str_replace('/'.$i, '', $root) : $root;
+    }
+
+    /**
+     * Generate a URL to a secure asset.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function secureAsset($path)
+    {
+        return $this->asset($path, true);
+    }
+
+    /**
+     * Get the scheme for a raw URL.
+     *
+     * @param  bool|null  $secure
+     * @return string
+     */
+    protected function getScheme($secure)
+    {
+        if (is_null($secure))
+        {
+            return $this->forceSchema ?: $this->request->getScheme().'://';
+        }
+
+        return $secure ? 'https://' : 'http://';
+    }
+
+    /**
+     * Force the schema for URLs.
+     *
+     * @param  string  $schema
+     * @return void
+     */
+    public function forceSchema($schema)
+    {
+        $this->forceSchema = $schema.'://';
+    }
+
+    /**
      * Get the URL to a named route.
      *
      * @param  string  $name
