@@ -26,6 +26,13 @@ class UrlGenerator
      * @var string|null
      */
     protected $cachedRoot;
+    
+    /**
+     * Url schema to be forced
+     *
+     * @var string|null
+     */
+    protected $forceSchema;
 
     /**
      * Create a new URL redirector instance.
@@ -156,7 +163,7 @@ class UrlGenerator
     {
         if (is_null($secure))
         {
-            return $this->forceSchema ?: $this->request->getScheme().'://';
+            return $this->forceSchema ?: $this->app->make('request')->getScheme().'://';
         }
 
         return $secure ? 'https://' : 'http://';
