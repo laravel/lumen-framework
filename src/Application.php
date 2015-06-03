@@ -1159,6 +1159,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $action = $routeInfo[1];
 
+        // set route info as route resolve, so $request->route() will return it
+        // and you can access route info (name, uses, ...) in middleware for example as $request->route()[1]['uses']
+        $this->make('Illuminate\Http\Request')->setRouteResolver(function() use ($routeInfo) {
+            return $routeInfo;
+        });
+
         // Pipe through route middleware...
         if (isset($action['middleware'])) {
             $middleware = $this->gatherMiddlewareClassNames($action['middleware']);
