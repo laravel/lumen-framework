@@ -367,6 +367,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $provider = new LumenTestServiceProvider($app);
         $app->register($provider);
     }
+
+
+    public function testWelcomeReturnsResponse()
+    {
+        $app = new Application;
+        $this->assertInstanceOf('Illuminate\Http\Response', $app->welcome());
+    }
 }
 
 class LumenTestService {}
