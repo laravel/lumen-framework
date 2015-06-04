@@ -354,6 +354,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
     }
+
+
+    public function testWelcomeReturnsResponse()
+    {
+        $app = new Application;
+        $this->assertInstanceOf('Illuminate\Http\Response', $app->welcome());
+    }
 }
 
 class LumenTestService {}
