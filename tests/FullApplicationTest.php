@@ -333,6 +333,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
     }
 
 
@@ -358,6 +359,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
     }
 
 
@@ -366,6 +368,25 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app = new Application;
         $provider = new LumenTestServiceProvider($app);
         $app->register($provider);
+    }
+
+
+    public function testUsingCustomDispatcher()
+    {
+        $routes = new FastRoute\RouteCollector(new FastRoute\RouteParser\Std, new FastRoute\DataGenerator\GroupCountBased);
+
+        $routes->addRoute('GET', '/', [function () {
+            return response('Hello World');
+        }]);
+
+        $app = new Application;
+
+        $app->setDispatcher(new FastRoute\Dispatcher\GroupCountBased($routes->getData()));
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
     }
 }
 

@@ -28,6 +28,13 @@ class UrlGenerator
     protected $cachedRoot;
 
     /**
+     * The URL schema to be forced on all generated URLs.
+     *
+     * @var string|null
+     */
+    protected $forceSchema;
+
+    /**
      * Create a new URL redirector instance.
      *
      * @param  Application  $application
@@ -56,7 +63,7 @@ class UrlGenerator
     public function current()
     {
         return $this->to($this->app->make('request')->getPathInfo());
-    }    
+    }
 
     /**
      * Generate a url for the application
@@ -92,6 +99,89 @@ class UrlGenerator
     }
 
     /**
+     * Generate a secure, absolute URL to the given path.
+     *
+     * @param  string  $path
+     * @param  array   $parameters
+     * @return string
+     */
+    public function secure($path, $parameters = array())
+    {
+        return $this->to($path, $parameters, true);
+    }
+
+    /**
+     * Generate a URL to an application asset.
+     *
+     * @param  string  $path
+     * @param  bool|null  $secure
+     * @return string
+     */
+    public function asset($path, $secure = null)
+    {
+        if ($this->isValidUrl($path)) {
+            return $path;
+        }
+
+        // Once we get the root URL, we will check to see if it contains an index.php
+        // file in the paths. If it does, we will remove it since it is not needed
+        // for asset paths, but only for routes to endpoints in the application.
+        $root = $this->getRootUrl($this->getScheme($secure));
+
+        return $this->removeIndex($root).'/'.trim($path, '/');
+    }
+
+    /**
+     * Remove the index.php file from a path.
+     *
+     * @param  string  $root
+     * @return string
+     */
+    protected function removeIndex($root)
+    {
+        $i = 'index.php';
+
+        return str_contains($root, $i) ? str_replace('/'.$i, '', $root) : $root;
+    }
+
+    /**
+     * Generate a URL to a secure asset.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function secureAsset($path)
+    {
+        return $this->asset($path, true);
+    }
+
+    /**
+     * Get the scheme for a raw URL.
+     *
+     * @param  bool|null  $secure
+     * @return string
+     */
+    protected function getScheme($secure)
+    {
+        if (is_null($secure)) {
+            return $this->forceSchema ?: $this->app->make('request')->getScheme().'://';
+        }
+
+        return $secure ? 'https://' : 'http://';
+    }
+
+    /**
+     * Force the schema for URLs.
+     *
+     * @param  string  $schema
+     * @return void
+     */
+    public function forceSchema($schema)
+    {
+        $this->forceSchema = $schema.'://';
+    }
+
+    /**
      * Get the URL to a named route.
      *
      * @param  string  $name
@@ -108,11 +198,17 @@ class UrlGenerator
 
         $uri = $this->app->namedRoutes[$name];
 
-        foreach ($parameters as $key => $value) {
-            $uri = preg_replace('/\{'.$key.'.*?\}/', $value, $uri);
+        $uri = preg_replace_callback('/\{(.*?)(:.*?)?\}/', function ($m) use (&$parameters) {
+            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+        }, $uri);
+
+        $uri = $this->to($uri, []);
+
+        if (! empty($parameters)) {
+            $uri .= '?'.http_build_query($parameters);
         }
 
-        return $this->to($uri, []);
+        return $uri;
     }
 
     /**

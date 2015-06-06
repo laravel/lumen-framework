@@ -20,6 +20,7 @@ use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Illuminate\Contracts\Routing\TerminableMiddleware;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -129,6 +130,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $ranServiceBinders = [];
 
     /**
+     * The FastRoute dispatcher.
+     *
+     * @var \FastRoute\Dispatcher
+     */
+    protected $dispatcher;
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -164,7 +172,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.0.8) (Laravel Components 5.0.*)';
+        return 'Lumen (5.0.10) (Laravel Components 5.0.*)';
     }
 
     /**
@@ -767,7 +775,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             class_alias('Illuminate\Support\Facades\Bus', 'Bus');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
             class_alias('Illuminate\Support\Facades\Cache', 'Cache');
+            class_alias('Illuminate\Support\Facades\Cookie', 'Cookie');
             class_alias('Illuminate\Support\Facades\Crypt', 'Crypt');
+            class_alias('Illuminate\Support\Facades\Event', 'Event');
+            class_alias('Illuminate\Support\Facades\Hash', 'Hash');
             class_alias('Illuminate\Support\Facades\Log', 'Log');
             class_alias('Illuminate\Support\Facades\Mail', 'Mail');
             class_alias('Illuminate\Support\Facades\Queue', 'Queue');
@@ -902,16 +913,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         $uri = $uri === '/' ? $uri : '/'.trim($uri, '/');
 
-        if (isset($action['as'])) {
-            $this->namedRoutes[$action['as']] = $uri;
-        }
-
         if (isset($this->groupAttributes)) {
             if (isset($this->groupAttributes['prefix'])) {
                 $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
             }
 
             $action = $this->mergeGroupAttributes($action);
+        }
+
+        if (isset($action['as'])) {
+            $this->namedRoutes[$action['as']] = $uri;
         }
 
         $this->routes[$method.$uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
@@ -1077,13 +1088,15 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         try {
-            if (isset($this->routes[$method.$pathInfo])) {
-                return $this->handleFoundRoute([true, $this->routes[$method.$pathInfo]['action'], []]);
-            }
+            return $this->sendThroughPipeline($this->middleware, function () use ($method, $pathInfo) {
+                if (isset($this->routes[$method.$pathInfo])) {
+                    return $this->handleFoundRoute([true, $this->routes[$method.$pathInfo]['action'], []]);
+                }
 
-            return $this->handleDispatcherResponse(
-                $this->createDispatcher()->dispatch($method, $pathInfo)
-            );
+                return $this->handleDispatcherResponse(
+                    $this->createDispatcher()->dispatch($method, $pathInfo)
+                );
+            });
         } catch (Exception $e) {
             return $this->sendExceptionToHandler($e);
         }
@@ -1096,11 +1109,22 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function createDispatcher()
     {
-        return \FastRoute\simpleDispatcher(function ($r) {
+        return $this->dispatcher ?: \FastRoute\simpleDispatcher(function ($r) {
             foreach ($this->routes as $route) {
                 $r->addRoute($route['method'], $route['uri'], $route['action']);
             }
         });
+    }
+
+    /**
+     * Set the FastRoute dispatcher instance.
+     *
+     * @param  \FastRoute\Dispatcher  $dispatcher
+     * @return void
+     */
+    public function setDispatcher(Dispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -1124,7 +1148,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Handle a route that was found by the dispatcher.
+     * Handle a route found by the dispatcher.
      *
      * @param  array  $routeInfo
      * @return mixed
@@ -1133,24 +1157,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->currentRoute = $routeInfo;
 
-        // Pipe through global middleware...
-        if (count($this->middleware) > 0) {
-            return $this->prepareResponse($this->sendThroughPipeline($this->middleware, function () use ($routeInfo) {
-                return $this->prepareResponse($this->handleArrayBasedFoundRoute($routeInfo));
-            }));
-        }
-
-        return $this->handleArrayBasedFoundRoute($routeInfo);
-    }
-
-    /**
-     * Handle an array based route that was found by the dispatcher.
-     *
-     * @param  array  $routeInfo
-     * @return mixed
-     */
-    protected function handleArrayBasedFoundRoute($routeInfo)
-    {
         $action = $routeInfo[1];
 
         // Pipe through route middleware...
@@ -1158,7 +1164,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $middleware = $this->gatherMiddlewareClassNames($action['middleware']);
 
             return $this->prepareResponse($this->sendThroughPipeline($middleware, function () use ($routeInfo) {
-                return $this->prepareResponse($this->callActionOnArrayBasedRoute($routeInfo));
+                return $this->callActionOnArrayBasedRoute($routeInfo);
             }));
         }
 
@@ -1305,10 +1311,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
     {
-        return (new Pipeline($this))
-            ->send($this->make('request'))
-            ->through($middleware)
-            ->then($then);
+        if (count($middleware) > 0) {
+            return (new Pipeline($this))
+                ->send($this->make('request'))
+                ->through($middleware)
+                ->then($then);
+        }
+
+        return $then();
     }
 
     /**
@@ -1321,6 +1331,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (! $response instanceof SymfonyResponse) {
             $response = new Response($response);
+        } elseif ($response instanceof BinaryFileResponse) {
+            $response = $response->prepare(Request::capture());
         }
 
         return $response;
