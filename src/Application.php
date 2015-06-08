@@ -907,7 +907,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  string  $uri
      * @param  mixed  $action
      */
-    protected function addRoute($method, $uri, $action)
+    public function addRoute($method, $uri, $action)
     {
         $action = $this->parseAction($action);
 
