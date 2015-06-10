@@ -337,6 +337,19 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testBootRegisteredServiceProvider()
+    {
+        $app = new Application;
+        $provider = new LumenTestServiceProvider($app);
+        $app->register($provider);
+        $this->assertFalse($provider->bootCalled);
+
+        $app->handle(Request::create('/', 'GET'));
+
+        $this->assertTrue($provider->bootCalled);
+    }
+
+
     public function testUsingCustomDispatcher()
     {
         $routes = new FastRoute\RouteCollector(new FastRoute\RouteParser\Std, new FastRoute\DataGenerator\GroupCountBased);
@@ -360,7 +373,12 @@ class LumenTestService {}
 
 class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
+
+    public $bootCalled = false;
+
     public function register() {}
+
+    public function boot() { $this->bootCalled = true; }
 }
 
 class LumenTestMiddleware {
