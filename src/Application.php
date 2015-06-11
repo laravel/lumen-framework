@@ -375,6 +375,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
     /**
      * Boots service providers
+     *
+     * @return void
      */
     protected function bootServiceProviders()
     {
@@ -382,7 +384,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $provider->boot();
         }
     }
-
 
     /**
      * Register container bindings for the application.
