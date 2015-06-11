@@ -1,11 +1,11 @@
 <?php namespace Laravel\Lumen\Testing;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 trait ApplicationTrait
 {
-
     /**
      * The application instance.
      *
@@ -37,6 +37,8 @@ trait ApplicationTrait
         putenv('APP_ENV=testing');
 
         $this->app = $this->createApplication();
+
+        Facade::clearResolvedInstances();
     }
 
     /**
