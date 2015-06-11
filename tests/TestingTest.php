@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 
 class TestingTest extends TestCase
 {
-
     public function createApplication()
     {
         return new Application;
@@ -23,12 +22,10 @@ class TestingTest extends TestCase
         $this->app->withFacades();
         Auth::user();
     }
+
     public function testSecondMethodUsingFacades()
     {
         $this->app->withFacades();
         Auth::user();
     }
 }
-
-
-
