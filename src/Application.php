@@ -907,19 +907,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  string  $uri
      * @param  mixed  $action
      */
-    protected function addRoute($method, $uri, $action)
+    public function addRoute($method, $uri, $action)
     {
         $action = $this->parseAction($action);
 
-        $uri = $uri === '/' ? $uri : '/'.trim($uri, '/');
-
         if (isset($this->groupAttributes)) {
             if (isset($this->groupAttributes['prefix'])) {
-                $uri = rtrim('/'.trim($this->groupAttributes['prefix'], '/').$uri, '/');
+                $uri = trim($this->groupAttributes['prefix'], '/').'/'.trim($uri, '/');
             }
 
             $action = $this->mergeGroupAttributes($action);
         }
+
+        $uri = '/'.trim($uri, '/');
 
         if (isset($action['as'])) {
             $this->namedRoutes[$action['as']] = $uri;
