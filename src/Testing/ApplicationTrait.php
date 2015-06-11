@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
+use Illuminate\Support\Facades\Facade;
 
 trait ApplicationTrait
 {
@@ -37,6 +38,7 @@ trait ApplicationTrait
         putenv('APP_ENV=testing');
 
         $this->app = $this->createApplication();
+        Facade::clearResolvedInstances();
     }
 
     /**
