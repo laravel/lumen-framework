@@ -5,7 +5,14 @@ use PHPUnit_Framework_TestCase;
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
 
-    use ApplicationTrait, AssertionsTrait;
+    use ApplicationTrait, AssertionsTrait, CrawlerTrait;
+
+    /**
+     * The base URL to use while testing the application.
+     *
+     * @var string
+     */
+    protected $baseUrl = 'http://localhost';
 
     /**
      * Creates the application.
