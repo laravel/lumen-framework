@@ -631,7 +631,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function registerRedisBindings()
     {
-        $this->singleton('redis', function() {
+        $this->singleton('redis', function () {
             return $this->loadComponent('database', 'Illuminate\Redis\RedisServiceProvider', 'redis');
         });
     }
@@ -1333,8 +1333,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $middleware = is_string($middleware) ? explode('|', $middleware) : (array) $middleware;
 
         return array_map(function ($name) {
-	        list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
-	        return array_get($this->routeMiddleware, $name, $name).($parameters ? ':'.$parameters : '');
+            list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+            return array_get($this->routeMiddleware, $name, $name).($parameters ? ':'.$parameters : '');
         }, $middleware);
     }
 
@@ -1573,6 +1573,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',
             'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Mail\Mailer' => 'mailer',
+            'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'Illuminate\Redis\Database' => 'redis',
             'Illuminate\Contracts\Redis\Database' => 'redis',
@@ -1620,6 +1621,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Mail\Mailer' => 'registerMailBindings',
         'queue' => 'registerQueueBindings',
         'queue.connection' => 'registerQueueBindings',
+        'Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
         'redis' => 'registerRedisBindings',
         'request' => 'registerRequestBindings',
