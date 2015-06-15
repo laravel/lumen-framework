@@ -411,6 +411,22 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return void
      */
+    protected function registerBroadcastingBindings()
+    {
+        $this->singleton('Illuminate\Contracts\Broadcasting\Broadcaster', function () {
+            $this->configure('broadcasting');
+
+            $this->register('Illuminate\Broadcasting\BroadcastServiceProvider');
+
+            return $this->make('Illuminate\Contracts\Broadcasting\Broadcaster');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerBusBindings()
     {
         $this->singleton('Illuminate\Contracts\Bus\Dispatcher', function () {
@@ -1577,6 +1593,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'auth.password' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\PasswordBroker' => 'registerAuthBindings',
+        'Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
         'Illuminate\Contracts\Bus\Dispatcher' => 'registerBusBindings',
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
