@@ -6,7 +6,7 @@ use Illuminate\Validation\Validator;
 
 class Closure
 {
-    use DispatchesCommands, ValidatesRequests {
+    use DispatchesJobs, ValidatesRequests {
         ValidatesRequests::buildFailedValidationResponse as baseBuildFailedValidationResponse;
         ValidatesRequests::formatValidationErrors as baseFormatValidationErrors;
     }
