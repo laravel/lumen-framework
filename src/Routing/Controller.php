@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 abstract class Controller
 {
-    use DispatchesCommands, ValidatesRequests;
+    use DispatchesJobs, ValidatesRequests;
 
     /**
      * The middleware defined on the controller.
