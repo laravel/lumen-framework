@@ -15,6 +15,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $factory;
 
     /**
+     * The callbacks that should be run before the application is destroyed.
+     *
+     * @var array
+     */
+    protected $beforeApplicationDestroyedCallbacks = [];
+
+    /**
      * The base URL to use while testing the application.
      *
      * @var string
