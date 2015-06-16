@@ -137,6 +137,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $dispatcher;
 
     /**
+     * Registered service providers that waits to be booted
+     *
+     * @var ServiceProvider[]
+     */
+    protected $providersToBoot = [];
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -225,9 +232,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         $this->loadedProviders[$providerName] = true;
+        $this->providersToBoot[] = $provider;
 
         $provider->register();
-        $provider->boot();
     }
 
     /**
@@ -364,6 +371,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         return parent::make($abstract, $parameters);
+    }
+
+    /**
+     * Boots service providers
+     *
+     * @return void
+     */
+    protected function bootServiceProviders()
+    {
+        foreach ($this->providersToBoot as $provider) {
+            $provider->boot();
+        }
     }
 
     /**
@@ -1086,6 +1105,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $method = $this->getMethod();
             $pathInfo = $this->getPathInfo();
         }
+
+        // boot service providers
+        $this->bootServiceProviders();
 
         try {
             return $this->sendThroughPipeline($this->middleware, function () use ($method, $pathInfo) {
