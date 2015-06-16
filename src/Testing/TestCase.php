@@ -42,8 +42,29 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        if ($this->app) {
-            $this->app->flush();
+        if (class_exists('Mockery')) {
+            Mockery::close();
         }
+
+        if ($this->app) {
+            foreach ($this->beforeApplicationDestroyedCallbacks as $callback) {
+                call_user_func($callback);
+            }
+
+            $this->app->flush();
+
+            $this->app = null;
+        }
+    }
+
+    /**
+     * Register a callback to be run before the application is destroyed.
+     *
+     * @param  callable  $callback
+     * @return void
+     */
+    protected function beforeApplicationDestroyed(callable $callback)
+    {
+        $this->beforeApplicationDestroyedCallbacks[] = $callback;
     }
 }
