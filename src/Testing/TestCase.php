@@ -8,6 +8,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     use ApplicationTrait, AssertionsTrait, CrawlerTrait;
 
     /**
+     * The Eloquent factory instance.
+     *
+     * @var \Illuminate\Database\Eloquent\Factory
+     */
+    protected $factory;
+
+    /**
      * The base URL to use while testing the application.
      *
      * @var string
@@ -32,6 +39,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         if (! $this->app) {
             $this->refreshApplication();
+        }
+
+        if (!$this->factory) {
+            $this->app->make('db');
+
+            $this->factory = $this->app->make('Illuminate\Database\Eloquent\Factory');
         }
     }
 

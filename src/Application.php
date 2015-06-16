@@ -1606,6 +1606,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'Illuminate\Contracts\Cookie\Factory' => 'registerCookieBindings',
         'Illuminate\Contracts\Cookie\QueueingFactory' => 'registerCookieBindings',
         'db' => 'registerDatabaseBindings',
+        'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
         'encrypter' => 'registerEncrypterBindings',
         'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
         'events' => 'registerEventBindings',
