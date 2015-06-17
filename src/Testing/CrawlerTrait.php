@@ -287,15 +287,11 @@ trait CrawlerTrait
      */
     public function seeJson(array $data = null)
     {
-        if (is_null($data)) {
-            $this->assertJson(
-                $this->response->getContent(), "Failed asserting that JSON returned [{$this->currentUri}]."
-            );
+        $this->assertJson(
+            $this->response->getContent(), "Failed asserting that JSON returned [{$this->currentUri}]."
+        );
 
-            return $this;
-        }
-
-        return $this->seeJsonContains($data);
+        return is_null($data) ? $this : $this->seeJsonContains($data);
     }
 
     /**
