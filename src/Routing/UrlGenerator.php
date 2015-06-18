@@ -197,6 +197,8 @@ class UrlGenerator
         }
 
         $uri = $this->app->namedRoutes[$name];
+        
+        $parameters = $this->formatParametersForUrl($parameters);
 
         $uri = preg_replace_callback('/\{(.*?)(:.*?)?\}/', function ($m) use (&$parameters) {
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
