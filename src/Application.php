@@ -19,7 +19,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Illuminate\Contracts\Routing\TerminableMiddleware;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -172,7 +171,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.1-dev) (Laravel Components 5.1.*)';
+        return 'Lumen (5.1.0) (Laravel Components 5.1.*)';
     }
 
     /**
@@ -1096,10 +1095,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         foreach ($this->middleware as $middleware) {
             $instance = $this->make($middleware);
 
-            if ($instance instanceof TerminableMiddleware) {
-                $instance->terminate(
-                    $this->make('request'), $response
-                );
+            if (method_exists($instance, 'terminate')) {
+                $instance->terminate($this->make('request'), $response);
             }
         }
     }
@@ -1412,7 +1409,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->basePath.($path ? '/'.$path : $path);
         }
 
-        if ($this->runningInConsole() || php_sapi_name() === 'cli-server') {
+        if ($this->runningInConsole()) {
             $this->basePath = getcwd();
         } else {
             $this->basePath = realpath(getcwd().'/../');
