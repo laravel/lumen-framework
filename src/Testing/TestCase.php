@@ -1,10 +1,10 @@
 <?php namespace Laravel\Lumen\Testing;
 
+use Mockery;
 use PHPUnit_Framework_TestCase;
 
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
-
     use ApplicationTrait, AssertionsTrait, CrawlerTrait;
 
     /**
@@ -44,7 +44,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (! $this->app) {
+        if (!$this->app) {
             $this->refreshApplication();
         }
 
@@ -72,7 +72,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
 
             $this->app->flush();
-
             $this->app = null;
         }
     }
