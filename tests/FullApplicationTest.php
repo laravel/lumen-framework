@@ -204,12 +204,12 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $app->group(['middleware' => 'foo'], function($app) {
             $app->get('/', function () {
-                return response('Hello World');
+                return 'Hello World';
             });
         });
 
         $app->get('/foo', function() {
-            return response('Hello World');
+            return 'Hello World';
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
@@ -388,6 +388,25 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
     }
+
+
+    public function testMiddlewareReceiveResponsesEvenWhenStringReturned()
+    {
+        unset($_SERVER['__middleware.response']);
+
+        $app = new Application;
+
+        $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
+
+        $app->get('/', ['middleware' => 'foo', function () {
+            return 'Hello World';
+        }]);
+
+        $response = $app->handle(Request::create('/', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+        $this->assertEquals(true, $_SERVER['__middleware.response']);
+    }
 }
 
 class LumenTestService {}
@@ -400,6 +419,14 @@ class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 class LumenTestMiddleware {
     public function handle($request, $next) {
           return response('Middleware');
+    }
+}
+
+class LumenTestPlainMiddleware {
+    public function handle($request, $next) {
+          $response = $next($request);
+          $_SERVER['__middleware.response'] = $response instanceof Illuminate\Http\Response;
+          return $response;
     }
 }
 

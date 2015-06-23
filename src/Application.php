@@ -1204,8 +1204,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             }));
         }
 
-        return is_string($response = $this->callActionOnArrayBasedRoute($routeInfo))
-                         ? $response : $this->prepareResponse($response);
+        return $this->prepareResponse(
+            $this->callActionOnArrayBasedRoute($routeInfo)
+        );
     }
 
     /**
@@ -1219,7 +1220,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $action = $routeInfo[1];
 
         if (isset($action['uses'])) {
-            return $this->callControllerAction($routeInfo);
+            return $this->prepareResponse($this->callControllerAction($routeInfo));
         }
 
         foreach ($action as $value) {
@@ -1230,7 +1231,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         try {
-            return $this->call($closure, $routeInfo[2]);
+            return $this->prepareResponse($this->call($closure, $routeInfo[2]));
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
