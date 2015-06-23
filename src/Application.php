@@ -1643,7 +1643,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function welcome()
     {
-        return "<html>
+        return "<!DOCTYPE html>
+            <html>
             <head>
                 <title>Lumen</title>
 
@@ -1689,7 +1690,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                     </div>
                 </div>
             </body>
-        </html>
+            </html>
         ";
     }
 }
