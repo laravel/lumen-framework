@@ -1538,6 +1538,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * Get the application namespace.
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return 'App\\';
+    }
+
+    /**
      * Set the cached routes.
      *
      * @param  array  $routes
