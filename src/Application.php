@@ -4,6 +4,7 @@ use Closure;
 use Exception;
 use ErrorException;
 use Monolog\Logger;
+use RuntimeException;
 use FastRoute\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -134,6 +135,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @var \FastRoute\Dispatcher
      */
     protected $dispatcher;
+
+    /**
+     * The application namespace.
+     *
+     * @var string
+     */
+    protected $namespace;
 
     /**
      * Create a new Lumen application instance.
@@ -1399,6 +1407,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * Get the path to the application "app" directory.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'app';
+    }
+
+    /**
      * Get the base path for the application.
      *
      * @param  string  $path
@@ -1541,10 +1559,26 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Get the application namespace.
      *
      * @return string
+     *
+     * @throws \RuntimeException
      */
     public function getNamespace()
     {
-        return 'App\\';
+        if (!is_null($this->namespace)) {
+            return $this->namespace;
+        }
+
+        $composer = json_decode(file_get_contents($this->basePath().'/composer.json'), true);
+
+        foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
+            foreach ((array) $path as $pathChoice) {
+                if (realpath($this->path()) == realpath($this->basePath().'/'.$pathChoice)) {
+                    return $this->namespace = $namespace;
+                }
+            }
+        }
+
+        throw new RuntimeException('Unable to detect application namespace.');
     }
 
     /**
