@@ -445,6 +445,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $this->singleton('cache', function () {
             return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider');
         });
+        
+        $this->singleton('cache.store', function () {
+            return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider', 'cache.store');
+        });
     }
 
     /**
