@@ -1549,7 +1549,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Determine if the application is running in the console.
      *
-     * @return string
+     * @return bool
      */
     public function runningInConsole()
     {
