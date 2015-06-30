@@ -15,7 +15,7 @@ if (! function_exists('abort')) {
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    function abort($code, $message = '', array $headers = array())
+    function abort($code, $message = '', array $headers = [])
     {
         return app()->abort($code, $message, $headers);
     }
@@ -60,7 +60,7 @@ if (! function_exists('bcrypt')) {
      * @param  array   $options
      * @return string
      */
-    function bcrypt($value, $options = array())
+    function bcrypt($value, $options = [])
     {
         return app('hash')->make($value, $options);
     }
@@ -197,7 +197,7 @@ if (! function_exists('event')) {
      * @param  bool    $halt
      * @return array|null
      */
-    function event($event, $payload = array(), $halt = false)
+    function event($event, $payload = [], $halt = false)
     {
         return app('events')->fire($event, $payload, $halt);
     }
@@ -236,7 +236,7 @@ if (! function_exists('info')) {
      * @param  array   $context
      * @return void
      */
-    function info($message, $context = array())
+    function info($message, $context = [])
     {
         return app('Psr\Log\LoggerInterface')->info($message, $context);
     }
@@ -266,7 +266,7 @@ if (! function_exists('redirect')) {
      * @param  bool    $secure
      * @return \Laravel\Lumen\Http\Redirector|\Illuminate\Http\RedirectResponse
      */
-    function redirect($to = null, $status = 302, $headers = array(), $secure = null)
+    function redirect($to = null, $status = 302, $headers = [], $secure = null)
     {
         $redirector = new Laravel\Lumen\Http\Redirector(Container::getInstance()->make('app'));
 
@@ -287,7 +287,7 @@ if (! function_exists('response')) {
      * @param  array   $headers
      * @return \Symfony\Component\HttpFoundation\Response|\Laravel\Lumen\Http\ResponseFactory
      */
-    function response($content = '', $status = 200, array $headers = array())
+    function response($content = '', $status = 200, array $headers = [])
     {
         $factory = new Laravel\Lumen\Http\ResponseFactory(Container::getInstance()->make('app'));
 
@@ -307,7 +307,7 @@ if (! function_exists('route')) {
      * @param  array   $parameters
      * @return string
      */
-    function route($name, $parameters = array())
+    function route($name, $parameters = [])
     {
         return (new Laravel\Lumen\Routing\UrlGenerator(app()))
                 ->route($name, $parameters);
@@ -359,7 +359,7 @@ if (! function_exists('trans')) {
      * @param  string  $locale
      * @return string
      */
-    function trans($id = null, $parameters = array(), $domain = 'messages', $locale = null)
+    function trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
     {
         if (is_null($id)) {
             return app('translator');
@@ -380,7 +380,7 @@ if (! function_exists('trans_choice')) {
      * @param  string  $locale
      * @return string
      */
-    function trans_choice($id, $number, array $parameters = array(), $domain = 'messages', $locale = null)
+    function trans_choice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return app('translator')->transChoice($id, $number, $parameters, $domain, $locale);
     }
@@ -395,7 +395,7 @@ if (! function_exists('url')) {
      * @param  bool    $secure
      * @return string
      */
-    function url($path = null, $parameters = array(), $secure = null)
+    function url($path = null, $parameters = [], $secure = null)
     {
         return (new Laravel\Lumen\Routing\UrlGenerator(app()))
                                 ->to($path, $parameters, $secure);
@@ -411,7 +411,7 @@ if (! function_exists('view')) {
      * @param  array   $mergeData
      * @return \Illuminate\View\View
      */
-    function view($view = null, $data = array(), $mergeData = array())
+    function view($view = null, $data = [], $mergeData = [])
     {
         $factory = Container::getInstance()->make('view');
 

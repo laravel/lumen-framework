@@ -73,7 +73,7 @@ class UrlGenerator
      * @param  bool  $secure
      * @return string
      */
-    public function to($path, $extra = array(), $secure = null)
+    public function to($path, $extra = [], $secure = null)
     {
         // First we will check if the URL is already a valid URL. If it is we will not
         // try to generate a new one but will simply return the URL as is, which is
@@ -105,7 +105,7 @@ class UrlGenerator
      * @param  array   $parameters
      * @return string
      */
-    public function secure($path, $parameters = array())
+    public function secure($path, $parameters = [])
     {
         return $this->to($path, $parameters, true);
     }
@@ -190,7 +190,7 @@ class UrlGenerator
      *
      * @throws \InvalidArgumentException
      */
-    public function route($name, $parameters = array())
+    public function route($name, $parameters = [])
     {
         if (! isset($this->app->namedRoutes[$name])) {
             throw new \InvalidArgumentException("Route [{$name}] not defined.");
@@ -264,7 +264,7 @@ class UrlGenerator
      * @param  array  $parameters
      * @return array
      */
-    protected function replaceRoutableParametersForUrl($parameters = array())
+    protected function replaceRoutableParametersForUrl($parameters = [])
     {
         $parameters = is_array($parameters) ? $parameters : array($parameters);
 

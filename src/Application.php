@@ -241,7 +241,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  bool   $force
      * @return \Illuminate\Support\ServiceProvider
      */
-    public function register($provider, $options = array(), $force = false)
+    public function register($provider, $options = [], $force = false)
     {
         if (!$provider instanceof ServiceProvider) {
             $provider = new $provider($this);
@@ -365,7 +365,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function abort($code, $message = '', array $headers = array())
+    public function abort($code, $message = '', array $headers = [])
     {
         if ($code == 404) {
             throw new NotFoundHttpException($message);
@@ -381,7 +381,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, array $parameters = array())
+    public function make($abstract, array $parameters = [])
     {
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {

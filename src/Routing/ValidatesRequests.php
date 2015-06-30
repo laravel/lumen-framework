@@ -17,7 +17,7 @@ trait ValidatesRequests
      * @param  array  $customAttributes
      * @return void
      */
-    public function validate(Request $request, array $rules, array $messages = array(), array $customAttributes = array())
+    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
 
