@@ -322,7 +322,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Send the exception to the handler and retunr the response.
+     * Send the exception to the handler and return the response.
      *
      * @param  Exception  $e
      * @return Response
