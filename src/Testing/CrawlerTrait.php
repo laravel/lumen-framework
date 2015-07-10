@@ -58,7 +58,9 @@ trait CrawlerTrait
      */
     public function get($uri, array $headers = [])
     {
-        $this->call('GET', $uri, [], [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+        
+        $this->call('GET', $uri, [], [], [], $server);
 
         return $this;
     }
@@ -73,7 +75,9 @@ trait CrawlerTrait
      */
     public function post($uri, array $data = [], array $headers = [])
     {
-        $this->call('POST', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+        
+        $this->call('POST', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -88,7 +92,9 @@ trait CrawlerTrait
      */
     public function put($uri, array $data = [], array $headers = [])
     {
-        $this->call('PUT', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+        
+        $this->call('PUT', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -103,7 +109,9 @@ trait CrawlerTrait
      */
     public function patch($uri, array $data = [], array $headers = [])
     {
-        $this->call('PATCH', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+        
+        $this->call('PATCH', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -118,9 +126,31 @@ trait CrawlerTrait
      */
     public function delete($uri, array $data = [], array $headers = [])
     {
-        $this->call('DELETE', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+        
+        $this->call('DELETE', $uri, $data, [], [], $server);
 
         return $this;
+    }
+    
+    /**
+     * Transform headers array to array of $_SERVER vars with HTTP_* format.
+     *
+     * @param  array $headers
+     *
+     * @return array
+     */
+    protected function transformHeadersToServerVars(array $headers)
+    {
+        $server = [];
+        foreach ($headers as $name => $value) {
+            if (! starts_with($name, 'HTTP_')) {
+                $name = 'HTTP_' . strtr(strtoupper($name), '-', '_');
+            }
+            $server[$name] = $value;
+        }
+
+        return $server;
     }
 
     /**
