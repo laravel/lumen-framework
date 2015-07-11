@@ -109,7 +109,7 @@ return [
     |
     */
 
-    'cookie' => env('SESSION_DRIVER', 'laravel_session'),
+    'cookie' => env('SESSION_COOKIE_NAME', 'laravel_session'),
 
     /*
     |--------------------------------------------------------------------------
