@@ -221,6 +221,23 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
+    public function testWithMiddlewareDisabled()
+    {
+        $app = new Application;
+
+        $app->middleware(['LumenTestMiddleware']);
+        $app->instance('middleware.disable', true);
+        
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+    }
+
 
     public function testGroupPrefixRoutes()
     {
