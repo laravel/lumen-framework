@@ -1360,7 +1360,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $shouldSkipMiddleware = $this->bound('middleware.disable') &&
                                         $this->make('middleware.disable') === true;
 
-        if (count($middleware) > 0 && $shouldSkipMiddleware === false) {
+        if (count($middleware) > 0 && ! $shouldSkipMiddleware) {
             return (new Pipeline($this))
                 ->send($this->make('request'))
                 ->through($middleware)
