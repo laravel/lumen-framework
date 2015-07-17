@@ -22,6 +22,7 @@ use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -316,9 +317,28 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             }
         });
 
+        register_shutdown_function(function () {
+            if (! is_null($error = error_get_last()) && $this->isFatalError($error['type'])) {
+                $this->handleUncaughtException(new FatalErrorException(
+                    $error['message'], $error['type'], 0, $error['file'], $error['line']
+                ));
+            }
+        });
+
         set_exception_handler(function ($e) {
             $this->handleUncaughtException($e);
         });
+    }
+
+    /**
+     * Determine if the error type is fatal.
+     *
+     * @param  int  $type
+     * @return bool
+     */
+    protected function isFatalError($type)
+    {
+        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
     }
 
     /**
