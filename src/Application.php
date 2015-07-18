@@ -1450,7 +1450,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return string
      */
-    public function getPathInfo()
+    protected function getPathInfo()
     {
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
