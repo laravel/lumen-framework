@@ -1,6 +1,7 @@
 <?php namespace Laravel\Lumen\Testing;
 
 use Mockery;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
