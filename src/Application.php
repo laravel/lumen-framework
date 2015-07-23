@@ -323,8 +323,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         register_shutdown_function(function () {
             if (! is_null($error = error_get_last()) && $this->isFatalError($error['type'])) {
-                $this->handleUncaughtException(new FatalErrorException(
-                    $error['message'], $error['type'], 0, $error['file'], $error['line']
+               $this->handleUncaughtException(new FatalErrorException(
+                    $error['message'],
+                    $error['type'],
+                    0,
+                    $error['file'],
+                    $error['line']
                 ));
             }
         });
@@ -524,7 +528,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->singleton('db', function () {
             return $this->loadComponent(
-                'database', [
+                'database',
+                [
                     'Illuminate\Database\DatabaseServiceProvider',
                     'Illuminate\Pagination\PaginationServiceProvider'],
                 'db'
@@ -567,7 +572,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (! $this->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
             $this->singleton(
-                'Illuminate\Contracts\Debug\ExceptionHandler', 'Laravel\Lumen\Exceptions\Handler'
+                'Illuminate\Contracts\Debug\ExceptionHandler',
+                'Laravel\Lumen\Exceptions\Handler'
             );
         }
     }
@@ -1284,7 +1290,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->callLumenController($instance, $method, $routeInfo);
         } else {
             return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
+                [$instance, $method],
+                $routeInfo[2]
             );
         }
     }
@@ -1299,17 +1306,22 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function callLumenController($instance, $method, $routeInfo)
     {
-        $middleware = $instance->getMiddlewareForMethod(
-            $this->make('request'), $method
+         $middleware = $instance->getMiddlewareForMethod(
+            $this->make('request'),
+            $method
         );
 
         if (count($middleware) > 0) {
             return $this->callLumenControllerWithMiddleware(
-                $instance, $method, $routeInfo, $middleware
+                $instance,
+                $method,
+                $routeInfo,
+                $middleware
             );
         } else {
             return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
+                [$instance, $method],
+                $routeInfo[2]
             );
         }
     }
@@ -1329,7 +1341,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
             return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
+                [$instance, $method],
+                $routeInfo[2]
             );
         });
     }

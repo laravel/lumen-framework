@@ -99,7 +99,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
         $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
-          return response($baz);
+            return response($baz);
         });
 
         $response = $app->handle(Request::create('/foo-bar/something', 'GET'));
@@ -148,7 +148,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             return response('Hello World');
         });
 
-        $app->get('/foo', ['middleware' => 'foo', function() {
+        $app->get('/foo', ['middleware' => 'foo', function () {
             return response('Hello World');
         }]);
 
@@ -202,13 +202,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
 
-        $app->group(['middleware' => 'foo'], function($app) {
+        $app->group(['middleware' => 'foo'], function ($app) {
             $app->get('/', function () {
                 return 'Hello World';
             });
         });
 
-        $app->get('/foo', function() {
+        $app->get('/foo', function () {
             return 'Hello World';
         });
 
@@ -243,7 +243,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->group(['prefix' => 'user'], function($app) {
+        $app->group(['prefix' => 'user'], function ($app) {
             $app->get('/', function () {
                 return response('User Index');
             });
@@ -322,7 +322,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         require_once __DIR__.'/fixtures/TestController.php';
 
-        $app->group(['namespace' => 'Lumen\Tests'], function($app) {
+        $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
         });
 
@@ -339,11 +339,11 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
@@ -360,15 +360,15 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
             //
         }]);
 
@@ -426,45 +426,62 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 }
 
-class LumenTestService {}
+class LumenTestService
+{
+    
+}
 
 class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
-    public function register() {}
+    public function register()
+    {
+
+    }
 }
 
-class LumenTestMiddleware {
-    public function handle($request, $next) {
+class LumenTestMiddleware
+{
+    public function handle($request, $next)
+    {
           return response('Middleware');
     }
 }
 
-class LumenTestPlainMiddleware {
-    public function handle($request, $next) {
+class LumenTestPlainMiddleware
+{
+    public function handle($request, $next)
+    {
           $response = $next($request);
           $_SERVER['__middleware.response'] = $response instanceof Illuminate\Http\Response;
           return $response;
     }
 }
 
-class LumenTestParameterizedMiddleware {
-    public function handle($request, $next, $parameter1, $parameter2) {
+class LumenTestParameterizedMiddleware
+{
+    public function handle($request, $next, $parameter1, $parameter2)
+    {
         return response("Middleware - $parameter1 - $parameter2");
     }
 }
 
-class LumenTestController {
+class LumenTestController
+{
     public $service;
-    public function __construct(LumenTestService $service) {
+    public function __construct(LumenTestService $service)
+    {
         $this->service = $service;
     }
-    public function action() {
+    public function action()
+    {
         return response(__CLASS__);
     }
-    public function actionWithParameter($baz) {
+    public function actionWithParameter($baz)
+    {
         return response($baz);
     }
-    public function actionWithDefaultParameter($baz = 'default-value') {
+    public function actionWithDefaultParameter($baz = 'default-value')
+    {
         return response($baz);
     }
 }

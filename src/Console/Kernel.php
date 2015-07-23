@@ -56,7 +56,8 @@ class Kernel implements KernelContract
     protected function defineConsoleSchedule()
     {
         $this->app->instance(
-            'Illuminate\Console\Scheduling\Schedule', $schedule = new Schedule
+            'Illuminate\Console\Scheduling\Schedule',
+            $schedule = new Schedule
         );
 
         $this->schedule($schedule);

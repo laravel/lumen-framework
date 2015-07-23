@@ -36,7 +36,8 @@ trait ValidatesRequests
     protected function throwValidationException(Request $request, $validator)
     {
         throw new HttpResponseException($this->buildFailedValidationResponse(
-            $request, $this->formatValidationErrors($validator)
+            $request,
+            $this->formatValidationErrors($validator)
         ));
     }
 

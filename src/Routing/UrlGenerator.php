@@ -86,9 +86,7 @@ class UrlGenerator
 
         $extra = $this->formatParametersForUrl($extra);
 
-        $tail = implode('/', array_map(
-            'rawurlencode', (array) $extra)
-        );
+        $tail = implode('/', array_map('rawurlencode', (array) $extra));
 
         // Once we have the scheme we will compile the "tail" by collapsing the values
         // into a single string delimited by slashes. This just makes it convenient
