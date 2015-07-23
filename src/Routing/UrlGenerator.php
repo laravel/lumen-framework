@@ -200,7 +200,7 @@ class UrlGenerator
         
         $parameters = $this->formatParametersForUrl($parameters);
 
-        $uri = preg_replace_callback('/\{(.*?)(:.*?)?\}/', function ($m) use (&$parameters) {
+        $uri = preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
 
