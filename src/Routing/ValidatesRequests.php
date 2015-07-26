@@ -20,7 +20,8 @@ trait ValidatesRequests
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
-         $validator->setAttributeNames($customAttributes);
+        $validator->setAttributeNames($customAttributes);
+        
         if ($validator->fails()) {
             $this->throwValidationException($request, $validator);
         }
