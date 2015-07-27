@@ -338,7 +338,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function isFatalError($type)
     {
-        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
+        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE, 16777217]); //16777217 is a fatal error thrown by HHVM
     }
 
     /**
