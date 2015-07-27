@@ -340,7 +340,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $errorCodes = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE];
 
-        if (defined('FATAL_ERROR')){
+        if (defined('FATAL_ERROR')) {
             $errorCodes[] = FATAL_ERROR;
         }
 
