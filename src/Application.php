@@ -339,9 +339,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected function isFatalError($type)
     {
         $errorCodes = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE];
+
         if (defined('FATAL_ERROR')){
             $errorCodes[] = FATAL_ERROR; //add the HHVM fatal runtime error to the codes
         }
+
         return in_array($type, $errorCodes);
     }
 
