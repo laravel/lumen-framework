@@ -338,7 +338,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function isFatalError($type)
     {
-        return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
+        $errorCodes = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE];
+
+        if (defined('FATAL_ERROR')) {
+            $errorCodes[] = FATAL_ERROR;
+        }
+
+        return in_array($type, $errorCodes);
     }
 
     /**
