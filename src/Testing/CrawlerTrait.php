@@ -145,7 +145,9 @@ trait CrawlerTrait
         $server = [];
 
         foreach ($headers as $name => $value) {
-            if (! starts_with($name, 'HTTP_')) {
+            if (strtoupper($name) == 'CONTENT-TYPE') {
+                $name = 'CONTENT_TYPE';
+            } elseif (! starts_with($name, 'HTTP_')) {
                 $name = 'HTTP_' . strtr(strtoupper($name), '-', '_');
             }
 
