@@ -71,13 +71,14 @@ trait CrawlerTrait
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
+     * @param  string  $content
      * @return $this
      */
-    public function post($uri, array $data = [], array $headers = [])
+    public function post($uri, array $data = [], array $headers = [], $content = null)
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('POST', $uri, $data, [], [], $server);
+        $this->call('POST', $uri, $data, [], [], $server, $content);
 
         return $this;
     }
@@ -88,13 +89,14 @@ trait CrawlerTrait
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
+     * @param  string  $content
      * @return $this
      */
-    public function put($uri, array $data = [], array $headers = [])
+    public function put($uri, array $data = [], array $headers = [], $content = null)
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('PUT', $uri, $data, [], [], $server);
+        $this->call('PUT', $uri, $data, [], [], $server, $content);
 
         return $this;
     }
@@ -105,13 +107,14 @@ trait CrawlerTrait
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
+     * @param  string  $content
      * @return $this
      */
-    public function patch($uri, array $data = [], array $headers = [])
+    public function patch($uri, array $data = [], array $headers = [], $content = null)
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('PATCH', $uri, $data, [], [], $server);
+        $this->call('PATCH', $uri, $data, [], [], $server, $content);
 
         return $this;
     }
@@ -165,11 +168,11 @@ trait CrawlerTrait
      * @param  array  $files
      * @return $this
      */
-    protected function makeRequest($method, $uri, $parameters = [], $cookies = [], $files = [])
+    protected function makeRequest($method, $uri, $parameters = [], $cookies = [], $files = [], $content = null)
     {
         $uri = $this->prepareUrlForRequest($uri);
 
-        $this->call($method, $uri, $parameters, $cookies, $files);
+        $this->call($method, $uri, $parameters, $cookies, $files, [], $content);
 
         $this->clearInputs()->followRedirects()->assertPageLoaded($uri);
 
