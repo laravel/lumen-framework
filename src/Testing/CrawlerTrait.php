@@ -141,6 +141,8 @@ trait CrawlerTrait
      */
     public function request(Request $request)
     {
+        $this->currentUri = $request->getUri();
+
         $this->response = $this->app->prepareResponse($this->app->handle($request));
 
         return $this;
