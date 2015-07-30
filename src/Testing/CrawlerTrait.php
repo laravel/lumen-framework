@@ -136,7 +136,7 @@ trait CrawlerTrait
     /**
      * Make the given request.
      *
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return $this
      */
     public function request(Request $request)
