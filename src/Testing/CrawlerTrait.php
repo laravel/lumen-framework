@@ -134,7 +134,7 @@ trait CrawlerTrait
     }
 
     /**
-     * Make the given request
+     * Make the given request.
      *
      * @param  Request  $request
      * @return $this
