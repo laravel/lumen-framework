@@ -134,6 +134,19 @@ trait CrawlerTrait
     }
 
     /**
+     * Make the given request
+     *
+     * @param Request $request
+     * @return $this
+     */
+    public function request(Request $request)
+    {
+        $this->response = $this->app->prepareResponse($this->app->handle($request));
+
+        return $this;
+    }
+
+    /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
      * @param  array $headers
