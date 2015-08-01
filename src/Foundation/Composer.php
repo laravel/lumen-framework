@@ -1,10 +1,12 @@
-<?php namespace Illuminate\Foundation;
+<?php
+
+namespace Illuminate\Foundation;
 
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
-class Composer {
-
+class Composer
+{
     /**
      * The filesystem instance.
      *
@@ -64,8 +66,7 @@ class Composer {
      */
     protected function findComposer()
     {
-        if ($this->files->exists($this->workingPath.'/composer.phar'))
-        {
+        if ($this->files->exists($this->workingPath.'/composer.phar')) {
             return '"'.PHP_BINARY.'" composer.phar';
         }
 
@@ -94,5 +95,4 @@ class Composer {
 
         return $this;
     }
-
 }

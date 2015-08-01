@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen;
+<?php
+
+namespace Laravel\Lumen;
 
 use Closure;
 use Exception;
@@ -31,7 +33,6 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Application extends Container implements ApplicationContract, HttpKernelInterface
 {
-
     /**
      * Indicates if the class aliases have been registered.
      *
@@ -244,7 +245,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function register($provider, $options = [], $force = false)
     {
-        if (!$provider instanceof ServiceProvider) {
+        if (! $provider instanceof ServiceProvider) {
             $provider = new $provider($this);
         }
 
@@ -532,7 +533,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->loadComponent(
                 'database', [
                     'Illuminate\Database\DatabaseServiceProvider',
-                    'Illuminate\Pagination\PaginationServiceProvider'],
+                    'Illuminate\Pagination\PaginationServiceProvider', ],
                 'db'
             );
         });
@@ -1370,6 +1371,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         return array_map(function ($name) {
             list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+
             return array_get($this->routeMiddleware, $name, $name).($parameters ? ':'.$parameters : '');
         }, $middleware);
     }
@@ -1448,7 +1450,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function getNamespace()
     {
-        if (!is_null($this->namespace)) {
+        if (! is_null($this->namespace)) {
             return $this->namespace;
         }
 

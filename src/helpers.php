@@ -129,7 +129,7 @@ if (! function_exists('csrf_token')) {
         if (isset($session)) {
             return $session->getToken();
         }
-        throw new RuntimeException("Application session store not set.");
+        throw new RuntimeException('Application session store not set.');
     }
 }
 
@@ -203,7 +203,7 @@ if (! function_exists('event')) {
     }
 }
 
-if (!function_exists('factory')) {
+if (! function_exists('factory')) {
     /**
      * Create a model factory builder for a given class, name, and amount.
      *
@@ -332,6 +332,7 @@ if (! function_exists('session')) {
         if (is_array($key)) {
             return Container::getInstance()->make('session')->put($key);
         }
+
         return Container::getInstance()->make('session')->get($key, $default);
     }
 }
@@ -418,6 +419,7 @@ if (! function_exists('view')) {
         if (func_num_args() === 0) {
             return $factory;
         }
+
         return $factory->make($view, $data, $mergeData);
     }
 }

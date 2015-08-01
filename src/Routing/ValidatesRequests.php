@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Routing;
+<?php
+
+namespace Laravel\Lumen\Routing;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -7,7 +9,6 @@ use Illuminate\Http\Exception\HttpResponseException;
 
 trait ValidatesRequests
 {
-
     /**
      * Validate the given request with the given rules.
      *

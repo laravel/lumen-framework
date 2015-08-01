@@ -1,11 +1,12 @@
-<?php namespace Laravel\Lumen\Http;
+<?php
+
+namespace Laravel\Lumen\Http;
 
 use Laravel\Lumen\Application;
 use Illuminate\Http\RedirectResponse;
 
 class Redirector
 {
-
     /**
      * The application instance.
      *
