@@ -64,7 +64,7 @@ return [
             'container' => env('RACKSPACE_CONTAINER'),
             'endpoint'  => 'https://identity.api.rackspacecloud.com/v2.0/',
             'region'    => env('RACKSPACE_REGION'),
-            'url_type'  => 'publicURL'
+            'url_type'  => 'publicURL',
         ],
 
     ],

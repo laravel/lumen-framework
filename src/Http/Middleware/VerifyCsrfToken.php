@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Http\Middleware;
+<?php
+
+namespace Laravel\Lumen\Http\Middleware;
 
 use Closure;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -8,7 +10,6 @@ use Symfony\Component\Security\Core\Util\StringUtils;
 
 class VerifyCsrfToken
 {
-
     /**
      * The encrypter implementation.
      *

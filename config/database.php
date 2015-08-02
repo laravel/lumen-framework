@@ -67,7 +67,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix'    => env('DB_PREFIX', ''),
-            'timezone'  => env('DB_TIMEZONE','+00:00'),
+            'timezone'  => env('DB_TIMEZONE', '+00:00'),
             'strict'    => false,
         ],
 
@@ -126,7 +126,7 @@ return [
             'host'     => env('REDIS_HOST', '127.0.0.1'),
             'port'     => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DATABASE', 0),
-            'password' => env('REDIS_PASSWORD', null)
+            'password' => env('REDIS_PASSWORD', null),
         ],
 
     ],

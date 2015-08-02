@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Http;
+<?php
+
+namespace Laravel\Lumen\Http;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
@@ -8,7 +10,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResponseFactory
 {
-
     /**
      * Return a new response from the application.
      *

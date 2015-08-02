@@ -1,11 +1,12 @@
-<?php namespace Laravel\Lumen\Testing;
+<?php
+
+namespace Laravel\Lumen\Testing;
 
 use Illuminate\View\View;
 use PHPUnit_Framework_Assert as PHPUnit;
 
 trait AssertionsTrait
 {
-
     /**
      * Assert that the client response has an OK status code.
      *

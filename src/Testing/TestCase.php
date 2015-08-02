@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Testing;
+<?php
+
+namespace Laravel\Lumen\Testing;
 
 use Mockery;
 use PHPUnit_Framework_TestCase;
@@ -37,7 +39,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if (!$this->app) {
+        if (! $this->app) {
             $this->refreshApplication();
         }
     }
