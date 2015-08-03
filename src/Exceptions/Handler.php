@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Exceptions;
+<?php
+
+namespace Laravel\Lumen\Exceptions;
 
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -7,7 +9,6 @@ use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 class Handler implements ExceptionHandler
 {
-
     /**
      * A list of the exception types that should not be reported.
      *

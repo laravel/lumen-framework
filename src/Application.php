@@ -1,9 +1,12 @@
-<?php namespace Laravel\Lumen;
+<?php
+
+namespace Laravel\Lumen;
 
 use Closure;
 use Exception;
 use ErrorException;
 use Monolog\Logger;
+use RuntimeException;
 use FastRoute\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,6 +24,7 @@ use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -29,7 +33,6 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Application extends Container implements ApplicationContract, HttpKernelInterface
 {
-
     /**
      * Indicates if the class aliases have been registered.
      *
@@ -136,6 +139,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected $dispatcher;
 
     /**
+     * The application namespace.
+     *
+     * @var string
+     */
+    protected $namespace;
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -233,9 +243,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  bool   $force
      * @return \Illuminate\Support\ServiceProvider
      */
-    public function register($provider, $options = array(), $force = false)
+    public function register($provider, $options = [], $force = false)
     {
-        if (!$provider instanceof ServiceProvider) {
+        if (! $provider instanceof ServiceProvider) {
             $provider = new $provider($this);
         }
 
@@ -311,10 +321,35 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         set_exception_handler(function ($e) {
             $this->handleUncaughtException($e);
         });
+
+        register_shutdown_function(function () {
+            if (! is_null($error = error_get_last()) && $this->isFatalError($error['type'])) {
+                $this->handleUncaughtException(new FatalErrorException(
+                    $error['message'], $error['type'], 0, $error['file'], $error['line']
+                ));
+            }
+        });
     }
 
     /**
-     * Send the exception to the handler and retunr the response.
+     * Determine if the error type is fatal.
+     *
+     * @param  int  $type
+     * @return bool
+     */
+    protected function isFatalError($type)
+    {
+        $errorCodes = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE];
+
+        if (defined('FATAL_ERROR')) {
+            $errorCodes[] = FATAL_ERROR;
+        }
+
+        return in_array($type, $errorCodes);
+    }
+
+    /**
+     * Send the exception to the handler and return the response.
      *
      * @param  Exception  $e
      * @return Response
@@ -357,7 +392,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function abort($code, $message = '', array $headers = array())
+    public function abort($code, $message = '', array $headers = [])
     {
         if ($code == 404) {
             throw new NotFoundHttpException($message);
@@ -373,7 +408,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, array $parameters = array())
+    public function make($abstract, array $parameters = [])
     {
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
@@ -445,6 +480,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $this->singleton('cache', function () {
             return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider');
         });
+
+        $this->singleton('cache.store', function () {
+            return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider', 'cache.store');
+        });
     }
 
     /**
@@ -494,7 +533,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return $this->loadComponent(
                 'database', [
                     'Illuminate\Database\DatabaseServiceProvider',
-                    'Illuminate\Pagination\PaginationServiceProvider'],
+                    'Illuminate\Pagination\PaginationServiceProvider', ],
                 'db'
             );
         });
@@ -1201,8 +1240,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             }));
         }
 
-        return is_string($response = $this->callActionOnArrayBasedRoute($routeInfo))
-                         ? $response : $this->prepareResponse($response);
+        return $this->prepareResponse(
+            $this->callActionOnArrayBasedRoute($routeInfo)
+        );
     }
 
     /**
@@ -1216,7 +1256,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $action = $routeInfo[1];
 
         if (isset($action['uses'])) {
-            return $this->callControllerAction($routeInfo);
+            return $this->prepareResponse($this->callControllerAction($routeInfo));
         }
 
         foreach ($action as $value) {
@@ -1227,7 +1267,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         try {
-            return $this->call($closure, $routeInfo[2]);
+            return $this->prepareResponse($this->call($closure, $routeInfo[2]));
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
@@ -1331,6 +1371,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         return array_map(function ($name) {
             list($name, $parameters) = array_pad(explode(':', $name, 2), 2, null);
+
             return array_get($this->routeMiddleware, $name, $name).($parameters ? ':'.$parameters : '');
         }, $middleware);
     }
@@ -1344,7 +1385,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
     {
-        if (count($middleware) > 0) {
+        $shouldSkipMiddleware = $this->bound('middleware.disable') &&
+                                        $this->make('middleware.disable') === true;
+
+        if (count($middleware) > 0 && ! $shouldSkipMiddleware) {
             return (new Pipeline($this))
                 ->send($this->make('request'))
                 ->through($middleware)
@@ -1395,6 +1439,42 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
         return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
+    }
+
+    /**
+     * Get the application namespace.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    public function getNamespace()
+    {
+        if (! is_null($this->namespace)) {
+            return $this->namespace;
+        }
+
+        $composer = json_decode(file_get_contents($this->basePath().'/composer.json'), true);
+
+        foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
+            foreach ((array) $path as $pathChoice) {
+                if (realpath($this->path()) == realpath($this->basePath().'/'.$pathChoice)) {
+                    return $this->namespace = $namespace;
+                }
+            }
+        }
+
+        throw new RuntimeException('Unable to detect application namespace.');
+    }
+
+    /**
+     * Get the path to the application "app" directory.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'app';
     }
 
     /**
@@ -1500,7 +1580,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Determine if the application is running in the console.
      *
-     * @return string
+     * @return bool
      */
     public function runningInConsole()
     {
@@ -1642,7 +1722,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function welcome()
     {
-        return "<html>
+        return "<!DOCTYPE html>
+            <html>
             <head>
                 <title>Lumen</title>
 
@@ -1688,7 +1769,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                     </div>
                 </div>
             </body>
-        </html>
+            </html>
         ";
     }
 }

@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Routing;
+<?php
+
+namespace Laravel\Lumen\Routing;
 
 use Closure as BaseClosure;
 use Illuminate\Http\Request;

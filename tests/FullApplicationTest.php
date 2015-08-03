@@ -11,7 +11,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         m::close();
     }
 
-
     public function testBasicRequest()
     {
         $app = new Application;
@@ -25,7 +24,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
     }
-
 
     public function testRequestWithoutSymfonyClass()
     {
@@ -46,7 +44,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
     }
 
-
     public function testRequestWithoutSymfonyClassTrailingSlash()
     {
         $app = new Application;
@@ -66,7 +63,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
     }
 
-
     public function testRequestWithParameters()
     {
         $app = new Application;
@@ -81,7 +77,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('12', $response->getContent());
     }
 
-
     public function testRequestToControllerWithParameters()
     {
         $app = new Application;
@@ -93,7 +88,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('1', $response->getContent());
     }
-
 
     public function testCallbackRouteWithDefaultParameter()
     {
@@ -108,7 +102,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('something', $response->getContent());
     }
 
-
     public function testControllerRouteWithDefaultParameter()
     {
         $app = new Application;
@@ -119,7 +112,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('something2', $response->getContent());
     }
-
 
     public function testGlobalMiddleware()
     {
@@ -137,7 +129,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Middleware', $response->getContent());
     }
 
-
     public function testRouteMiddleware()
     {
         $app = new Application;
@@ -148,7 +139,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             return response('Hello World');
         });
 
-        $app->get('/foo', ['middleware' => 'foo', function() {
+        $app->get('/foo', ['middleware' => 'foo', function () {
             return response('Hello World');
         }]);
 
@@ -160,7 +151,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Middleware', $response->getContent());
     }
-
 
     public function testGlobalMiddlewareParameters()
     {
@@ -178,7 +168,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Middleware - foo - bar', $response->getContent());
     }
 
-
     public function testRouteMiddlewareParameters()
     {
         $app = new Application;
@@ -195,21 +184,20 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Middleware - bar - boom', $response->getContent());
     }
 
-
     public function testGroupRouteMiddleware()
     {
         $app = new Application;
 
         $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
 
-        $app->group(['middleware' => 'foo'], function($app) {
+        $app->group(['middleware' => 'foo'], function ($app) {
             $app->get('/', function () {
-                return response('Hello World');
+                return 'Hello World';
             });
         });
 
-        $app->get('/foo', function() {
-            return response('Hello World');
+        $app->get('/foo', function () {
+            return 'Hello World';
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
@@ -221,12 +209,28 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
+    public function testWithMiddlewareDisabled()
+    {
+        $app = new Application;
+
+        $app->middleware(['LumenTestMiddleware']);
+        $app->instance('middleware.disable', true);
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+    }
 
     public function testGroupPrefixRoutes()
     {
         $app = new Application;
 
-        $app->group(['prefix' => 'user'], function($app) {
+        $app->group(['prefix' => 'user'], function ($app) {
             $app->get('/', function () {
                 return response('User Index');
             });
@@ -253,7 +257,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('User Show', $response->getContent());
     }
 
-
     public function testNotFoundResponse()
     {
         $app = new Application;
@@ -268,7 +271,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(404, $response->getStatusCode());
     }
-
 
     public function testMethodNotAllowedResponse()
     {
@@ -285,7 +287,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(405, $response->getStatusCode());
     }
 
-
     public function testControllerResponse()
     {
         $app = new Application;
@@ -298,14 +299,13 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('LumenTestController', $response->getContent());
     }
 
-
     public function testNamespacedControllerResponse()
     {
         $app = new Application;
 
         require_once __DIR__.'/fixtures/TestController.php';
 
-        $app->group(['namespace' => 'Lumen\Tests'], function($app) {
+        $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
         });
 
@@ -315,18 +315,17 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
     }
 
-
     public function testGeneratingUrls()
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
@@ -336,22 +335,25 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
     }
 
-
     public function testGeneratingUrlsForRegexParameters()
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function() {
+        $app->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function() {
+        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
+            //
+        }]);
+
+        $app->get('/foo-bar/{baz:[0-9]{2,5}}', ['as' => 'boom', function () {
             //
         }]);
 
@@ -360,8 +362,8 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
     }
-
 
     public function testRegisterServiceProvider()
     {
@@ -369,7 +371,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $provider = new LumenTestServiceProvider($app);
         $app->register($provider);
     }
-
 
     public function testUsingCustomDispatcher()
     {
@@ -388,39 +389,81 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
     }
-}
 
-class LumenTestService {}
+    public function testMiddlewareReceiveResponsesEvenWhenStringReturned()
+    {
+        unset($_SERVER['__middleware.response']);
 
-class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
-{
-    public function register() {}
-}
+        $app = new Application;
 
-class LumenTestMiddleware {
-    public function handle($request, $next) {
-          return response('Middleware');
+        $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
+
+        $app->get('/', ['middleware' => 'foo', function () {
+            return 'Hello World';
+        }]);
+
+        $response = $app->handle(Request::create('/', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+        $this->assertEquals(true, $_SERVER['__middleware.response']);
     }
 }
 
-class LumenTestParameterizedMiddleware {
-    public function handle($request, $next, $parameter1, $parameter2) {
+class LumenTestService
+{
+}
+
+class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
+{
+    public function register()
+    {
+    }
+}
+
+class LumenTestMiddleware
+{
+    public function handle($request, $next)
+    {
+        return response('Middleware');
+    }
+}
+
+class LumenTestPlainMiddleware
+{
+    public function handle($request, $next)
+    {
+        $response = $next($request);
+        $_SERVER['__middleware.response'] = $response instanceof Illuminate\Http\Response;
+
+        return $response;
+    }
+}
+
+class LumenTestParameterizedMiddleware
+{
+    public function handle($request, $next, $parameter1, $parameter2)
+    {
         return response("Middleware - $parameter1 - $parameter2");
     }
 }
 
-class LumenTestController {
+class LumenTestController
+{
     public $service;
-    public function __construct(LumenTestService $service) {
+    public function __construct(LumenTestService $service)
+    {
         $this->service = $service;
     }
-    public function action() {
+    public function action()
+    {
         return response(__CLASS__);
     }
-    public function actionWithParameter($baz) {
+    public function actionWithParameter($baz)
+    {
         return response($baz);
     }
-    public function actionWithDefaultParameter($baz = 'default-value') {
+    public function actionWithDefaultParameter($baz = 'default-value')
+    {
         return response($baz);
     }
 }

@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Routing;
+<?php
+
+namespace Laravel\Lumen\Routing;
 
 use Illuminate\Http\Request;
 
@@ -20,7 +22,7 @@ abstract class Controller
      * @param  array  $options
      * @return void
      */
-    public function middleware($middleware, array $options = array())
+    public function middleware($middleware, array $options = [])
     {
         $this->middleware[$middleware] = $options;
     }

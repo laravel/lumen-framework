@@ -58,7 +58,9 @@ trait CrawlerTrait
      */
     public function get($uri, array $headers = [])
     {
-        $this->call('GET', $uri, [], [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('GET', $uri, [], [], [], $server);
 
         return $this;
     }
@@ -73,7 +75,9 @@ trait CrawlerTrait
      */
     public function post($uri, array $data = [], array $headers = [])
     {
-        $this->call('POST', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('POST', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -88,7 +92,9 @@ trait CrawlerTrait
      */
     public function put($uri, array $data = [], array $headers = [])
     {
-        $this->call('PUT', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('PUT', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -103,7 +109,9 @@ trait CrawlerTrait
      */
     public function patch($uri, array $data = [], array $headers = [])
     {
-        $this->call('PATCH', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('PATCH', $uri, $data, [], [], $server);
 
         return $this;
     }
@@ -118,9 +126,36 @@ trait CrawlerTrait
      */
     public function delete($uri, array $data = [], array $headers = [])
     {
-        $this->call('DELETE', $uri, $data, [], [], $headers);
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('DELETE', $uri, $data, [], [], $server);
 
         return $this;
+    }
+
+    /**
+     * Transform headers array to array of $_SERVER vars with HTTP_* format.
+     *
+     * @param  array $headers
+     *
+     * @return array
+     */
+    protected function transformHeadersToServerVars(array $headers)
+    {
+        $server = [];
+        $prefix = 'HTTP_';
+
+        foreach ($headers as $name => $value) {
+            $name = strtr(strtoupper($name), '-', '_');
+
+            if (! starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
+                $name = $prefix.$name;
+            }
+
+            $server[$name] = $value;
+        }
+
+        return $server;
     }
 
     /**
@@ -257,7 +292,7 @@ trait CrawlerTrait
     {
         $this->seeJson();
 
-        if (!is_null($data)) {
+        if (! is_null($data)) {
             return $this->seeJson($data);
         }
     }
@@ -348,7 +383,7 @@ trait CrawlerTrait
      */
     protected function seeStatusCode($status)
     {
-        $this->assertEquals($this->response->getStatusCode(), $status);
+        $this->assertEquals($status, $this->response->getStatusCode());
 
         return $this;
     }
@@ -402,10 +437,10 @@ trait CrawlerTrait
     {
         $link = $this->crawler->selectLink($name);
 
-        if (!count($link)) {
+        if (! count($link)) {
             $link = $this->filterByNameOrId($name, 'a');
 
-            if (!count($link)) {
+            if (! count($link)) {
                 throw new InvalidArgumentException(
                     "Could not find a link with a body, name, or ID attribute of [{$name}]."
                 );
@@ -498,7 +533,7 @@ trait CrawlerTrait
      */
     protected function fillForm($buttonText, $inputs = [])
     {
-        if (!is_string($buttonText)) {
+        if (! is_string($buttonText)) {
             $inputs = $buttonText;
 
             $buttonText = null;
@@ -556,7 +591,7 @@ trait CrawlerTrait
     {
         $crawler = $this->filterByNameOrId($filter);
 
-        if (!count($crawler)) {
+        if (! count($crawler)) {
             throw new InvalidArgumentException(
                 "Nothing matched the filter [{$filter}] CSS query provided for [{$this->currentUri}]."
             );
@@ -672,7 +707,7 @@ trait CrawlerTrait
             $uri = substr($uri, 1);
         }
 
-        if (!starts_with($uri, 'http')) {
+        if (! starts_with($uri, 'http')) {
             $uri = $this->baseUrl.'/'.$uri;
         }
 

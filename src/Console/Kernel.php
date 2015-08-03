@@ -1,4 +1,6 @@
-<?php namespace Laravel\Lumen\Console;
+<?php
+
+namespace Laravel\Lumen\Console;
 
 use Exception;
 use RuntimeException;
@@ -9,7 +11,6 @@ use Illuminate\Contracts\Console\Kernel as KernelContract;
 
 class Kernel implements KernelContract
 {
-
     /**
      * The application implementation.
      *
@@ -100,7 +101,7 @@ class Kernel implements KernelContract
      * @param  array  $parameters
      * @return int
      */
-    public function call($command, array $parameters = array())
+    public function call($command, array $parameters = [])
     {
         return $this->getArtisan()->call($command, $parameters);
     }
@@ -112,9 +113,9 @@ class Kernel implements KernelContract
      * @param  array   $parameters
      * @return void
      */
-    public function queue($command, array $parameters = array())
+    public function queue($command, array $parameters = [])
     {
-        throw new RuntimeException("Queueing Artisan commands is not supported by Lumen.");
+        throw new RuntimeException('Queueing Artisan commands is not supported by Lumen.');
     }
 
     /**
