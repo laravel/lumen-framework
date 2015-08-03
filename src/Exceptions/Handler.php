@@ -83,7 +83,7 @@ class Handler implements ExceptionHandler
      * @param  string  $css
      * @return string
      */
-    private function decorate($content, $css)
+    protected function decorate($content, $css)
     {
         return <<<EOF
 <!DOCTYPE html>
