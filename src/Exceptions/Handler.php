@@ -71,9 +71,9 @@ class Handler implements ExceptionHandler
     {
         $e = FlattenException::create($e);
         $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
-        $dectorated = $this->decorate($handler->getContent($e), $handler->getStylesheet($e));
+        $decorated = $this->decorate($handler->getContent($e), $handler->getStylesheet($e));
 
-        return Response::create($dectorated, $e->getStatusCode(), $e->getHeaders());
+        return Response::create($decorated, $e->getStatusCode(), $e->getHeaders());
     }
 
     /**
