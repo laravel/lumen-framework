@@ -134,6 +134,21 @@ trait CrawlerTrait
     }
 
     /**
+     * Send the given request through the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return $this
+     */
+    public function handle(Request $request)
+    {
+        $this->currentUri = $request->fullUrl();
+
+        $this->response = $this->app->prepareResponse($this->app->handle($request));
+
+        return $this;
+    }
+
+    /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
      * @param  array $headers
