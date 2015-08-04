@@ -134,6 +134,21 @@ trait CrawlerTrait
     }
 
     /**
+     * Make the given request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return $this
+     */
+    public function request(Request $request)
+    {
+        $this->currentUri = $request->getUri();
+
+        $this->response = $this->app->prepareResponse($this->app->handle($request));
+
+        return $this;
+    }
+
+    /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
      * @param  array $headers
