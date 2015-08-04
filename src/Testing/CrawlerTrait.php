@@ -134,14 +134,14 @@ trait CrawlerTrait
     }
 
     /**
-     * Make the given request.
+     * Send the given request through the application.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return $this
      */
-    public function request(Request $request)
+    public function handle(Request $request)
     {
-        $this->currentUri = $request->getUri();
+        $this->currentUri = $request->fullUrl();
 
         $this->response = $this->app->prepareResponse($this->app->handle($request));
 
