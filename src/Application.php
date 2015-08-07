@@ -2,8 +2,10 @@
 
 namespace Laravel\Lumen;
 
+use Error;
 use Closure;
 use Exception;
+use Throwable;
 use ErrorException;
 use Monolog\Logger;
 use RuntimeException;
@@ -25,6 +27,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -351,12 +354,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Send the exception to the handler and return the response.
      *
-     * @param  Exception  $e
+     * @param  \Throwable  $e
      * @return Response
      */
     protected function sendExceptionToHandler($e)
     {
         $handler = $this->make('Illuminate\Contracts\Debug\ExceptionHandler');
+
+        if ($e instanceof Error) {
+            $e = new FatalThrowableError($e);
+        }
 
         $handler->report($e);
 
@@ -366,12 +373,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Handle an uncaught exception instance.
      *
-     * @param  Exception  $e
+     * @param  \Throwable  $e
      * @return void
      */
     protected function handleUncaughtException($e)
     {
         $handler = $this->make('Illuminate\Contracts\Debug\ExceptionHandler');
+
+        if ($e instanceof Error) {
+            $e = new FatalThrowableError($e);
+        }
 
         $handler->report($e);
 
@@ -1170,6 +1181,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                 );
             });
         } catch (Exception $e) {
+            return $this->sendExceptionToHandler($e);
+        } catch (Throwable $e) {
             return $this->sendExceptionToHandler($e);
         }
     }
