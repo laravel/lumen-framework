@@ -367,7 +367,7 @@ trait CrawlerTrait
             json_decode($this->response->getContent(), true)
         ));
 
-        foreach (array_sort_recursive($data) as $key => $value) {
+        foreach (array_sort_recursive(json_decode(json_encode($data), true)) as $key => $value) {
             $expected = $this->formatToExpectedJson($key, $value);
 
             $this->assertTrue(
