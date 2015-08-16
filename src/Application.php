@@ -173,6 +173,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         static::setInstance($this);
 
         $this->instance('app', $this);
+        $this->instance('path', $this->path());
 
         $this->registerContainerAliases();
     }
