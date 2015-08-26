@@ -895,11 +895,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function group(array $attributes, Closure $callback)
     {
+        $parentGroupAttributes = $this->groupAttributes;
+
         $this->groupAttributes = $attributes;
 
         call_user_func($callback, $this);
 
-        $this->groupAttributes = null;
+        $this->groupAttributes = $parentGroupAttributes;
     }
 
     /**

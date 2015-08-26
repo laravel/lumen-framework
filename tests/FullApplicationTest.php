@@ -194,6 +194,10 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             $app->get('/', function () {
                 return 'Hello World';
             });
+            $app->group([], function () {});
+            $app->get('/fooBar', function () {
+                return 'Hello World';
+            });
         });
 
         $app->get('/foo', function () {
@@ -207,6 +211,10 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $response = $app->handle(Request::create('/foo', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
+
+        $response = $app->handle(Request::create('/fooBar', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Middleware', $response->getContent());
     }
 
     public function testWithMiddlewareDisabled()
@@ -307,10 +315,16 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
+            $app->group([], function () {});
+            $app->get('/foo', 'TestController@action');
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
 
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
+
+        $response = $app->handle(Request::create('/foo', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
     }
