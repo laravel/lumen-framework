@@ -421,6 +421,34 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
         $this->assertEquals(true, $_SERVER['__middleware.response']);
     }
+
+    public function testInheritance()
+    {
+        $app = new Application;
+
+        $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware',
+                               'bar' => 'LumenTestMiddleware', ]);
+
+        $app->group(['middleware' => 'foo','namespace' => 'Lumen\Tests'], function () use ($app) {
+            $app->group(['middleware' => 'bar'], function () use ($app) {
+                $app->get('/', 'TestController@action');
+            });
+            $app->group([], function () use ($app) {
+                $app->get('/foo', 'TestController@action');
+            });
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Middleware', $response->getContent());
+        $this->assertEquals(true, $_SERVER['__middleware.response']);
+
+        $response = $app->handle(Request::create('/foo', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
+    }
 }
 
 class LumenTestService
