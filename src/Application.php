@@ -97,7 +97,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @var array|null
      */
-    protected $groupAttributes;
+    protected $groupStack = [];
 
     /**
      * All of the global middleware for the application.
@@ -895,13 +895,76 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function group(array $attributes, Closure $callback)
     {
-        $parentGroupAttributes = $this->groupAttributes;
-
-        $this->groupAttributes = $attributes;
-
+        $this->updateGroupStack($attributes);
+        // Once we have updated the group stack, we will execute the user Closure and
+        // merge in the groups attributes when the route is created. After we have
+        // run the callback, we will pop the attributes off of this group stack.
         call_user_func($callback, $this);
+        array_pop($this->groupStack);
+    }
 
-        $this->groupAttributes = $parentGroupAttributes;
+    /**
+     * Update the group stack with the given attributes.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    protected function updateGroupStack(array $attributes)
+    {
+        if (! empty($this->groupStack)) {
+            $attributes = $this->mergeGroup($attributes, end($this->groupStack));
+        }
+        $this->groupStack[] = $attributes;
+    }
+
+    /**
+     * Merge the given group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return array
+     */
+    public static function mergeGroup($new, $old)
+    {
+        $new['namespace'] = static::formatUsesPrefix($new, $old);
+        $new['prefix'] = static::formatGroupPrefix($new, $old);
+
+        return array_merge_recursive(array_except($old, ['namespace', 'prefix']), $new);
+    }
+
+    /**
+     * Format the uses prefix for the new group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return string|null
+     */
+    protected static function formatUsesPrefix($new, $old)
+    {
+        if (isset($new['namespace'])) {
+            return isset($old['namespace'])
+                    ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
+                    : trim($new['namespace'], '\\');
+        }
+
+        return isset($old['namespace']) ? $old['namespace'] : null;
+    }
+    /**
+     * Format the prefix for the new group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return string|null
+     */
+    protected static function formatGroupPrefix($new, $old)
+    {
+        $oldPrefix = isset($old['prefix']) ? $old['prefix'] : null;
+
+        if (isset($new['prefix'])) {
+            return trim($oldPrefix, '/').'/'.trim($new['prefix'], '/');
+        }
+
+        return $oldPrefix;
     }
 
     /**
@@ -999,11 +1062,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $action = $this->parseAction($action);
 
-        if (isset($this->groupAttributes)) {
-            if (isset($this->groupAttributes['prefix'])) {
-                $uri = trim($this->groupAttributes['prefix'], '/').'/'.trim($uri, '/');
-            }
+        if (isset(end($this->groupStack)['prefix'])) {
+            $uri = trim(end($this->groupStack)['prefix'], '/').'/'.trim($uri, '/');
+        }
 
+        if (! empty($this->groupStack)) {
             $action = $this->mergeGroupAttributes($action);
         }
 
@@ -1054,8 +1117,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function mergeNamespaceGroup(array $action)
     {
-        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
-            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
+        if (isset(end($this->groupStack)['namespace']) && isset($action['uses'])) {
+            $action['uses'] = end($this->groupStack)['namespace'].'\\'.$action['uses'];
         }
 
         return $action;
@@ -1069,11 +1132,11 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function mergeMiddlewareGroup($action)
     {
-        if (isset($this->groupAttributes['middleware'])) {
+        if (isset(end($this->groupStack)['middleware'])) {
             if (isset($action['middleware'])) {
-                $action['middleware'] .= '|'.$this->groupAttributes['middleware'];
+                $action['middleware'] .= '|'.end($this->groupStack)['middleware'];
             } else {
-                $action['middleware'] = $this->groupAttributes['middleware'];
+                $action['middleware'] = end($this->groupStack)['middleware'];
             }
         }
 
