@@ -287,6 +287,17 @@ trait CrawlerTrait
     }
 
     /**
+     * Assert that a given string is not seen on the page.
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    protected function dontSee($text)
+    {
+        return $this->see($text, true);
+    }
+
+    /**
      * Assert that the response contains JSON.
      *
      * @param  array|null  $data
@@ -356,7 +367,7 @@ trait CrawlerTrait
             json_decode($this->response->getContent(), true)
         ));
 
-        foreach (array_sort_recursive($data) as $key => $value) {
+        foreach (array_sort_recursive(json_decode(json_encode($data), true)) as $key => $value) {
             $expected = $this->formatToExpectedJson($key, $value);
 
             $this->assertTrue(
