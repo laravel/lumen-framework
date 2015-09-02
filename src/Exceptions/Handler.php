@@ -3,6 +3,7 @@
 namespace Laravel\Lumen\Exceptions;
 
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
@@ -24,11 +25,9 @@ class Handler implements ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if ($this->shouldntReport($e)) {
-            return;
+        if ($this->shouldReport($e)) {
+            app('Psr\Log\LoggerInterface')->error($e);
         }
-
-        app('Psr\Log\LoggerInterface')->error((string) $e);
     }
 
     /**
@@ -68,7 +67,25 @@ class Handler implements ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return (new SymfonyExceptionHandler(env('APP_DEBUG', false)))->createResponse($e);
+        $response = (new SymfonyExceptionHandler(env('APP_DEBUG', false)))->createResponse($e);
+
+        return $this->toIlluminateResponse($response, $e);
+    }
+
+    /**
+     * Map exception into an illuminate response.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Response  $response
+     * @param  \Exception  $e
+     * @return \Illuminate\Http\Response
+     */
+    protected function toIlluminateResponse($response, Exception $e)
+    {
+        $response = new Response($response->getContent(), $response->getStatusCode(), $response->headers->all());
+
+        $response->exception = $e;
+
+        return $response;
     }
 
     /**
