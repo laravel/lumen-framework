@@ -3,7 +3,7 @@
 namespace Laravel\Lumen\Exceptions;
 
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Console\Application as ConsoleApplication;
@@ -26,11 +26,9 @@ class Handler implements ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if ($this->shouldntReport($e)) {
-            return;
+        if ($this->shouldReport($e)) {
+            app('Psr\Log\LoggerInterface')->error($e);
         }
-
-        app('Psr\Log\LoggerInterface')->error((string) $e);
     }
 
     /**
@@ -66,17 +64,21 @@ class Handler implements ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
     {
-        $e = FlattenException::create($e);
+        $fe = FlattenException::create($e);
 
         $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
 
-        $decorated = $this->decorate($handler->getContent($e), $handler->getStylesheet($e));
+        $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
 
-        return Response::create($decorated, $e->getStatusCode(), $e->getHeaders());
+        $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
+
+        $response->exception = $e;
+
+        return $response;
     }
 
     /**
