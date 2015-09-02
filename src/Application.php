@@ -1323,7 +1323,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     protected function callLumenController($instance, $method, $routeInfo)
     {
         $middleware = $instance->getMiddlewareForMethod(
-            $this->make('request'), $method
+            $method
         );
 
         if (count($middleware) > 0) {
