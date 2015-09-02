@@ -24,11 +24,9 @@ class Handler implements ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if ($this->shouldntReport($e)) {
-            return;
+        if ($this->shouldReport($e)) {
+            app('Psr\Log\LoggerInterface')->error($e);
         }
-
-        app('Psr\Log\LoggerInterface')->error((string) $e);
     }
 
     /**
