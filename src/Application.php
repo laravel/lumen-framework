@@ -1071,7 +1071,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (isset($this->groupAttributes['middleware'])) {
             if (isset($action['middleware'])) {
-                $action['middleware'] .= '|'.$this->groupAttributes['middleware'];
+                $action['middleware'] = $this->groupAttributes['middleware'].'|'.$action['middleware'];
             } else {
                 $action['middleware'] = $this->groupAttributes['middleware'];
             }
