@@ -464,18 +464,22 @@ class LumenTestParameterizedMiddleware
 class LumenTestController
 {
     public $service;
+
     public function __construct(LumenTestService $service)
     {
         $this->service = $service;
     }
+
     public function action()
     {
         return response(__CLASS__);
     }
+
     public function actionWithParameter($baz)
     {
         return response($baz);
     }
+
     public function actionWithDefaultParameter($baz = 'default-value')
     {
         return response($baz);
