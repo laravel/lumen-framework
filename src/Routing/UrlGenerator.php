@@ -187,7 +187,7 @@ class UrlGenerator
      *
      * @param  string  $name
      * @param  mixed   $parameters
-     * @param  bool    $secure
+     * @param  bool|null  $secure
      * @return string
      *
      * @throws \InvalidArgumentException
