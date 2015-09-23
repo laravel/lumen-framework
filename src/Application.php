@@ -640,7 +640,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function getMonologHandler()
     {
-        $logPath = getenv('APP_LOG_PATH') ?: storage_path('logs/lumen.log');
+        $logPath = env('APP_LOG_PATH', storage_path('logs/lumen.log'));
         
         return (new StreamHandler($logPath, Logger::DEBUG))
                             ->setFormatter(new LineFormatter(null, null, true, true));
