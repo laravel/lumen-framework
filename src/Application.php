@@ -517,7 +517,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     protected function registerComposerBindings()
     {
-        $this->app->singleton('composer', function ($app) {
+        $this->singleton('composer', function ($app) {
             return new Composer($app->make('files'), $this->basePath());
         });
     }
@@ -810,6 +810,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Load a configuration file into the application.
      *
+     * @param  string  $name
      * @return void
      */
     public function configure($name)
@@ -890,7 +891,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a set of routes with a set of shared attributes.
      *
      * @param  array  $attributes
-     * @param  Closure  $callback
+     * @param  \Closure  $callback
      * @return void
      */
     public function group(array $attributes, Closure $callback)
@@ -1396,7 +1397,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Send the request through the pipeline with the given callback.
      *
      * @param  array  $middleware
-     * @param  Closure  $then
+     * @param  \Closure  $then
      * @return mixed
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
