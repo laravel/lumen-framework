@@ -33,7 +33,7 @@ class VerifyCsrfToken
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return mixed
+     * @return \Illuminate\Http\Response
      *
      * @throws \Illuminate\Session\TokenMismatchException
      */
