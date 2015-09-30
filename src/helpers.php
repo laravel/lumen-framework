@@ -329,13 +329,13 @@ if (! function_exists('session')) {
         $session = app('session');
 
         if (is_null($key)) {
-            return $session->make('session');
+            return $session;
         }
         if (is_array($key)) {
-            return $session->make('session')->put($key);
+            return $session->put($key);
         }
 
-        return $session->make('session')->get($key, $default);
+        return $session->get($key, $default);
     }
 }
 
