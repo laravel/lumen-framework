@@ -268,7 +268,7 @@ if (! function_exists('redirect')) {
      */
     function redirect($to = null, $status = 302, $headers = [], $secure = null)
     {
-        $redirector = new Laravel\Lumen\Http\Redirector(Container::getInstance()->make('app'));
+        $redirector = new Laravel\Lumen\Http\Redirector(app());
 
         if (is_null($to)) {
             return $redirector;
@@ -289,7 +289,7 @@ if (! function_exists('response')) {
      */
     function response($content = '', $status = 200, array $headers = [])
     {
-        $factory = new Laravel\Lumen\Http\ResponseFactory(Container::getInstance()->make('app'));
+        $factory = new Laravel\Lumen\Http\ResponseFactory;
 
         if (func_num_args() === 0) {
             return $factory;
@@ -326,14 +326,16 @@ if (! function_exists('session')) {
      */
     function session($key = null, $default = null)
     {
+        $session = app('session');
+
         if (is_null($key)) {
-            return Container::getInstance()->make('session');
+            return $session->make('session');
         }
         if (is_array($key)) {
-            return Container::getInstance()->make('session')->put($key);
+            return $session->make('session')->put($key);
         }
 
-        return Container::getInstance()->make('session')->get($key, $default);
+        return $session->make('session')->get($key, $default);
     }
 }
 
@@ -414,7 +416,7 @@ if (! function_exists('view')) {
      */
     function view($view = null, $data = [], $mergeData = [])
     {
-        $factory = Container::getInstance()->make('view');
+        $factory = app('view');
 
         if (func_num_args() === 0) {
             return $factory;
