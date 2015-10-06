@@ -421,6 +421,15 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
         $this->assertEquals(true, $_SERVER['__middleware.response']);
     }
+
+    public function testEnvironmentDetection()
+    {
+        $app = new Application;
+
+        $this->assertEquals('production', $app->environment());
+        $this->assertTrue($app->environment('production'));
+        $this->assertTrue($app->environment(['production']));
+    }
 }
 
 class LumenTestService

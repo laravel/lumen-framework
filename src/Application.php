@@ -10,6 +10,7 @@ use ErrorException;
 use Monolog\Logger;
 use RuntimeException;
 use FastRoute\Dispatcher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
@@ -196,7 +197,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function environment()
     {
-        return env('APP_ENV', 'production');
+        $env = env('APP_ENV', 'production');
+
+        if (func_num_args() > 0) {
+            $patterns = is_array(func_get_arg(0)) ? func_get_arg(0) : func_get_args();
+            foreach ($patterns as $pattern) {
+                if (Str::is($pattern, $env)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return $env;
     }
 
     /**
@@ -206,7 +219,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function isDownForMaintenance()
     {
-        return false;
+        return file_exists($this->storagePath().'/framework/down');
     }
 
     /**
