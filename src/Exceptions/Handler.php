@@ -64,7 +64,7 @@ class Handler implements ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $e)
     {
@@ -72,9 +72,13 @@ class Handler implements ExceptionHandler
 
         $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
 
-        $decorated = $this->decorate($handler->getContent($e), $handler->getStylesheet($e));
+        $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
 
-        return Response::create($decorated, $e->getStatusCode(), $e->getHeaders());
+        $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
+
+        $response->exception = $e;
+
+        return $response;
     }
 
     /**
