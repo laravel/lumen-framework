@@ -68,7 +68,7 @@ class Handler implements ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        $e = FlattenException::create($e);
+        $fe = FlattenException::create($e);
 
         $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
 
