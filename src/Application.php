@@ -844,19 +844,30 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the path to the given configuration file.
+     * Get the path to the given configuration file, or to the directory if the argument is 
+     * empty.
      *
      * @param  string  $name
      * @return string
      */
-    protected function getConfigurationPath($name)
+    public function getConfigurationPath($name = null)
     {
-        $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+        if (! $name) {
+            $appConfigDir = ($this->configPath ?: $this->basePath('config')).'/';
 
-        if (file_exists($appConfigPath)) {
-            return $appConfigPath;
-        } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
-            return $path;
+            if (file_exists($appConfigDir)) {
+                return $appConfigDir;
+            } elseif (file_exists($path = __DIR__.'/../config/')) {
+                return $path;
+            }
+        } else {
+            $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+
+            if (file_exists($appConfigPath)) {
+                return $appConfigPath;
+            } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
+                return $path;
+            }
         }
     }
 
