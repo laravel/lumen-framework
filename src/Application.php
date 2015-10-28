@@ -282,7 +282,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a deferred provider and service.
      *
      * @param  string  $provider
-     * @param  string  $service
+     * @param  string|null  $service
      * @return void
      */
     public function registerDeferredProvider($provider, $service = null)
@@ -844,10 +844,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the path to the given configuration file, or to the directory if the argument is 
+     * Get the path to the given configuration file, or to the directory if the argument is
      * empty.
      *
-     * @param  string  $name
+     * @param  string|null  $name
      * @return string
      */
     public function getConfigurationPath($name = null)
@@ -1523,7 +1523,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the base path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function basePath($path = null)
@@ -1544,7 +1544,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the storage path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function storagePath($path = null)
@@ -1595,7 +1595,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the resource path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function resourcePath($path = null)
