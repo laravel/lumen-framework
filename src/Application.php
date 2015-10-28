@@ -282,7 +282,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * Register a deferred provider and service.
      *
      * @param  string  $provider
-     * @param  string  $service
+     * @param  string|null  $service
      * @return void
      */
     public function registerDeferredProvider($provider, $service = null)
@@ -846,17 +846,29 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the path to the given configuration file.
      *
-     * @param  string  $name
+     * If no name is provided, then we'll return the path to the config folder.
+     *
+     * @param  string|null  $name
      * @return string
      */
-    protected function getConfigurationPath($name)
+    public function getConfigurationPath($name = null)
     {
-        $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+        if (! $name) {
+            $appConfigDir = ($this->configPath ?: $this->basePath('config')).'/';
 
-        if (file_exists($appConfigPath)) {
-            return $appConfigPath;
-        } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
-            return $path;
+            if (file_exists($appConfigDir)) {
+                return $appConfigDir;
+            } elseif (file_exists($path = __DIR__.'/../config/')) {
+                return $path;
+            }
+        } else {
+            $appConfigPath = ($this->configPath ?: $this->basePath('config')).'/'.$name.'.php';
+
+            if (file_exists($appConfigPath)) {
+                return $appConfigPath;
+            } elseif (file_exists($path = __DIR__.'/../config/'.$name.'.php')) {
+                return $path;
+            }
         }
     }
 
@@ -1512,7 +1524,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the base path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function basePath($path = null)
@@ -1533,7 +1545,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the storage path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function storagePath($path = null)
@@ -1584,7 +1596,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     /**
      * Get the resource path for the application.
      *
-     * @param  string  $path
+     * @param  string|null  $path
      * @return string
      */
     public function resourcePath($path = null)
