@@ -844,8 +844,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the path to the given configuration file, or to the directory if the argument is
-     * empty.
+     * Get the path to the given configuration file.
+     *
+     * If no name is provided, then we'll return the path to the config folder.
      *
      * @param  string|null  $name
      * @return string
