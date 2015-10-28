@@ -186,7 +186,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function version()
     {
-        return 'Lumen (5.1.5) (Laravel Components 5.1.*)';
+        return 'Lumen (5.1.6) (Laravel Components 5.1.*)';
     }
 
     /**
@@ -844,7 +844,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the path to the given configuration file, or to the directory if the argument is 
+     * Get the path to the given configuration file, or to the directory if the argument is
      * empty.
      *
      * @param  string  $name
