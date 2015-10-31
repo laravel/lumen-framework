@@ -45,7 +45,6 @@
         "symfony/dom-crawler": "2.8.*|3.0.*",
         "symfony/http-kernel": "2.8.*|3.0.*",
         "symfony/http-foundation": "2.8.*|3.0.*",
-        "symfony/security-core": "2.8.*|3.0.*",
         "symfony/var-dumper": "2.8.*|3.0.*"
     },
     "require-dev": {
