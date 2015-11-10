@@ -41,7 +41,7 @@
         "monolog/monolog": "~1.0",
         "mtdowling/cron-expression": "~1.0",
         "nikic/fast-route": "0.4.*",
-        "paragonie/random_compat": "^1.0.6",
+        "paragonie/random_compat": "~1.1",
         "symfony/dom-crawler": "2.7.*",
         "symfony/http-kernel": "2.7.*",
         "symfony/http-foundation": "2.7.*",
