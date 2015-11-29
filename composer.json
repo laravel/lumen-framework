@@ -40,6 +40,12 @@
         "illuminate/view": "5.2.*",
         "monolog/monolog": "~1.11",
         "mtdowling/cron-expression": "~1.0",
+        "nikic/fast-route": "0.4.*",
+        "paragonie/random_compat": "~1.1",
+        "symfony/dom-crawler": "2.7.*",
+        "symfony/http-kernel": "2.7.*",
+        "symfony/http-foundation": "2.7.*",
+        "symfony/var-dumper": "2.7.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
