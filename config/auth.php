@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('AUTH_DRIVER', 'eloquent'),
+    'driver' => env('AUTH_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
