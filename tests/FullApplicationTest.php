@@ -77,18 +77,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('12', $response->getContent());
     }
 
-    public function testRequestToControllerWithParameters()
-    {
-        $app = new Application;
-
-        $app->get('/foo/{bar}', 'LumenTestController@actionWithParameter');
-
-        $response = $app->handle(Request::create('/foo/1', 'GET'));
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('1', $response->getContent());
-    }
-
     public function testCallbackRouteWithDefaultParameter()
     {
         $app = new Application;
@@ -100,17 +88,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('something', $response->getContent());
-    }
-
-    public function testControllerRouteWithDefaultParameter()
-    {
-        $app = new Application;
-        $app->get('/foo-bar/{baz}', 'LumenTestController@actionWithDefaultParameter');
-
-        $response = $app->handle(Request::create('/foo-bar/something2', 'GET'));
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('something2', $response->getContent());
     }
 
     public function testGlobalMiddleware()
@@ -184,39 +161,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Middleware - bar - boom', $response->getContent());
     }
 
-    public function testGroupRouteMiddleware()
-    {
-        $app = new Application;
-
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
-
-        $app->group(['middleware' => 'foo'], function ($app) {
-            $app->get('/', function () {
-                return 'Hello World';
-            });
-            $app->group([], function () {});
-            $app->get('/fooBar', function () {
-                return 'Hello World';
-            });
-        });
-
-        $app->get('/foo', function () {
-            return 'Hello World';
-        });
-
-        $response = $app->handle(Request::create('/', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Middleware', $response->getContent());
-
-        $response = $app->handle(Request::create('/foo', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Hello World', $response->getContent());
-
-        $response = $app->handle(Request::create('/fooBar', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Middleware', $response->getContent());
-    }
-
     public function testWithMiddlewareDisabled()
     {
         $app = new Application;
@@ -232,37 +176,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
-    }
-
-    public function testGroupPrefixRoutes()
-    {
-        $app = new Application;
-
-        $app->group(['prefix' => 'user'], function ($app) {
-            $app->get('/', function () {
-                return response('User Index');
-            });
-
-            $app->get('profile', function () {
-                return response('User Profile');
-            });
-
-            $app->get('/show', function () {
-                return response('User Show');
-            });
-        });
-
-        $response = $app->handle(Request::create('/user', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('User Index', $response->getContent());
-
-        $response = $app->handle(Request::create('/user/profile', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('User Profile', $response->getContent());
-
-        $response = $app->handle(Request::create('/user/show', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('User Show', $response->getContent());
     }
 
     public function testNotFoundResponse()
@@ -293,40 +206,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(405, $response->getStatusCode());
-    }
-
-    public function testControllerResponse()
-    {
-        $app = new Application;
-
-        $app->get('/', 'LumenTestController@action');
-
-        $response = $app->handle(Request::create('/', 'GET'));
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('LumenTestController', $response->getContent());
-    }
-
-    public function testNamespacedControllerResponse()
-    {
-        $app = new Application;
-
-        require_once __DIR__.'/fixtures/TestController.php';
-
-        $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
-            $app->get('/', 'TestController@action');
-            $app->group([], function () {});
-            $app->get('/foo', 'TestController@action');
-        });
-
-        $response = $app->handle(Request::create('/', 'GET'));
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
-
-        $response = $app->handle(Request::create('/foo', 'GET'));
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Lumen\Tests\TestController', $response->getContent());
     }
 
     public function testGeneratingUrls()
@@ -467,30 +346,5 @@ class LumenTestParameterizedMiddleware
     public function handle($request, $next, $parameter1, $parameter2)
     {
         return response("Middleware - $parameter1 - $parameter2");
-    }
-}
-
-class LumenTestController
-{
-    public $service;
-
-    public function __construct(LumenTestService $service)
-    {
-        $this->service = $service;
-    }
-
-    public function action()
-    {
-        return response(__CLASS__);
-    }
-
-    public function actionWithParameter($baz)
-    {
-        return response($baz);
-    }
-
-    public function actionWithDefaultParameter($baz = 'default-value')
-    {
-        return response($baz);
     }
 }

@@ -120,6 +120,6 @@ EOF;
      */
     public function renderForConsole($output, Exception $e)
     {
-        (new ConsoleApplication)->renderException($e, $output);
+        echo (string) $e;
     }
 }

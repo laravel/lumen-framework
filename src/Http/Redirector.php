@@ -58,24 +58,6 @@ class Redirector
     }
 
     /**
-     * Create a new redirect response to the previous location.
-     *
-     * @param  int    $status
-     * @param  array  $headers
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function back($status = 302, $headers = [])
-    {
-        $referrer = $this->app->make('request')
-                                ->headers->get('referer');
-
-        $url = $referrer ? $this->app->make('url')->to($referrer)
-                                : $this->app->make('session')->previousUrl();
-
-        return $this->createRedirect($url, $status, $headers);
-    }
-
-    /**
      * Create a new redirect response.
      *
      * @param  string  $path

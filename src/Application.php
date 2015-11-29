@@ -16,12 +16,10 @@ use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
-use Illuminate\Foundation\Composer;
 use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -403,7 +401,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         $handler->report($e);
 
         if ($this->runningInConsole()) {
-            $handler->renderForConsole(new ConsoleOutput, $e);
+            echo (string) $e;
         } else {
             $handler->render($this->make('request'), $e)->send();
         }
@@ -452,100 +450,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return void
      */
-    protected function registerAuthBindings()
-    {
-        $this->singleton('auth', function () {
-            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth');
-        });
-
-        $this->singleton('auth.driver', function () {
-            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
-        });
-
-        $this->singleton('auth.password', function () {
-            return $this->loadComponent('auth', 'Illuminate\Auth\Passwords\PasswordResetServiceProvider', 'auth.password');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerBroadcastingBindings()
-    {
-        $this->singleton('Illuminate\Contracts\Broadcasting\Broadcaster', function () {
-            $this->configure('broadcasting');
-
-            $this->register('Illuminate\Broadcasting\BroadcastServiceProvider');
-
-            return $this->make('Illuminate\Contracts\Broadcasting\Broadcaster');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerBusBindings()
-    {
-        $this->singleton('Illuminate\Contracts\Bus\Dispatcher', function () {
-            $this->register('Illuminate\Bus\BusServiceProvider');
-
-            return $this->make('Illuminate\Contracts\Bus\Dispatcher');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerCacheBindings()
-    {
-        $this->singleton('cache', function () {
-            return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider');
-        });
-
-        $this->singleton('cache.store', function () {
-            return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider', 'cache.store');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
     protected function registerConfigBindings()
     {
         $this->singleton('config', function () {
             return new ConfigRepository;
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerComposerBindings()
-    {
-        $this->singleton('composer', function ($app) {
-            return new Composer($app->make('files'), $this->basePath());
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerCookieBindings()
-    {
-        $this->singleton('cookie', function () {
-            return $this->loadComponent('session', 'Illuminate\Cookie\CookieServiceProvider', 'cookie');
         });
     }
 
@@ -563,32 +471,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                     'Illuminate\Pagination\PaginationServiceProvider', ],
                 'db'
             );
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerEncrypterBindings()
-    {
-        $this->singleton('encrypter', function () {
-            return $this->loadComponent('app', 'Illuminate\Encryption\EncryptionServiceProvider', 'encrypter');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerEventBindings()
-    {
-        $this->singleton('events', function () {
-            $this->register('Illuminate\Events\EventServiceProvider');
-
-            return $this->make('events');
         });
     }
 
@@ -627,20 +509,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return void
      */
-    protected function registerHashBindings()
-    {
-        $this->singleton('hash', function () {
-            $this->register('Illuminate\Hashing\HashServiceProvider');
-
-            return $this->make('hash');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
     protected function registerLogBindings()
     {
         $this->singleton('Psr\Log\LoggerInterface', function () {
@@ -664,142 +532,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @return void
      */
-    protected function registerMailBindings()
-    {
-        $this->singleton('mailer', function () {
-            $this->configure('services');
-
-            return $this->loadComponent('mail', 'Illuminate\Mail\MailServiceProvider', 'mailer');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerQueueBindings()
-    {
-        $this->singleton('queue', function () {
-            return $this->loadComponent('queue', 'Illuminate\Queue\QueueServiceProvider', 'queue');
-        });
-
-        $this->singleton('queue.connection', function () {
-            return $this->loadComponent('queue', 'Illuminate\Queue\QueueServiceProvider', 'queue.connection');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerRedisBindings()
-    {
-        $this->singleton('redis', function () {
-            return $this->loadComponent('database', 'Illuminate\Redis\RedisServiceProvider', 'redis');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
     protected function registerRequestBindings()
     {
         $this->singleton('Illuminate\Http\Request', function () {
-            return Request::capture()->setUserResolver(function () {
-                return $this->make('auth')->user();
-            })->setRouteResolver(function () {
+            return Request::capture()->setRouteResolver(function () {
                 return $this->currentRoute;
             });
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerSessionBindings()
-    {
-        $this->singleton('session', function () {
-            return $this->loadComponent('session', 'Illuminate\Session\SessionServiceProvider');
-        });
-
-        $this->singleton('session.store', function () {
-            return $this->loadComponent('session', 'Illuminate\Session\SessionServiceProvider', 'session.store');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerTranslationBindings()
-    {
-        $this->singleton('translator', function () {
-            $this->configure('app');
-
-            $this->instance('path.lang', $this->getLanguagePath());
-
-            $this->register('Illuminate\Translation\TranslationServiceProvider');
-
-            return $this->make('translator');
-        });
-    }
-
-    /**
-     * Get the path to the application's language files.
-     *
-     * @return string
-     */
-    protected function getLanguagePath()
-    {
-        if (is_dir($appPath = $this->resourcePath('lang'))) {
-            return $appPath;
-        } else {
-            return __DIR__.'/../lang';
-        }
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerUrlGeneratorBindings()
-    {
-        $this->singleton('url', function () {
-            return new Routing\UrlGenerator($this);
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerValidatorBindings()
-    {
-        $this->singleton('validator', function () {
-            $this->register('Illuminate\Validation\ValidationServiceProvider');
-
-            return $this->make('validator');
-        });
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerViewBindings()
-    {
-        $this->singleton('view', function () {
-            return $this->loadComponent('view', 'Illuminate\View\ViewServiceProvider');
         });
     }
 
@@ -885,22 +623,9 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             static::$aliasesRegistered = true;
 
             class_alias('Illuminate\Support\Facades\App', 'App');
-            class_alias('Illuminate\Support\Facades\Auth', 'Auth');
-            class_alias('Illuminate\Support\Facades\Bus', 'Bus');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
-            class_alias('Illuminate\Support\Facades\Cache', 'Cache');
-            class_alias('Illuminate\Support\Facades\Cookie', 'Cookie');
-            class_alias('Illuminate\Support\Facades\Crypt', 'Crypt');
-            class_alias('Illuminate\Support\Facades\Event', 'Event');
-            class_alias('Illuminate\Support\Facades\Hash', 'Hash');
             class_alias('Illuminate\Support\Facades\Log', 'Log');
-            class_alias('Illuminate\Support\Facades\Mail', 'Mail');
-            class_alias('Illuminate\Support\Facades\Queue', 'Queue');
             class_alias('Illuminate\Support\Facades\Request', 'Request');
-            class_alias('Illuminate\Support\Facades\Schema', 'Schema');
-            class_alias('Illuminate\Support\Facades\Session', 'Session');
-            class_alias('Illuminate\Support\Facades\Storage', 'Storage');
-            class_alias('Illuminate\Support\Facades\Validator', 'Validator');
         }
     }
 
@@ -912,24 +637,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function withEloquent()
     {
         $this->make('db');
-    }
-
-    /**
-     * Register a set of routes with a set of shared attributes.
-     *
-     * @param  array  $attributes
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public function group(array $attributes, Closure $callback)
-    {
-        $parentGroupAttributes = $this->groupAttributes;
-
-        $this->groupAttributes = $attributes;
-
-        call_user_func($callback, $this);
-
-        $this->groupAttributes = $parentGroupAttributes;
     }
 
     /**
@@ -1027,14 +734,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $action = $this->parseAction($action);
 
-        if (isset($this->groupAttributes)) {
-            if (isset($this->groupAttributes['prefix'])) {
-                $uri = trim($this->groupAttributes['prefix'], '/').'/'.trim($uri, '/');
-            }
-
-            $action = $this->mergeGroupAttributes($action);
-        }
-
         $uri = '/'.trim($uri, '/');
 
         if (isset($action['as'])) {
@@ -1056,53 +755,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return ['uses' => $action];
         } elseif (! is_array($action)) {
             return [$action];
-        }
-
-        return $action;
-    }
-
-    /**
-     * Merge the group attributes into the action.
-     *
-     * @param  array  $action
-     * @return array
-     */
-    protected function mergeGroupAttributes(array $action)
-    {
-        return $this->mergeNamespaceGroup(
-            $this->mergeMiddlewareGroup($action)
-        );
-    }
-
-    /**
-     * Merge the namespace group into the action.
-     *
-     * @param  array  $action
-     * @return array
-     */
-    protected function mergeNamespaceGroup(array $action)
-    {
-        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
-            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
-        }
-
-        return $action;
-    }
-
-    /**
-     * Merge the middleware group into the action.
-     *
-     * @param  array  $action
-     * @return array
-     */
-    protected function mergeMiddlewareGroup($action)
-    {
-        if (isset($this->groupAttributes['middleware'])) {
-            if (isset($action['middleware'])) {
-                $action['middleware'] = $this->groupAttributes['middleware'].'|'.$action['middleware'];
-            } else {
-                $action['middleware'] = $this->groupAttributes['middleware'];
-            }
         }
 
         return $action;
@@ -1299,105 +951,15 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $action = $routeInfo[1];
 
-        if (isset($action['uses'])) {
-            return $this->prepareResponse($this->callControllerAction($routeInfo));
-        }
-
         foreach ($action as $value) {
             if ($value instanceof Closure) {
-                $closure = $value->bindTo(new Routing\Closure);
+                $closure = $value;
                 break;
             }
         }
 
         try {
             return $this->prepareResponse($this->call($closure, $routeInfo[2]));
-        } catch (HttpResponseException $e) {
-            return $e->getResponse();
-        }
-    }
-
-    /**
-     * Call a controller based route.
-     *
-     * @param  array  $routeInfo
-     * @return mixed
-     */
-    protected function callControllerAction($routeInfo)
-    {
-        list($controller, $method) = explode('@', $routeInfo[1]['uses']);
-
-        if (! method_exists($instance = $this->make($controller), $method)) {
-            throw new NotFoundHttpException;
-        }
-
-        if ($instance instanceof Routing\Controller) {
-            return $this->callLumenController($instance, $method, $routeInfo);
-        } else {
-            return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
-            );
-        }
-    }
-
-    /**
-     * Send the request through a Lumen controller.
-     *
-     * @param  mixed  $instance
-     * @param  string  $method
-     * @param  array  $routeInfo
-     * @return mixed
-     */
-    protected function callLumenController($instance, $method, $routeInfo)
-    {
-        $middleware = $instance->getMiddlewareForMethod(
-            $method
-        );
-
-        if (count($middleware) > 0) {
-            return $this->callLumenControllerWithMiddleware(
-                $instance, $method, $routeInfo, $middleware
-            );
-        } else {
-            return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
-            );
-        }
-    }
-
-    /**
-     * Send the request through a set of controller middleware.
-     *
-     * @param  mixed  $instance
-     * @param  string  $method
-     * @param  array  $routeInfo
-     * @param  array  $middleware
-     * @return mixed
-     */
-    protected function callLumenControllerWithMiddleware($instance, $method, $routeInfo, $middleware)
-    {
-        $middleware = $this->gatherMiddlewareClassNames($middleware);
-
-        return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
-            return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
-            );
-        });
-    }
-
-    /**
-     * Call the callable for a controller action with the given parameters.
-     *
-     * @param  array  $callable
-     * @param  array $parameters
-     * @return mixed
-     */
-    protected function callControllerCallable(array $callable, array $parameters)
-    {
-        try {
-            return $this->prepareResponse(
-                $this->call($callable, $parameters)
-            );
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
@@ -1486,32 +1048,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the application namespace.
-     *
-     * @return string
-     *
-     * @throws \RuntimeException
-     */
-    public function getNamespace()
-    {
-        if (! is_null($this->namespace)) {
-            return $this->namespace;
-        }
-
-        $composer = json_decode(file_get_contents($this->basePath().'/composer.json'), true);
-
-        foreach ((array) data_get($composer, 'autoload.psr-4') as $namespace => $path) {
-            foreach ((array) $path as $pathChoice) {
-                if (realpath($this->path()) == realpath($this->basePath().'/'.$pathChoice)) {
-                    return $this->namespace = $namespace;
-                }
-            }
-        }
-
-        throw new RuntimeException('Unable to detect application namespace.');
-    }
-
-    /**
      * Get the path to the application "app" directory.
      *
      * @return string
@@ -1571,16 +1107,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the database path for the application.
-     *
-     * @return string
-     */
-    public function databasePath()
-    {
-        return $this->basePath().'/database';
-    }
-
-    /**
      * Set a custom configuration path for the application.
      *
      * @param  string  $path
@@ -1594,34 +1120,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
-     * Get the resource path for the application.
-     *
-     * @param  string|null  $path
-     * @return string
-     */
-    public function resourcePath($path = null)
-    {
-        if ($this->resourcePath) {
-            return $this->resourcePath.($path ? '/'.$path : $path);
-        }
-
-        return $this->basePath().'/resources'.($path ? '/'.$path : $path);
-    }
-
-    /**
-     * Set a custom resource path for the application.
-     *
-     * @param  string  $path
-     * @return $this
-     */
-    public function useResourcePath($path)
-    {
-        $this->resourcePath = $path;
-
-        return $this;
-    }
-
-    /**
      * Determine if the application is running in the console.
      *
      * @return bool
@@ -1629,25 +1127,6 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function runningInConsole()
     {
         return php_sapi_name() == 'cli';
-    }
-
-    /**
-     * Prepare the application to execute a console command.
-     *
-     * @return void
-     */
-    public function prepareForConsoleCommand()
-    {
-        $this->withFacades();
-
-        $this->make('cache');
-        $this->make('queue');
-
-        $this->configure('database');
-
-        $this->register('Illuminate\Database\MigrationServiceProvider');
-        $this->register('Illuminate\Database\SeedServiceProvider');
-        $this->register('Illuminate\Queue\ConsoleServiceProvider');
     }
 
     /**
@@ -1680,28 +1159,13 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $this->aliases = [
             'Illuminate\Contracts\Foundation\Application' => 'app',
-            'Illuminate\Contracts\Auth\Guard' => 'auth.driver',
-            'Illuminate\Contracts\Auth\PasswordBroker' => 'auth.password',
-            'Illuminate\Contracts\Cache\Factory' => 'cache',
-            'Illuminate\Contracts\Cache\Repository' => 'cache.store',
             'Illuminate\Contracts\Config\Repository' => 'config',
             'Illuminate\Container\Container' => 'app',
             'Illuminate\Contracts\Container\Container' => 'app',
-            'Illuminate\Contracts\Cookie\Factory' => 'cookie',
-            'Illuminate\Contracts\Cookie\QueueingFactory' => 'cookie',
-            'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
-            'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Filesystem\Factory' => 'filesystem',
-            'Illuminate\Contracts\Hashing\Hasher' => 'hash',
             'log' => 'Psr\Log\LoggerInterface',
-            'Illuminate\Contracts\Mail\Mailer' => 'mailer',
-            'Illuminate\Contracts\Queue\Factory' => 'queue',
-            'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'Illuminate\Redis\Database' => 'redis',
-            'Illuminate\Contracts\Redis\Database' => 'redis',
             'request' => 'Illuminate\Http\Request',
-            'Illuminate\Session\SessionManager' => 'session',
-            'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
 
@@ -1711,52 +1175,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @var array
      */
     public $availableBindings = [
-        'auth' => 'registerAuthBindings',
-        'auth.driver' => 'registerAuthBindings',
-        'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
-        'auth.password' => 'registerAuthBindings',
-        'Illuminate\Contracts\Auth\PasswordBroker' => 'registerAuthBindings',
-        'Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
-        'Illuminate\Contracts\Bus\Dispatcher' => 'registerBusBindings',
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
         'config' => 'registerConfigBindings',
-        'composer' => 'registerComposerBindings',
-        'cookie' => 'registerCookieBindings',
-        'Illuminate\Contracts\Cookie\Factory' => 'registerCookieBindings',
-        'Illuminate\Contracts\Cookie\QueueingFactory' => 'registerCookieBindings',
         'db' => 'registerDatabaseBindings',
         'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
-        'encrypter' => 'registerEncrypterBindings',
-        'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
-        'events' => 'registerEventBindings',
-        'Illuminate\Contracts\Events\Dispatcher' => 'registerEventBindings',
         'Illuminate\Contracts\Debug\ExceptionHandler' => 'registerErrorBindings',
         'files' => 'registerFilesBindings',
         'filesystem' => 'registerFilesBindings',
-        'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesBindings',
-        'hash' => 'registerHashBindings',
-        'Illuminate\Contracts\Hashing\Hasher' => 'registerHashBindings',
         'log' => 'registerLogBindings',
         'Psr\Log\LoggerInterface' => 'registerLogBindings',
-        'mailer' => 'registerMailBindings',
-        'Illuminate\Contracts\Mail\Mailer' => 'registerMailBindings',
-        'queue' => 'registerQueueBindings',
-        'queue.connection' => 'registerQueueBindings',
-        'Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
-        'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
-        'redis' => 'registerRedisBindings',
         'request' => 'registerRequestBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
-        'session' => 'registerSessionBindings',
-        'session.store' => 'registerSessionBindings',
-        'Illuminate\Session\SessionManager' => 'registerSessionBindings',
-        'translator' => 'registerTranslationBindings',
-        'url' => 'registerUrlGeneratorBindings',
-        'validator' => 'registerValidatorBindings',
-        'view' => 'registerViewBindings',
-        'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
     ];
 
     /**
