@@ -4,7 +4,7 @@ use Mockery as m;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
 
-class ExampleTest extends PHPUnit_Framework_TestCase
+class FullApplicationTest extends PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {

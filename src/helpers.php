@@ -52,6 +52,19 @@ if (! function_exists('base_path')) {
     }
 }
 
+if (! function_exists('decrypt')) {
+    /**
+     * Decrypt the given value.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    function decrypt($value)
+    {
+        return app('encrypter')->decrypt($value);
+    }
+}
+
 if (! function_exists('config')) {
     /**
      * Get / set the specified configuration value.
@@ -73,6 +86,19 @@ if (! function_exists('config')) {
         }
 
         return app('config')->get($key, $default);
+    }
+}
+
+if (! function_exists('encrypt')) {
+    /**
+     * Encrypt the given value.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    function encrypt($value)
+    {
+        return app('encrypter')->encrypt($value);
     }
 }
 
@@ -115,6 +141,21 @@ if (! function_exists('env')) {
         }
 
         return $value;
+    }
+}
+
+if (! function_exists('event')) {
+    /**
+     * Fire an event and call the listeners.
+     *
+     * @param  string  $event
+     * @param  mixed   $payload
+     * @param  bool    $halt
+     * @return array|null
+     */
+    function event($event, $payload = [], $halt = false)
+    {
+        return app('events')->fire($event, $payload, $halt);
     }
 }
 

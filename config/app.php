@@ -27,9 +27,7 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
     'locale' => env('APP_LOCALE', 'en'),
-
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -40,7 +38,6 @@ return [
     | the language folders that are provided through your application.
     |
     */
-
     'fallback_locale' => env('APP_FALLBACK_LOCALE', 'en'),
 
 ];
