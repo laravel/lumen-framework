@@ -2,10 +2,7 @@
 
 namespace Laravel\Lumen;
 
-use Closure;
-use Exception;
 use Monolog\Logger;
-use RuntimeException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Monolog\Handler\StreamHandler;
@@ -279,6 +276,7 @@ class Application extends Container
     {
         $this->singleton('events', function () {
             $this->register('Illuminate\Events\EventServiceProvider');
+
             return $this->make('events');
         });
     }
