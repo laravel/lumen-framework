@@ -13,6 +13,7 @@ use Laravel\Lumen\Routing\Closure as RoutingClosure;
 use Illuminate\Http\Exception\HttpResponseException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Laravel\Lumen\Routing\Controller as LumenController;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -390,6 +391,10 @@ trait RoutesRequests
     {
         $action = $routeInfo[1];
 
+        if (isset($action['uses'])) {
+            return $this->prepareResponse($this->callControllerAction($routeInfo));
+        }
+
         foreach ($action as $value) {
             if ($value instanceof Closure) {
                 $closure = $value->bindTo(new RoutingClosure);
@@ -399,6 +404,89 @@ trait RoutesRequests
 
         try {
             return $this->prepareResponse($this->call($closure, $routeInfo[2]));
+        } catch (HttpResponseException $e) {
+            return $e->getResponse();
+        }
+    }
+
+
+    /**
+     * Call a controller based route.
+     *
+     * @param  array  $routeInfo
+     * @return mixed
+     */
+    protected function callControllerAction($routeInfo)
+    {
+        list($controller, $method) = explode('@', $routeInfo[1]['uses']);
+
+        if (! method_exists($instance = $this->make($controller), $method)) {
+            throw new NotFoundHttpException;
+        }
+
+        if ($instance instanceof LumenController) {
+            return $this->callLumenController($instance, $method, $routeInfo);
+        } else {
+            return $this->callControllerCallable(
+                [$instance, $method], $routeInfo[2]
+            );
+        }
+    }
+
+    /**
+     * Send the request through a Lumen controller.
+     *
+     * @param  mixed  $instance
+     * @param  string  $method
+     * @param  array  $routeInfo
+     * @return mixed
+     */
+    protected function callLumenController($instance, $method, $routeInfo)
+    {
+        $middleware = $instance->getMiddlewareForMethod($method);
+
+        if (count($middleware) > 0) {
+            return $this->callLumenControllerWithMiddleware(
+                $instance, $method, $routeInfo, $middleware
+            );
+        } else {
+            return $this->callControllerCallable(
+                [$instance, $method], $routeInfo[2]
+            );
+        }
+    }
+
+    /**
+     * Send the request through a set of controller middleware.
+     *
+     * @param  mixed  $instance
+     * @param  string  $method
+     * @param  array  $routeInfo
+     * @param  array  $middleware
+     * @return mixed
+     */
+    protected function callLumenControllerWithMiddleware($instance, $method, $routeInfo, $middleware)
+    {
+        $middleware = $this->gatherMiddlewareClassNames($middleware);
+
+        return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
+            return $this->callControllerCallable([$instance, $method], $parameters);
+        });
+    }
+
+    /**
+     * Call a controller callable and return the response.
+     *
+     * @param  callable  $callable
+     * @param  array  $parameters
+     * @return \Illuminate\Http\Response
+     */
+    protected function callControllerCallable(callable $callable, array $parameters = [])
+    {
+        try {
+            return $this->prepareResponse(
+                $this->call($callable, $parameters)
+            );
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
