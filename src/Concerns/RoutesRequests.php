@@ -50,6 +50,13 @@ trait RoutesRequests
     protected $routeMiddleware = [];
 
     /**
+     * The shared attributes for the current route group.
+     *
+     * @var array|null
+     */
+    protected $groupAttributes;
+
+    /**
      * The current route being dispatched.
      *
      * @var array
@@ -62,6 +69,24 @@ trait RoutesRequests
      * @var \FastRoute\Dispatcher
      */
     protected $dispatcher;
+
+    /**
+     * Register a set of routes with a set of shared attributes.
+     *
+     * @param  array  $attributes
+     * @param  \Closure  $callback
+     * @return void
+     */
+    public function group(array $attributes, Closure $callback)
+    {
+        $parentGroupAttributes = $this->groupAttributes;
+
+        $this->groupAttributes = $attributes;
+
+        call_user_func($callback, $this);
+
+        $this->groupAttributes = $parentGroupAttributes;
+    }
 
     /**
      * Register a route with the application.
@@ -158,6 +183,14 @@ trait RoutesRequests
     {
         $action = $this->parseAction($action);
 
+        if (isset($this->groupAttributes)) {
+            if (isset($this->groupAttributes['prefix'])) {
+                $uri = trim($this->groupAttributes['prefix'], '/').'/'.trim($uri, '/');
+            }
+
+            $action = $this->mergeGroupAttributes($action);
+        }
+
         $uri = '/'.trim($uri, '/');
 
         if (isset($action['as'])) {
@@ -179,6 +212,53 @@ trait RoutesRequests
             return ['uses' => $action];
         } elseif (! is_array($action)) {
             return [$action];
+        }
+
+        return $action;
+    }
+
+    /**
+     * Merge the group attributes into the action.
+     *
+     * @param  array  $action
+     * @return array
+     */
+    protected function mergeGroupAttributes(array $action)
+    {
+        return $this->mergeNamespaceGroup(
+            $this->mergeMiddlewareGroup($action)
+        );
+    }
+
+    /**
+     * Merge the namespace group into the action.
+     *
+     * @param  array  $action
+     * @return array
+     */
+    protected function mergeNamespaceGroup(array $action)
+    {
+        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
+            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
+        }
+
+        return $action;
+    }
+
+    /**
+     * Merge the middleware group into the action.
+     *
+     * @param  array  $action
+     * @return array
+     */
+    protected function mergeMiddlewareGroup($action)
+    {
+        if (isset($this->groupAttributes['middleware'])) {
+            if (isset($action['middleware'])) {
+                $action['middleware'] = $this->groupAttributes['middleware'].'|'.$action['middleware'];
+            } else {
+                $action['middleware'] = $this->groupAttributes['middleware'];
+            }
         }
 
         return $action;
