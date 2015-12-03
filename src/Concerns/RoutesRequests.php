@@ -489,7 +489,6 @@ trait RoutesRequests
         }
     }
 
-
     /**
      * Call a controller based route.
      *
