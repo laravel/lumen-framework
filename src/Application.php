@@ -456,6 +456,7 @@ class Application extends Container
             class_alias('Illuminate\Support\Facades\Event', 'Event');
             class_alias('Illuminate\Support\Facades\Log', 'Log');
             class_alias('Illuminate\Support\Facades\Queue', 'Queue');
+            class_alias('Illuminate\Support\Facades\Schema', 'Schema');
             class_alias('Illuminate\Support\Facades\Validator', 'Validator');
         }
     }
@@ -502,6 +503,16 @@ class Application extends Container
     }
 
     /**
+     * Get the database path for the application.
+     *
+     * @return string
+     */
+    public function databasePath()
+    {
+        return $this->basePath().'/database';
+    }
+
+    /**
      * Get the storage path for the application.
      *
      * @param  string|null  $path
@@ -536,6 +547,7 @@ class Application extends Container
 
         $this->configure('database');
 
+        $this->register('Illuminate\Database\MigrationServiceProvider');
         $this->register('Illuminate\Queue\ConsoleServiceProvider');
     }
 
