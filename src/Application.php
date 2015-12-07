@@ -236,7 +236,10 @@ class Application extends Container
     {
         $this->singleton('db', function () {
             return $this->loadComponent(
-                'database', 'Illuminate\Database\DatabaseServiceProvider', 'db'
+                'database', [
+                    'Illuminate\Database\DatabaseServiceProvider',
+                    'Illuminate\Pagination\PaginationServiceProvider'
+                ], 'db'
             );
         });
     }

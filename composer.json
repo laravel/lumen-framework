@@ -25,6 +25,7 @@
         "illuminate/events": "5.2.*",
         "illuminate/filesystem": "5.2.*",
         "illuminate/http": "5.2.*",
+        "illuminate/pagination": "5.2.*",
         "illuminate/pipeline": "5.2.*",
         "illuminate/queue": "5.2.*",
         "illuminate/support": "5.2.*",
