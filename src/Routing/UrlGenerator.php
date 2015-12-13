@@ -2,7 +2,7 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Laravel\Lumen\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlRoutable;
 
 class UrlGenerator
