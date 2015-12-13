@@ -2,8 +2,10 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Laravel\Lumen\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlRoutable;
+use Laravel\Lumen\Application as Lumen;
+use InvalidArgumentException;
 
 class UrlGenerator
 {
@@ -43,6 +45,10 @@ class UrlGenerator
      */
     public function __construct(Application $app)
     {
+        if (! $app instanceof Lumen) {
+            throw new InvalidArgumentException('The [Laravel\\Lumen\\Routing\\UrlGenerator] requires an instance of Lumen to run.');
+        }
+
         $this->app = $app;
     }
 

@@ -2,8 +2,10 @@
 
 namespace Laravel\Lumen\Http;
 
-use Laravel\Lumen\Application;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
+use Laravel\Lumen\Application as Lumen;
+use InvalidArgumentException;
 
 class Redirector
 {
@@ -22,6 +24,11 @@ class Redirector
      */
     public function __construct(Application $app)
     {
+        // Optionally check for Lumen Application instance
+        if (! $app instanceof Lumen) {
+            throw new InvalidArgumentException('The [Laravel\\Lumen\\Http\\Redirector] requires an instance of Lumen to run.');
+        }
+
         $this->app = $app;
     }
 
