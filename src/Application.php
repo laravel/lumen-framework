@@ -238,7 +238,7 @@ class Application extends Container
             return $this->loadComponent(
                 'database', [
                     'Illuminate\Database\DatabaseServiceProvider',
-                    'Illuminate\Pagination\PaginationServiceProvider'
+                    'Illuminate\Pagination\PaginationServiceProvider',
                 ], 'db'
             );
         });
