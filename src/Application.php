@@ -312,7 +312,6 @@ class Application extends Container
         });
     }
 
-
     /**
      * Register container bindings for the application.
      *
