@@ -228,6 +228,20 @@ class Application extends Container
      *
      * @return void
      */
+    protected function registerBusBindings()
+    {
+        $this->singleton('Illuminate\Contracts\Bus\Dispatcher', function () {
+            $this->register('Illuminate\Bus\BusServiceProvider');
+
+            return $this->make('Illuminate\Contracts\Bus\Dispatcher');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerCacheBindings()
     {
         $this->singleton('cache', function () {
@@ -667,6 +681,7 @@ class Application extends Container
         'auth.driver' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Access\Gate' => 'registerAuthBindings',
+        'Illuminate\Contracts\Bus\Dispatcher' => 'registerBusBindings',
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',

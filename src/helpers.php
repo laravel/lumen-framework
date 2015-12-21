@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 if (! function_exists('abort')) {
     /**
@@ -62,6 +63,19 @@ if (! function_exists('decrypt')) {
     function decrypt($value)
     {
         return app('encrypter')->decrypt($value);
+    }
+}
+
+if (! function_exists('dispatch')) {
+    /**
+     * Dispatch a job to its appropriate handler.
+     *
+     * @param  mixed  $job
+     * @return mixed
+     */
+    function dispatch($job)
+    {
+        return app(Dispatcher::class)->dispatch($job);
     }
 }
 
