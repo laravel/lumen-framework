@@ -303,6 +303,21 @@ class Application extends Container
      *
      * @return void
      */
+    protected function registerHashBindings()
+    {
+        $this->singleton('hash', function () {
+            $this->register('Illuminate\Hashing\HashServiceProvider');
+
+            return $this->make('hash');
+        });
+    }
+
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerLogBindings()
     {
         $this->singleton('Psr\Log\LoggerInterface', function () {
@@ -614,6 +629,7 @@ class Application extends Container
             'Illuminate\Contracts\Container\Container' => 'app',
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
+            'Illuminate\Contracts\Hashing\Hasher' => 'hash',
             'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
@@ -640,6 +656,8 @@ class Application extends Container
         'events' => 'registerEventBindings',
         'Illuminate\Contracts\Events\Dispatcher' => 'registerEventBindings',
         'files' => 'registerFilesBindings',
+        'hash' => 'registerHashBindings',
+        'Illuminate\Contracts\Hashing\Hasher' => 'registerHashBindings',
         'log' => 'registerLogBindings',
         'Psr\Log\LoggerInterface' => 'registerLogBindings',
         'queue' => 'registerQueueBindings',
