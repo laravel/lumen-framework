@@ -217,6 +217,10 @@ class Application extends Container
         $this->singleton('auth.driver', function () {
             return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
         });
+
+        $this->singleton('Illuminate\Contracts\Auth\Access\Gate', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'Illuminate\Contracts\Auth\Access\Gate');
+        });
     }
 
     /**
@@ -662,6 +666,7 @@ class Application extends Container
         'auth' => 'registerAuthBindings',
         'auth.driver' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
+        'Illuminate\Contracts\Auth\Access\Gate' => 'registerAuthBindings',
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
