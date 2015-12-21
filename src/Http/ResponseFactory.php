@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
-class ResponseFactory
+class ResponseFactory implements ResponseFactoryInterface
 {
     /**
      * Return a new response from the application.

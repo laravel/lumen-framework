@@ -21,6 +21,7 @@ use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Http\AbstractResponseFactory;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Http\Exception\HttpResponseException;
 use Illuminate\Config\Repository as ConfigRepository;
@@ -494,6 +495,18 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $this->register('Illuminate\Bus\BusServiceProvider');
 
             return $this->make('Illuminate\Contracts\Bus\Dispatcher');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerAbstractResponseFactory()
+    {
+        $this->singleton('abstract.response.factory', function () {
+            return new AbstractResponseFactory();
         });
     }
 
@@ -1757,6 +1770,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         'validator' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
+        'abstract.response.factory' => 'registerAbstractResponseFactory',
     ];
 
     /**
