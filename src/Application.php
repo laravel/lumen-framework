@@ -190,6 +190,8 @@ class Application extends Container
      */
     public function make($abstract, array $parameters = [])
     {
+        $abstract = $this->getAlias($this->normalize($abstract));
+
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
             $this->{$method = $this->availableBindings[$abstract]}();
@@ -621,6 +623,7 @@ class Application extends Container
     {
         $this->aliases = [
             'Illuminate\Contracts\Foundation\Application' => 'app',
+            'Illuminate\Contracts\Auth\Factory' => 'auth',
             'Illuminate\Contracts\Auth\Guard' => 'auth.driver',
             'Illuminate\Contracts\Cache\Factory' => 'cache',
             'Illuminate\Contracts\Cache\Repository' => 'cache.store',
