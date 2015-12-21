@@ -205,6 +205,22 @@ class Application extends Container
      *
      * @return void
      */
+    protected function registerAuthBindings()
+    {
+        $this->singleton('auth', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth');
+        });
+
+        $this->singleton('auth.driver', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerCacheBindings()
     {
         $this->singleton('cache', function () {
@@ -345,7 +361,9 @@ class Application extends Container
     protected function registerRequestBindings()
     {
         $this->singleton('Illuminate\Http\Request', function () {
-            return Request::capture()->setRouteResolver(function () {
+            return Request::capture()->setUserResolver(function () {
+                return $this->make('auth')->user();
+            })->setRouteResolver(function () {
                 return $this->currentRoute;
             });
         });
@@ -478,6 +496,7 @@ class Application extends Container
         if (! static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
+            class_alias('Illuminate\Support\Facades\Auth', 'Auth');
             class_alias('Illuminate\Support\Facades\Cache', 'Cache');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
             class_alias('Illuminate\Support\Facades\Event', 'Event');
@@ -587,6 +606,7 @@ class Application extends Container
     {
         $this->aliases = [
             'Illuminate\Contracts\Foundation\Application' => 'app',
+            'Illuminate\Contracts\Auth\Guard' => 'auth.driver',
             'Illuminate\Contracts\Cache\Factory' => 'cache',
             'Illuminate\Contracts\Cache\Repository' => 'cache.store',
             'Illuminate\Contracts\Config\Repository' => 'config',
@@ -607,6 +627,9 @@ class Application extends Container
      * @var array
      */
     public $availableBindings = [
+        'auth' => 'registerAuthBindings',
+        'auth.driver' => 'registerAuthBindings',
+        'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
