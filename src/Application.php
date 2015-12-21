@@ -5,6 +5,7 @@ namespace Laravel\Lumen;
 use Monolog\Logger;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Composer;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
 use Monolog\Formatter\LineFormatter;
@@ -230,6 +231,18 @@ class Application extends Container
         });
         $this->singleton('cache.store', function () {
             return $this->loadComponent('cache', 'Illuminate\Cache\CacheServiceProvider', 'cache.store');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerComposerBindings()
+    {
+        $this->singleton('composer', function ($app) {
+            return new Composer($app->make('files'), $this->basePath());
         });
     }
 
@@ -516,6 +529,7 @@ class Application extends Container
             class_alias('Illuminate\Support\Facades\Cache', 'Cache');
             class_alias('Illuminate\Support\Facades\DB', 'DB');
             class_alias('Illuminate\Support\Facades\Event', 'Event');
+            class_alias('Illuminate\Support\Facades\Gate', 'Gate');
             class_alias('Illuminate\Support\Facades\Log', 'Log');
             class_alias('Illuminate\Support\Facades\Queue', 'Queue');
             class_alias('Illuminate\Support\Facades\Schema', 'Schema');
@@ -651,6 +665,7 @@ class Application extends Container
         'cache' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
+        'composer' => 'registerComposerBindings',
         'config' => 'registerConfigBindings',
         'db' => 'registerDatabaseBindings',
         'encrypter' => 'registerEncrypterBindings',
