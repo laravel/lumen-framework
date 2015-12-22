@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => env('AUTH_GUARD', 'api'),
         'passwords' => 'users',
     ],
 
@@ -42,8 +42,8 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
+            'driver' => env('AUTH_DRIVER', 'token'),
+            'provider' => env('AUTH_PROVIDER', 'users'),
         ],
     ],
 
