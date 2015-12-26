@@ -486,7 +486,7 @@ class Application extends Container
      * @param  string|null  $return
      * @return mixed
      */
-    protected function loadComponent($config, $providers, $return = null)
+    public function loadComponent($config, $providers, $return = null)
     {
         $this->configure($config);
 
