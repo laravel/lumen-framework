@@ -265,7 +265,6 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             }]);
         });
 
-
         $app->group(['middleware' => ['passing']], function ($app) {
             $app->get('/bar', ['middleware' => ['bar'], function () {
                 return 'Hello World';
@@ -290,6 +289,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Middleware', $response->getContent());
     }
+
     public function testWithMiddlewareDisabled()
     {
         $app = new Application;
