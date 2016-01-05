@@ -658,6 +658,7 @@ class Application extends Container
         $this->configure('database');
 
         $this->register('Illuminate\Database\MigrationServiceProvider');
+        $this->register('Illuminate\Database\SeedServiceProvider');
         $this->register('Illuminate\Queue\ConsoleServiceProvider');
     }
 
@@ -705,6 +706,7 @@ class Application extends Container
         'composer' => 'registerComposerBindings',
         'config' => 'registerConfigBindings',
         'db' => 'registerDatabaseBindings',
+        'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
         'encrypter' => 'registerEncrypterBindings',
         'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
         'events' => 'registerEventBindings',
