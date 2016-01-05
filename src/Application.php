@@ -925,6 +925,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         $parentGroupAttributes = $this->groupAttributes;
 
+        if (isset($attributes['middleware']) && is_string($attributes['middleware'])) {
+            $attributes['middleware'] = explode('|', $attributes['middleware']);
+        }
+
         $this->groupAttributes = $attributes;
 
         call_user_func($callback, $this);
@@ -1058,6 +1062,10 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             return [$action];
         }
 
+        if (isset($action['middleware']) && is_string($action['middleware'])) {
+            $action['middleware'] = explode('|', $action['middleware']);
+        }
+
         return $action;
     }
 
@@ -1099,7 +1107,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     {
         if (isset($this->groupAttributes['middleware'])) {
             if (isset($action['middleware'])) {
-                $action['middleware'] = $this->groupAttributes['middleware'].'|'.$action['middleware'];
+                $action['middleware'] = array_merge($this->groupAttributes['middleware'], $action['middleware']);
             } else {
                 $action['middleware'] = $this->groupAttributes['middleware'];
             }
