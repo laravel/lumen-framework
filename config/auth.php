@@ -15,7 +15,6 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'api'),
-        'passwords' => 'users',
     ],
 
     /*
@@ -36,15 +35,7 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-
-        'api' => [
-            'driver' => env('AUTH_DRIVER', 'token'),
-            'provider' => env('AUTH_PROVIDER', 'users'),
-        ],
+        //
     ],
 
     /*
@@ -65,15 +56,7 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\User::class),
-        ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        //
     ],
 
     /*
@@ -96,12 +79,7 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'email' => 'auth.emails.password',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
+        //
     ],
 
 ];
