@@ -5,8 +5,13 @@ namespace Laravel\Lumen\Exceptions;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Exception\HttpResponseException;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Debug\ExceptionHandler as SymfonyExceptionHandler;
 
 class Handler implements ExceptionHandler
@@ -68,6 +73,16 @@ class Handler implements ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if ($e instanceof HttpResponseException) {
+            return $e->getResponse();
+        } elseif ($e instanceof ModelNotFoundException) {
+            $e = new NotFoundHttpException($e->getMessage(), $e);
+        } elseif ($e instanceof AuthorizationException) {
+            $e = new HttpException(403, $e->getMessage());
+        } elseif ($e instanceof ValidationException && $e->getResponse()) {
+            return $e->getResponse();
+        }
+
         $fe = FlattenException::create($e);
 
         $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
