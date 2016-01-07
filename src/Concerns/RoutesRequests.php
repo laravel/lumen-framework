@@ -8,7 +8,7 @@ use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pipeline\Pipeline;
+use Laravel\Lumen\Routing\Pipeline;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
 use Illuminate\Http\Exception\HttpResponseException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
