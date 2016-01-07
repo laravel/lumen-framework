@@ -348,6 +348,19 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($app->environment('production'));
         $this->assertTrue($app->environment(['production']));
     }
+
+    public function testValidationHelpers()
+    {
+        $app = new Application;
+
+        $app->get('/', function (Illuminate\Http\Request $request) {
+            $this->validate($request, ['name' => 'required']);
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(422, $response->getStatusCode());
+    }
 }
 
 class LumenTestService

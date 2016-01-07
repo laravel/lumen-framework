@@ -62,5 +62,6 @@
             "dev-master": "5.2-dev"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
