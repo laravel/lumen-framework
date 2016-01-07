@@ -479,6 +479,18 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerViewBindings()
+    {
+        $this->singleton('view', function () {
+            return $this->loadComponent('view', 'Illuminate\View\ViewServiceProvider');
+        });
+    }
+
+    /**
      * Configure and load the given component and provider.
      *
      * @param  string  $config
@@ -685,6 +697,7 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
 
@@ -724,5 +737,7 @@ class Application extends Container
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
         'validator' => 'registerValidatorBindings',
+        'view' => 'registerViewBindings',
+        'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
     ];
 }
