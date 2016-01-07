@@ -2,9 +2,9 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Closure;
 use Throwable;
 use Exception;
+use Closure as BaseClosure;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
@@ -45,7 +45,7 @@ class Pipeline extends BasePipeline
      * @param  \Closure  $destination
      * @return \Closure
      */
-    protected function getInitialSlice(Closure $destination)
+    protected function getInitialSlice(BaseClosure $destination)
     {
         return function ($passable) use ($destination) {
             try {
