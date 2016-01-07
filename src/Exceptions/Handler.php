@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Exceptions;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Exception\HttpResponseException;
