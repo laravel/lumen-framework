@@ -47,7 +47,7 @@
         "mockery/mockery": "~0.9"
     },
     "suggest": {
-        "vlucas/phpdotenv": "Required to use .env files (~2.0)."
+        "vlucas/phpdotenv": "Required to use .env files (~2.2)."
     },
     "autoload": {
         "psr-4": {
