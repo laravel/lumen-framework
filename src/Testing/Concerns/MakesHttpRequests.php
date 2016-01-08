@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Testing\Concerns;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use PHPUnit_Framework_Assert as PHPUnit;
 
 trait MakesHttpRequests
 {
@@ -367,6 +368,31 @@ trait MakesHttpRequests
         }
 
         return $server;
+    }
+
+    /**
+     * Assert that the client response has an OK status code.
+     *
+     * @return void
+     */
+    public function assertResponseOk()
+    {
+        $actual = $this->response->getStatusCode();
+
+        return PHPUnit::assertTrue($this->response->isOk(), "Expected status code 200, got {$actual}.");
+    }
+
+    /**
+     * Assert that the client response has a given code.
+     *
+     * @param  int  $code
+     * @return void
+     */
+    public function assertResponseStatus($code)
+    {
+        $actual = $this->response->getStatusCode();
+
+        return PHPUnit::assertEquals($code, $this->response->getStatusCode(), "Expected status code {$code}, got {$actual}.");
     }
 
     /**
