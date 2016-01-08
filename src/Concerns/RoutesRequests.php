@@ -549,7 +549,7 @@ trait RoutesRequests
         $middleware = $this->gatherMiddlewareClassNames($middleware);
 
         return $this->sendThroughPipeline($middleware, function () use ($instance, $method, $routeInfo) {
-            return $this->callControllerCallable([$instance, $method], $parameters);
+            return $this->callControllerCallable([$instance, $method], $routeInfo[2]);
         });
     }
 
