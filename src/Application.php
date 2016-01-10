@@ -675,6 +675,16 @@ class Application extends Container
     }
 
     /**
+      * Get the raw routes for the application.
+      *
+      * @return array
+      */
+     public function getRoutes()
+     {
+         return $this->routes;
+     }
+
+    /**
      * Register the core container aliases.
      *
      * @return void
