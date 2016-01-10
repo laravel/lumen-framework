@@ -652,4 +652,14 @@ trait RoutesRequests
 
         return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
     }
+
+    /**
+      * Get the raw routes for the application.
+      *
+      * @return array
+      */
+     public function getRoutes()
+     {
+         return $this->routes;
+     }
 }
