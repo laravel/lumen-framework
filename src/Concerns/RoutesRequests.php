@@ -654,12 +654,12 @@ trait RoutesRequests
     }
 
     /**
-      * Get the raw routes for the application.
-      *
-      * @return array
-      */
-     public function getRoutes()
-     {
-         return $this->routes;
-     }
+     * Get the raw routes for the application.
+     *
+     * @return array
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
 }
