@@ -457,7 +457,7 @@ class Application extends Container
      */
     protected function getLanguagePath()
     {
-        if (is_dir($appPath = $this->path().'/resources/lang')) {
+        if (is_dir($appPath = $this->path().'/../resources/lang')) {
             return $appPath;
         } else {
             return __DIR__.'/../resources/lang';
