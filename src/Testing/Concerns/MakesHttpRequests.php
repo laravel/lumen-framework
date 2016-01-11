@@ -280,6 +280,19 @@ trait MakesHttpRequests
     }
 
     /**
+     * Asserts that the status code of the response matches the given code.
+     *
+     * @param  int  $status
+     * @return $this
+     */
+    protected function seeStatusCode($status)
+    {
+        $this->assertEquals($status, $this->response->getStatusCode());
+
+        return $this;
+    }
+
+    /**
      * Format the given key and value into a JSON string for expectation checks.
      *
      * @param  string  $key
