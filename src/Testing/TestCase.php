@@ -2,6 +2,7 @@
 
 namespace Laravel\Lumen\Testing;
 
+use Exception;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Facades\Facade;
