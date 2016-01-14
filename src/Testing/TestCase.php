@@ -2,8 +2,8 @@
 
 namespace Laravel\Lumen\Testing;
 
-use Exception;
 use Mockery;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Auth\Authenticatable;
