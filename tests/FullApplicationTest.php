@@ -110,7 +110,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware']);
+        $app->routeMiddleware(['foo' => 'LumenTestMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
         $app->get('/', function () {
             return response('Hello World');
@@ -120,11 +120,27 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
             return response('Hello World');
         }]);
 
+        $app->get('/bar', ['middleware' => ['foo'], function () {
+            return response('Hello World');
+        }]);
+
+        $app->get('/fooBar', ['middleware' => 'passing|foo', function () {
+            return response('Hello World');
+        }]);
+
         $response = $app->handle(Request::create('/', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
 
         $response = $app->handle(Request::create('/foo', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Middleware', $response->getContent());
+
+        $response = $app->handle(Request::create('/bar', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Middleware', $response->getContent());
+
+        $response = $app->handle(Request::create('/fooBar', 'GET'));
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Middleware', $response->getContent());
     }
@@ -149,9 +165,9 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware']);
+        $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
-        $app->get('/', ['middleware' => 'foo:bar,boom', function () {
+        $app->get('/', ['middleware' => 'passing|foo:bar,boom', function () {
             return response('Hello World');
         }]);
 
