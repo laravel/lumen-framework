@@ -457,8 +457,8 @@ class Application extends Container
      */
     protected function getLanguagePath()
     {
-        if (is_dir($appPath = $this->path().'/resources/lang')) {
-            return $appPath;
+        if (is_dir($langPath = $this->basePath().'/resources/lang')) {
+            return $langPath;
         } else {
             return __DIR__.'/../resources/lang';
         }
@@ -475,6 +475,18 @@ class Application extends Container
             $this->register('Illuminate\Validation\ValidationServiceProvider');
 
             return $this->make('validator');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerViewBindings()
+    {
+        $this->singleton('view', function () {
+            return $this->loadComponent('view', 'Illuminate\View\ViewServiceProvider');
         });
     }
 
@@ -685,6 +697,7 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
 
@@ -701,6 +714,7 @@ class Application extends Container
         'Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
         'Illuminate\Contracts\Bus\Dispatcher' => 'registerBusBindings',
         'cache' => 'registerCacheBindings',
+        'cache.store' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Factory' => 'registerCacheBindings',
         'Illuminate\Contracts\Cache\Repository' => 'registerCacheBindings',
         'composer' => 'registerComposerBindings',
@@ -724,5 +738,7 @@ class Application extends Container
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
         'validator' => 'registerValidatorBindings',
+        'view' => 'registerViewBindings',
+        'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
     ];
 }
