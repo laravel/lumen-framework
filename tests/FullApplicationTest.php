@@ -208,6 +208,20 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(405, $response->getStatusCode());
     }
 
+    public function testUncaughtExceptionResponse()
+    {
+        $app = new Application;
+        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $mock->shouldIgnoreMissing();
+
+        $app->get('/', function () {
+            throw new \RuntimeException('app exception');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+        $this->assertInstanceOf('Illuminate\Http\Response', $response);
+    }
+
     public function testGeneratingUrls()
     {
         $app = new Application;
