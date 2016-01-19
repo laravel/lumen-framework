@@ -33,7 +33,7 @@ class Handler implements ExceptionHandler
     public function report(Exception $e)
     {
         if ($this->shouldReport($e)) {
-            app('Psr\Log\LoggerInterface')->error($e);
+            app(\Psr\Log\LoggerInterface::class)->error($e);
         }
     }
 

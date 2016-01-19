@@ -197,7 +197,7 @@ if (! function_exists('factory')) {
     {
         app('db');
 
-        $factory = app('Illuminate\Database\Eloquent\Factory');
+        $factory = app(\Illuminate\Database\Eloquent\Factory::class);
 
         $arguments = func_get_args();
 
@@ -221,7 +221,7 @@ if (! function_exists('info')) {
      */
     function info($message, $context = [])
     {
-        return app('Psr\Log\LoggerInterface')->info($message, $context);
+        return app(\Psr\Log\LoggerInterface::class)->info($message, $context);
     }
 }
 
