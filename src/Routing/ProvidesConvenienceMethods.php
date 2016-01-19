@@ -160,7 +160,7 @@ trait ProvidesConvenienceMethods
      */
     public function dispatch($job)
     {
-        return app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($job);
+        return app(\Illuminate\Contracts\Bus\Dispatcher::class)->dispatch($job);
     }
 
     /**

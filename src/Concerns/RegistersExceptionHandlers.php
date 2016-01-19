@@ -136,10 +136,10 @@ trait RegistersExceptionHandlers
      */
     protected function resolveExceptionHandler()
     {
-        if ($this->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
-            return $this->make('Illuminate\Contracts\Debug\ExceptionHandler');
+        if ($this->bound(\Illuminate\Contracts\Debug\ExceptionHandler::class)) {
+            return $this->make(\Illuminate\Contracts\Debug\ExceptionHandler::class);
         } else {
-            return $this->make('Laravel\Lumen\Exceptions\Handler');
+            return $this->make(\Laravel\Lumen\Exceptions\Handler::class);
         }
     }
 }

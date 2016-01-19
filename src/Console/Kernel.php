@@ -50,7 +50,7 @@ class Kernel implements KernelContract
     protected function defineConsoleSchedule()
     {
         $this->app->instance(
-            'Illuminate\Console\Scheduling\Schedule', $schedule = new Schedule
+            \Illuminate\Console\Scheduling\Schedule::class, $schedule = new Schedule
         );
 
         $this->schedule($schedule);
@@ -162,7 +162,7 @@ class Kernel implements KernelContract
     protected function getCommands()
     {
         return array_merge($this->commands, [
-            'Illuminate\Console\Scheduling\ScheduleRunCommand',
+            \Illuminate\Console\Scheduling\ScheduleRunCommand::class,
         ]);
     }
 
@@ -174,7 +174,7 @@ class Kernel implements KernelContract
      */
     protected function reportException(Exception $e)
     {
-        $this->app['Illuminate\Contracts\Debug\ExceptionHandler']->report($e);
+        $this->app[\Illuminate\Contracts\Debug\ExceptionHandler::class]->report($e);
     }
 
     /**
@@ -186,6 +186,6 @@ class Kernel implements KernelContract
      */
     protected function renderException($output, Exception $e)
     {
-        $this->app['Illuminate\Contracts\Debug\ExceptionHandler']->renderForConsole($output, $e);
+        $this->app[\Illuminate\Contracts\Debug\ExceptionHandler::class]->renderForConsole($output, $e);
     }
 }
