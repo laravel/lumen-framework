@@ -71,8 +71,6 @@ class Redirector
 
         $redirect->setRequest($this->app->make('request'));
 
-        $redirect->setSession($this->app->make('session.store'));
-
         return $redirect;
     }
 }

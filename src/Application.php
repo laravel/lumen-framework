@@ -469,6 +469,18 @@ class Application extends Container
      *
      * @return void
      */
+    protected function registerUrlGeneratorBindings()
+    {
+        $this->singleton('url', function () {
+            return new Routing\UrlGenerator($this);
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerValidatorBindings()
     {
         $this->singleton('validator', function () {
@@ -697,6 +709,7 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
@@ -737,6 +750,7 @@ class Application extends Container
         'request' => 'registerRequestBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
+        'url' => 'registerUrlGeneratorBindings',
         'validator' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
