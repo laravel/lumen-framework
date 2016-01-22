@@ -15,6 +15,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Laravel\Lumen\Routing\Controller as LumenController;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -626,7 +628,9 @@ trait RoutesRequests
      */
     public function prepareResponse($response)
     {
-        if (! $response instanceof SymfonyResponse) {
+        if ($response instanceof PsrResponseInterface) {
+            $response = (new HttpFoundationFactory)->createResponse($response);
+        } elseif (! $response instanceof SymfonyResponse) {
             $response = new Response($response);
         } elseif ($response instanceof BinaryFileResponse) {
             $response = $response->prepare(Request::capture());

@@ -12,7 +12,9 @@ use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Zend\Diactoros\Response as PsrResponse;
 use Illuminate\Config\Repository as ConfigRepository;
+use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 
 class Application extends Container
 {
@@ -433,6 +435,30 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the PSR-7 request implementation.
+     *
+     * @return void
+     */
+    protected function registerPsrRequestBindings()
+    {
+        $this->singleton('Psr\Http\Message\ServerRequestInterface', function () {
+            return (new DiactorosFactory)->createRequest($this->make('request'));
+        });
+    }
+
+    /**
+     * Register container bindings for the PSR-7 response implementation.
+     *
+     * @return void
+     */
+    protected function registerPsrResponseBindings()
+    {
+        $this->singleton('Psr\Http\Message\ResponseInterface', function () {
+            return new PsrResponse();
+        });
+    }
+
+    /**
      * Register container bindings for the application.
      *
      * @return void
@@ -462,6 +488,18 @@ class Application extends Container
         } else {
             return __DIR__.'/../resources/lang';
         }
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerUrlGeneratorBindings()
+    {
+        $this->singleton('url', function () {
+            return new Routing\UrlGenerator($this);
+        });
     }
 
     /**
@@ -697,6 +735,7 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
@@ -735,8 +774,11 @@ class Application extends Container
         'Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
         'request' => 'registerRequestBindings',
+        'Psr\Http\Message\ServerRequestInterface' => 'registerPsrRequestBindings',
+        'Psr\Http\Message\ResponseInterface' => 'registerPsrResponseBindings',
         'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
+        'url' => 'registerUrlGeneratorBindings',
         'validator' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
