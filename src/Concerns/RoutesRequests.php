@@ -195,7 +195,7 @@ trait RoutesRequests
             }
 
             if (isset($this->groupAttributes['suffix'])) {
-                $uri  = trim($uri, '/').trim($this->groupAttributes['suffix'], '/');
+                $uri = trim($uri, '/').trim($this->groupAttributes['suffix'], '/');
             }
 
             $action = $this->mergeGroupAttributes($action);
