@@ -358,6 +358,21 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Middleware', $response->getContent());
     }
 
+    public function testBasicControllerDispatchingWithGroupSuffix()
+    {
+        $app = new Application;
+        $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
+
+        $app->group(['suffix' => '.{format:json|xml}'], function ($app) {
+            $app->get('/show/{id}', 'LumenTestController@show');
+        });
+
+        $response = $app->handle(Request::create('/show/25.xml', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('25', $response->getContent());
+    }
+
     public function testBasicControllerDispatchingWithMiddlewareIntercept()
     {
         $app = new Application;
