@@ -407,7 +407,7 @@ trait RoutesRequests
      */
     protected function createDispatcher()
     {
-        return $this->dispatcher = $this->dispatcher ?: \FastRoute\simpleDispatcher(function ($r) {
+        return $this->dispatcher ?: \FastRoute\simpleDispatcher(function ($r) {
             foreach ($this->routes as $route) {
                 $r->addRoute($route['method'], $route['uri'], $route['action']);
             }
