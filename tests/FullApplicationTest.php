@@ -373,7 +373,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('25', $response->getContent());
     }
 
-     public function testBasicControllerDispatchingWithGroupAndSuffixWithPath()
+    public function testBasicControllerDispatchingWithGroupAndSuffixWithPath()
     {
         $app = new Application;
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
