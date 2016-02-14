@@ -80,7 +80,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset'  => 'utf8',
             'prefix'   => env('DB_PREFIX', ''),
-            'schema'   => 'public',
+            'schema'   => env('DB_SCHEMA', 'public'),
         ],
 
         'sqlsrv' => [
