@@ -426,12 +426,25 @@ class Application extends Container
     protected function registerRequestBindings()
     {
         $this->singleton('Illuminate\Http\Request', function () {
-            return Request::capture()->setUserResolver(function () {
-                return $this->make('auth')->user();
-            })->setRouteResolver(function () {
-                return $this->currentRoute;
-            });
+            return $this->configureRequest(Request::capture());
         });
+    }
+
+    /**
+     * Configure the given request instance for use with the application.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Request
+     */
+    protected function configureRequest(Request $request)
+    {
+        $request->setUserResolver(function () {
+            return $this->make('auth')->user();
+        })->setRouteResolver(function () {
+            return $this->currentRoute;
+        });
+
+        return $request;
     }
 
     /**

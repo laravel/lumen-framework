@@ -390,12 +390,13 @@ trait RoutesRequests
     /**
      * Parse the incoming request and return the method and path info.
      *
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     protected function parseIncomingRequest($request)
     {
         if ($request) {
-            $this->instance('Illuminate\Http\Request', $request);
+            $this->instance('Illuminate\Http\Request', $this->configureRequest($request));
             $this->ranServiceBinders['registerRequestBindings'] = true;
 
             return [$request->getMethod(), $request->getPathInfo()];
