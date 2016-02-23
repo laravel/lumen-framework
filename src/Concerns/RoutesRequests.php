@@ -396,7 +396,7 @@ trait RoutesRequests
     protected function parseIncomingRequest($request)
     {
         if ($request) {
-            $this->instance('Illuminate\Http\Request', $this->configureRequest($request));
+            $this->instance('Illuminate\Http\Request', $this->prepareRequest($request));
             $this->ranServiceBinders['registerRequestBindings'] = true;
 
             return [$request->getMethod(), $request->getPathInfo()];
