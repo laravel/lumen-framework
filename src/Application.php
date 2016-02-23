@@ -433,7 +433,7 @@ class Application extends Container
     /**
      * Prepare the given request instance for use with the application.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param   \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Request
      */
     protected function prepareRequest(Request $request)
