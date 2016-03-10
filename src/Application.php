@@ -630,6 +630,7 @@ class Application extends Container
             class_alias('Illuminate\Support\Facades\Log', 'Log');
             class_alias('Illuminate\Support\Facades\Queue', 'Queue');
             class_alias('Illuminate\Support\Facades\Schema', 'Schema');
+            class_alias('Illuminate\Support\Facades\URL', 'URL');
             class_alias('Illuminate\Support\Facades\Validator', 'Validator');
         }
     }
