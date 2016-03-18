@@ -426,12 +426,25 @@ class Application extends Container
     protected function registerRequestBindings()
     {
         $this->singleton('Illuminate\Http\Request', function () {
-            return Request::capture()->setUserResolver(function () {
-                return $this->make('auth')->user();
-            })->setRouteResolver(function () {
-                return $this->currentRoute;
-            });
+            return $this->prepareRequest(Request::capture());
         });
+    }
+
+    /**
+     * Prepare the given request instance for use with the application.
+     *
+     * @param   \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Request
+     */
+    protected function prepareRequest(Request $request)
+    {
+        $request->setUserResolver(function () {
+            return $this->make('auth')->user();
+        })->setRouteResolver(function () {
+            return $this->currentRoute;
+        });
+
+        return $request;
     }
 
     /**
@@ -617,6 +630,7 @@ class Application extends Container
             class_alias('Illuminate\Support\Facades\Log', 'Log');
             class_alias('Illuminate\Support\Facades\Queue', 'Queue');
             class_alias('Illuminate\Support\Facades\Schema', 'Schema');
+            class_alias('Illuminate\Support\Facades\URL', 'URL');
             class_alias('Illuminate\Support\Facades\Validator', 'Validator');
         }
     }
@@ -728,6 +742,8 @@ class Application extends Container
             'Illuminate\Contracts\Config\Repository' => 'config',
             'Illuminate\Container\Container' => 'app',
             'Illuminate\Contracts\Container\Container' => 'app',
+            'Illuminate\Database\ConnectionResolverInterface' => 'db',
+            'Illuminate\Database\DatabaseManager' => 'db',
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',

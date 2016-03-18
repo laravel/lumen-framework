@@ -122,11 +122,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param  string  $table
      * @param  array  $data
+     * @param  string|null $onConnection
      * @return $this
      */
-    protected function seeInDatabase($table, array $data)
+    protected function seeInDatabase($table, array $data, $onConnection = null)
     {
-        $count = $this->app->make('db')->table($table)->where($data)->count();
+        $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
 
         $this->assertGreaterThan(0, $count, sprintf(
             'Unable to find row in database table [%s] that matched attributes [%s].', $table, json_encode($data)
@@ -140,11 +141,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param  string  $table
      * @param  array  $data
+     * @param  string|null $onConnection
      * @return $this
      */
-    protected function missingFromDatabase($table, array $data)
+    protected function missingFromDatabase($table, array $data, $onConnection = null)
     {
-        return $this->notSeeInDatabase($table, $data);
+        return $this->notSeeInDatabase($table, $data, $onConnection);
     }
 
     /**
@@ -152,11 +154,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param  string  $table
      * @param  array  $data
+     * @param  string|null $onConnection
      * @return $this
      */
-    protected function notSeeInDatabase($table, array $data)
+    protected function notSeeInDatabase($table, array $data, $onConnection = null)
     {
-        $count = $this->app->make('db')->table($table)->where($data)->count();
+        $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
 
         $this->assertEquals(0, $count, sprintf(
             'Found unexpected records in database table [%s] that matched attributes [%s].', $table, json_encode($data)
