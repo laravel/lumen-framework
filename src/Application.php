@@ -742,6 +742,8 @@ class Application extends Container
             'Illuminate\Contracts\Config\Repository' => 'config',
             'Illuminate\Container\Container' => 'app',
             'Illuminate\Contracts\Container\Container' => 'app',
+            'Illuminate\Database\ConnectionResolverInterface' => 'db',
+            'Illuminate\Database\DatabaseManager' => 'db',
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',
