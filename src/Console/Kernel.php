@@ -28,6 +28,13 @@ class Kernel implements KernelContract
     protected $artisan;
 
     /**
+     * The Artisan commands provided by the application.
+     *
+     * @var array
+     */
+    protected $commands = [];
+
+    /**
      * Create a new console kernel instance.
      *
      * @param  \Laravel\Lumen\Application  $app
