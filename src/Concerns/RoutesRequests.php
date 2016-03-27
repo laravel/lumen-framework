@@ -470,8 +470,8 @@ trait RoutesRequests
         if (isset($action['middleware'])) {
             $middleware = $this->gatherMiddlewareClassNames($action['middleware']);
 
-            return $this->prepareResponse($this->sendThroughPipeline($middleware, function () use ($routeInfo) {
-                return $this->callActionOnArrayBasedRoute($routeInfo);
+            return $this->prepareResponse($this->sendThroughPipeline($middleware, function () {
+                return $this->callActionOnArrayBasedRoute($this['request']->route());
             }));
         }
 
