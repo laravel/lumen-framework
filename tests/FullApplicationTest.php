@@ -25,6 +25,25 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
+    public function testAddRouteMultipleMethodRequest()
+    {
+        $app = new Application;
+
+        $app->addRoute(['GET', 'POST'], '/', function() {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+
+        $response = $app->handle(Request::create('/', 'POST'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+    }
+
     public function testRequestWithoutSymfonyClass()
     {
         $app = new Application;
