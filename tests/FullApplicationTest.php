@@ -29,7 +29,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->addRoute(['GET', 'POST'], '/', function() {
+        $app->addRoute(['GET', 'POST'], '/', function () {
             return response('Hello World');
         });
 

@@ -209,10 +209,10 @@ trait RoutesRequests
 
         if (is_array($method)) {
             foreach ($method as $verb) {
-                $this->routes[$verb . $uri] = ['method' => $verb, 'uri' => $uri, 'action' => $action];
+                $this->routes[$verb.$uri] = ['method' => $verb, 'uri' => $uri, 'action' => $action];
             }
         } else {
-            $this->routes[$method . $uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
+            $this->routes[$method.$uri] = ['method' => $method, 'uri' => $uri, 'action' => $action];
         }
     }
 
