@@ -182,8 +182,9 @@ trait RoutesRequests
      * Add a route to the collection.
      *
      * @param  array|string  $method
-     * @param  string        $uri
-     * @param  mixed         $action
+     * @param  string  $uri
+     * @param  mixed  $action
+     * @return void
      */
     public function addRoute($method, $uri, $action)
     {
