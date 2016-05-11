@@ -355,6 +355,29 @@ trait MakesHttpRequests
     }
 
     /**
+     * Asserts that the response contains the given header and equals the optional value.
+     *
+     * @param  string  $headerName
+     * @param  mixed  $value
+     * @return $this
+     */
+    protected function seeHeader($headerName, $value = null)
+    {
+        $headers = $this->response->headers;
+
+        $this->assertTrue($headers->has($headerName), "Header [{$headerName}] not present on response.");
+
+        if (! is_null($value)) {
+            $this->assertEquals(
+                $headers->get($headerName), $value,
+                "Header [{$headerName}] was found, but value [{$headers->get($headerName)}] does not match [{$value}]."
+            );
+        }
+
+        return $this;
+    }
+
+    /**
      * Transform headers array to array of $_SERVER vars with HTTP_* format.
      *
      * @param  array  $headers
