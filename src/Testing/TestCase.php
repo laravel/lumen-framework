@@ -51,9 +51,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         putenv('APP_ENV=testing');
 
-        $this->app = $this->createApplication();
-
         Facade::clearResolvedInstances();
+
+        $this->app = $this->createApplication();
     }
 
     /**
