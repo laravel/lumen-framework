@@ -708,6 +708,16 @@ class Application extends Container
     }
 
     /**
+     * Determine if we are running unit tests.
+     *
+     * @return bool
+     */
+    public function runningUnitTests()
+    {
+        return $this->environment() == 'testing';
+    }
+
+    /**
      * Prepare the application to execute a console command.
      *
      * @return void
