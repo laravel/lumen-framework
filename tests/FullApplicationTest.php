@@ -100,7 +100,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
         $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
-          return response($baz);
+            return response($baz);
         });
 
         $response = $app->handle(Request::create('/foo-bar/something', 'GET'));
