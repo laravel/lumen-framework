@@ -93,7 +93,7 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
         $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
-          return response($baz);
+            return response($baz);
         });
 
         $response = $app->handle(Request::create('/foo-bar/something', 'GET'));
@@ -210,7 +210,8 @@ class ExampleTest extends PHPUnit_Framework_TestCase
             $app->get('/', function () {
                 return 'Hello World';
             });
-            $app->group([], function () {});
+            $app->group([], function () {
+            });
             $app->get('/fooBar', function () {
                 return 'Hello World';
             });
@@ -388,7 +389,8 @@ class ExampleTest extends PHPUnit_Framework_TestCase
 
         $app->group(['namespace' => 'Lumen\Tests'], function ($app) {
             $app->get('/', 'TestController@action');
-            $app->group([], function () {});
+            $app->group([], function () {
+            });
             $app->get('/foo', 'TestController@action');
         });
 
