@@ -494,6 +494,15 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('1234', $response->getContent());
     }
+
+    public function testCanResolveValidationFactoryFromContract()
+    {
+        $app = new Application();
+
+        $validator = $app['Illuminate\Contracts\Validation\Factory'];
+
+        $this->assertInstanceOf('Illuminate\Contracts\Validation\Factory', $validator);
+    }
 }
 
 class LumenTestService
