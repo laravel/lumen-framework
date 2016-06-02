@@ -762,6 +762,7 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
             'Laravel\Lumen\Routing\UrlGenerator' => 'url',
+            'Illuminate\Contracts\Validation\Factory' => 'validator',
             'Illuminate\Contracts\View\Factory' => 'view',
         ];
     }
@@ -806,6 +807,7 @@ class Application extends Container
         'translator' => 'registerTranslationBindings',
         'url' => 'registerUrlGeneratorBindings',
         'validator' => 'registerValidatorBindings',
+        'Illuminate\Contracts\Validation\Factory' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
     ];
