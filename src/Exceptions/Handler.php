@@ -30,10 +30,12 @@ class Handler implements ExceptionHandler
         }
 
         try {
-            app('Psr\Log\LoggerInterface')->error($e);
+            $logger = app('Psr\Log\LoggerInterface');
         } catch (Exception $ex) {
             throw $e; // throw the original exception
         }
+
+        $logger->error($e);
     }
 
     /**
