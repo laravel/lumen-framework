@@ -28,18 +28,18 @@ class Kernel implements KernelContract
     protected $artisan;
 
     /**
+     * Are facade aliases enabled?
+     *
+     * @var bool
+     */
+    protected $aliases = true;
+
+    /**
      * The Artisan commands provided by the application.
      *
      * @var array
      */
     protected $commands = [];
-
-    /**
-     * Are aliases enabled?
-     *
-     * @var bool
-     */
-    protected $aliases = true;
 
     /**
      * Create a new console kernel instance.
