@@ -35,6 +35,13 @@ class Kernel implements KernelContract
     protected $commands = [];
 
     /**
+     * Are aliases enabled?
+     *
+     * @var bool
+     */
+    protected $aliases = true;
+
+    /**
      * Create a new console kernel instance.
      *
      * @param  \Laravel\Lumen\Application  $app
@@ -44,7 +51,7 @@ class Kernel implements KernelContract
     {
         $this->app = $app;
 
-        $this->app->prepareForConsoleCommand();
+        $this->app->prepareForConsoleCommand($this->aliases);
 
         $this->defineConsoleSchedule();
     }
