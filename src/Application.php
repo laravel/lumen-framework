@@ -618,12 +618,25 @@ class Application extends Container
     /**
      * Register the facades for the application.
      *
+     * @param  bool  $aliases
      * @return void
      */
-    public function withFacades()
+    public function withFacades($aliases = true)
     {
         Facade::setFacadeApplication($this);
 
+        if ($aliases) {
+            $this->withAliases();
+        }
+    }
+
+    /**
+     * Register the aliases for the application.
+     *
+     * @return void
+     */
+    public function withAliases()
+    {
         if (! static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
@@ -725,11 +738,12 @@ class Application extends Container
     /**
      * Prepare the application to execute a console command.
      *
+     * @param  bool  $aliases
      * @return void
      */
-    public function prepareForConsoleCommand()
+    public function prepareForConsoleCommand($aliases = false)
     {
-        $this->withFacades();
+        $this->withFacades($aliases);
 
         $this->make('cache');
         $this->make('queue');
