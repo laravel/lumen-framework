@@ -168,8 +168,13 @@ class Application extends Container
 
         $this->loadedProviders[$providerName] = true;
 
-        $provider->register();
-        $provider->boot();
+        if (method_exists($provider, 'register')) {
+            $provider->register();
+        }
+
+        if (method_exists($provider, 'boot')) {
+            return $this->call([$provider, 'boot']);
+        }
     }
 
     /**
