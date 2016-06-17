@@ -247,6 +247,19 @@ if (! function_exists('redirect')) {
     }
 }
 
+if (! function_exists('resource_path')) {
+    /**
+     * Get the path to the resources folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function resource_path($path = '')
+    {
+        return app()->basePath().'/resources'.($path ? '/'.$path : $path);
+    }
+}
+
 if (! function_exists('response')) {
     /**
      * Return a new response from the application.
