@@ -741,7 +741,7 @@ class Application extends Container
      * @param  bool  $aliases
      * @return void
      */
-    public function prepareForConsoleCommand($aliases = false)
+    public function prepareForConsoleCommand($aliases = true)
     {
         $this->withFacades($aliases);
 
