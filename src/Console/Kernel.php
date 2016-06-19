@@ -28,7 +28,7 @@ class Kernel implements KernelContract
     protected $artisan;
 
     /**
-     * Are facade aliases enabled?
+     * Indicates if facade aliases are enabled for the console.
      *
      * @var bool
      */
