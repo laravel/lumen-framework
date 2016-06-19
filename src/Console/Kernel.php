@@ -28,6 +28,13 @@ class Kernel implements KernelContract
     protected $artisan;
 
     /**
+     * Are facade aliases enabled?
+     *
+     * @var bool
+     */
+    protected $aliases = true;
+
+    /**
      * The Artisan commands provided by the application.
      *
      * @var array
@@ -44,7 +51,7 @@ class Kernel implements KernelContract
     {
         $this->app = $app;
 
-        $this->app->prepareForConsoleCommand();
+        $this->app->prepareForConsoleCommand($this->aliases);
 
         $this->defineConsoleSchedule();
     }
