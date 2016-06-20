@@ -6,6 +6,7 @@ use Closure;
 use Exception;
 use Throwable;
 use FastRoute\Dispatcher;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Pipeline;
@@ -523,7 +524,13 @@ trait RoutesRequests
      */
     protected function callControllerAction($routeInfo)
     {
-        list($controller, $method) = explode('@', $routeInfo[1]['uses']);
+        $uses = $routeInfo[1]['uses'];
+
+        if (is_string($uses) && ! Str::contains($uses, '@')) {
+            $uses .= '@__invoke';
+        }
+
+        list($controller, $method) = explode('@', $uses);
 
         if (! method_exists($instance = $this->make($controller), $method)) {
             throw new NotFoundHttpException;
