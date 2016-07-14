@@ -515,11 +515,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Illuminate\Contracts\Validation\Factory', $validator);
     }
-    
+
     public function testCanMergeUserProvidedFacadesWithDefaultOnes()
     {
         $app = new Application();
-        
+
         $aliases = [
             UserFacade::class => 'Foo',
         ];
