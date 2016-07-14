@@ -521,11 +521,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app = new Application();
         
         $aliases = [
-            UserFacade::class => 'Foo'
+            UserFacade::class => 'Foo',
         ];
-        
+
         $app->withFacades(true, $aliases);
-        
+
         $this->assertTrue(class_exists('Foo'));
     }
 }

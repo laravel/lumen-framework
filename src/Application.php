@@ -651,12 +651,12 @@ class Application extends Container
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
         ];
-        
+
         if (! static::$aliasesRegistered) {
             static::$aliasesRegistered = true;
 
             $merged = array_merge($defaults, $userAliases);
-            
+
             foreach ($merged as $original => $alias) {
                 class_alias($original, $alias);
             }
