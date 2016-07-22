@@ -428,6 +428,13 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($app->environment(['production']));
     }
 
+    public function testNamespaceDetection()
+    {
+        $app = new Application;
+        $this->setExpectedException('RuntimeException');
+        $app->getNamespace();
+    }
+
     public function testRunningUnitTestsDetection()
     {
         $app = new Application;
