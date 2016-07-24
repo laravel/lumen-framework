@@ -16,7 +16,7 @@ class ResponseFactory
      * @param  string  $content
      * @param  int     $status
      * @param  array   $headers
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\Response
      */
     public function make($content = '', $status = 200, array $headers = [])
     {
@@ -30,7 +30,7 @@ class ResponseFactory
      * @param  int    $status
      * @param  array  $headers
      * @param  int    $options
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\JsonResponse;
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
