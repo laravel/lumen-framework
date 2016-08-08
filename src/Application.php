@@ -634,7 +634,7 @@ class Application extends Container
     /**
      * Register the aliases for the application.
      *
-     * @param array $userAliases
+     * @param  array  $userAliases
      * @return void
      */
     public function withAliases($userAliases = [])
