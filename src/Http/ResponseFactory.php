@@ -21,6 +21,7 @@ class ResponseFactory
     public function make($content = '', $status = 200, array $headers = [])
     {
         $response = new Response($content, $status, $headers);
+
         return $response->prepare(app()->request);
     }
 
@@ -40,6 +41,7 @@ class ResponseFactory
         }
 
         $response = new JsonResponse($data, $status, $headers, $options);
+
         return $response->prepare(app()->request);
     }
 
