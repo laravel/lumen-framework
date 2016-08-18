@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class ResponseFactory
 {
@@ -21,8 +22,9 @@ class ResponseFactory
     public function make($content = '', $status = 200, array $headers = [])
     {
         $response = new Response($content, $status, $headers);
+        $this->prepare($response);
 
-        return $response->prepare(app()->request);
+        return $response;
     }
 
     /**
@@ -41,8 +43,9 @@ class ResponseFactory
         }
 
         $response = new JsonResponse($data, $status, $headers, $options);
+        $this->prepare($response);
 
-        return $response->prepare(app()->request);
+        return $response;
     }
 
     /**
@@ -57,11 +60,27 @@ class ResponseFactory
     public function download($file, $name = null, array $headers = [], $disposition = 'attachment')
     {
         $response = new BinaryFileResponse($file, 200, $headers, true, $disposition);
+        $this->prepare($response);
 
         if (! is_null($name)) {
             return $response->setContentDisposition($disposition, $name, str_replace('%', '', Str::ascii($name)));
         }
 
-        return $response->prepare(app()->request);
+        return $response;
+    }
+
+    /**
+     * Fix up the default Response settings.
+     *
+     * This is a light version of Symfony's prepare method.
+     *
+     * @param  \Symfony\Component\HttpFoundation\Response  $response
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function prepare(SymfonyResponse $response)
+    {
+        $response->setProtocolVersion('1.1');
+
+        return $response;
     }
 }
