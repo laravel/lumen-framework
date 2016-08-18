@@ -20,7 +20,8 @@ class ResponseFactory
      */
     public function make($content = '', $status = 200, array $headers = [])
     {
-        return new Response($content, $status, $headers);
+        $response = new Response($content, $status, $headers);
+        return $response->prepare(app()->request);
     }
 
     /**
@@ -38,7 +39,8 @@ class ResponseFactory
             $data = $data->toArray();
         }
 
-        return new JsonResponse($data, $status, $headers, $options);
+        $response = new JsonResponse($data, $status, $headers, $options);
+        return $response->prepare(app()->request);
     }
 
     /**
@@ -58,6 +60,6 @@ class ResponseFactory
             return $response->setContentDisposition($disposition, $name, str_replace('%', '', Str::ascii($name)));
         }
 
-        return $response;
+        return $response->prepare(app()->request);
     }
 }
