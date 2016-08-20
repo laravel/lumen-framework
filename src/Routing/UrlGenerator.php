@@ -219,8 +219,14 @@ class UrlGenerator
 
         $parameters = $this->formatParametersForUrl($parameters);
 
+        $index = -1;
+
         $uri = preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
-            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+            $index++;
+            
+            return isset($parameters[$m[1]])
+                ? array_pull($parameters, $m[1])
+                : (isset($parameters[$index]) ? array_pull($parameters, $index) : $m[0]);
         }, $uri);
 
         $uri = $this->to($uri, []);
