@@ -320,7 +320,13 @@ trait RoutesRequests
      */
     public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
     {
-        return $this->dispatch($request);
+        $response = $this->dispatch($request);
+
+        if (count($this->middleware) > 0) {
+            $this->callTerminableMiddleware($response);
+        }
+
+        return $response;
     }
 
     /**
@@ -359,7 +365,7 @@ trait RoutesRequests
                 continue;
             }
 
-            $instance = $this->make($middleware);
+            $instance = $this->make(explode(':', $middleware)[0]);
 
             if (method_exists($instance, 'terminate')) {
                 $instance->terminate($this->make('request'), $response);
