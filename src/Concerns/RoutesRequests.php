@@ -689,16 +689,6 @@ trait RoutesRequests
     }
 
     /**
-     * Should middleware be skipped for this request?
-     *
-     * @return bool
-     */
-    protected function shouldSkipMiddleware()
-    {
-        return $this->bound('middleware.disable') && $this->make('middleware.disable') === true;
-    }
-
-    /**
      * Get the raw routes for the application.
      *
      * @return array
@@ -706,5 +696,15 @@ trait RoutesRequests
     public function getRoutes()
     {
         return $this->routes;
+    }
+
+    /**
+     * Determines whether middleware should be skipped during request.
+     *
+     * @return bool
+     */
+    protected function shouldSkipMiddleware()
+    {
+        return $this->bound('middleware.disable') && $this->make('middleware.disable') === true;
     }
 }
