@@ -358,6 +358,10 @@ trait RoutesRequests
      */
     protected function callTerminableMiddleware($response)
     {
+        if ($this->shouldSkipMiddleware()) {
+            return;
+        }
+
         $response = $this->prepareResponse($response);
 
         foreach ($this->middleware as $middleware) {
@@ -629,10 +633,7 @@ trait RoutesRequests
      */
     protected function sendThroughPipeline(array $middleware, Closure $then)
     {
-        $shouldSkipMiddleware = $this->bound('middleware.disable') &&
-                                        $this->make('middleware.disable') === true;
-
-        if (count($middleware) > 0 && ! $shouldSkipMiddleware) {
+        if (count($middleware) > 0 && ! $this->shouldSkipMiddleware()) {
             return (new Pipeline($this))
                 ->send($this->make('request'))
                 ->through($middleware)
@@ -685,6 +686,16 @@ trait RoutesRequests
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
         return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
+    }
+
+    /**
+     * Should middleware be skipped for this request?
+     *
+     * @return bool
+     */
+    protected function shouldSkipMiddleware()
+    {
+        return $this->bound('middleware.disable') && $this->make('middleware.disable') === true;
     }
 
     /**
