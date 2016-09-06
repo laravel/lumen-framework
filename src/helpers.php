@@ -53,6 +53,19 @@ if (! function_exists('base_path')) {
     }
 }
 
+if (! function_exists('resource_path')) {
+    /**
+     * Get the path to the resources folder.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    function resource_path($path = '')
+    {
+        return app()->resourcePath().($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+}
+
 if (! function_exists('decrypt')) {
     /**
      * Decrypt the given value.
