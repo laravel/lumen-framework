@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6.4",
         "illuminate/auth": "5.3.*",
         "illuminate/broadcasting": "5.3.*",
         "illuminate/bus": "5.3.*",
