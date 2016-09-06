@@ -111,7 +111,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.2.8) (Laravel Components 5.2.*)';
+        return 'Lumen (5.3) (Laravel Components 5.3.*)';
     }
 
     /**
@@ -170,7 +170,10 @@ class Application extends Container
         $this->loadedProviders[$providerName] = true;
 
         $provider->register();
-        $provider->boot();
+
+        if (method_exists($provider, 'boot')) {
+            $provider->boot();
+        }
     }
 
     /**
@@ -696,6 +699,16 @@ class Application extends Container
     public function storagePath($path = null)
     {
         return $this->basePath().'/storage'.($path ? '/'.$path : $path);
+    }
+
+    /**
+     * Get the path to the resources directory.
+     *
+     * @return string
+     */
+    public function resourcePath()
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'resources';
     }
 
     /**
