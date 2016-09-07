@@ -233,6 +233,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $jobs = is_array($jobs) ? $jobs : func_get_args();
 
+        unset($this->app->availableBindings['Illuminate\Contracts\Bus\Dispatcher']);
+
         $mock = Mockery::mock('Illuminate\Bus\Dispatcher[dispatch]', [$this->app]);
 
         foreach ($jobs as $job) {

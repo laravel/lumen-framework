@@ -213,6 +213,39 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
+    public function testTerminableGlobalMiddleware()
+    {
+        $app = new Application;
+
+        $app->middleware(['LumenTestTerminateMiddleware']);
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('TERMINATED', $response->getContent());
+    }
+
+    public function testTerminateWithMiddlewareDisabled()
+    {
+        $app = new Application;
+
+        $app->middleware(['LumenTestTerminateMiddleware']);
+        $app->instance('middleware.disable', true);
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+    }
+
     public function testNotFoundResponse()
     {
         $app = new Application;
@@ -440,6 +473,13 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($app->environment(['production']));
     }
 
+    public function testNamespaceDetection()
+    {
+        $app = new Application;
+        $this->setExpectedException('RuntimeException');
+        $app->getNamespace();
+    }
+
     public function testRunningUnitTestsDetection()
     {
         $app = new Application;
@@ -604,4 +644,17 @@ class LumenTestAction
 
 class UserFacade
 {
+}
+
+class LumenTestTerminateMiddleware
+{
+    public function handle($request, $next)
+    {
+        return $next($request);
+    }
+
+    public function terminate($request, Illuminate\Http\Response $response)
+    {
+        $response->setContent('TERMINATED');
+    }
 }
