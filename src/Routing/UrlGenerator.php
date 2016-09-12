@@ -209,7 +209,7 @@ class UrlGenerator
      *
      * @throws \InvalidArgumentException
      */
-    public function route($name, $parameters = [])
+    public function route($name, $parameters = [], $secure = null)
     {
         if (! isset($this->app->namedRoutes[$name])) {
             throw new \InvalidArgumentException("Route [{$name}] not defined.");
@@ -223,7 +223,7 @@ class UrlGenerator
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
 
-        $uri = $this->to($uri, []);
+        $uri = $this->to($uri, [], $secure);
 
         if (! empty($parameters)) {
             $uri .= '?'.http_build_query($parameters);
