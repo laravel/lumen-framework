@@ -395,7 +395,9 @@ trait RoutesRequests
                 }
 
                 return $this->handleDispatcherResponse(
-                    $this->createDispatcher()->dispatch($method, $pathInfo)
+                    $this->createDispatcher()->dispatch($method, $pathInfo),
+                    $method,
+                    $pathInfo
                 );
             });
         } catch (Exception $e) {
@@ -452,16 +454,26 @@ trait RoutesRequests
      * Handle the response from the FastRoute dispatcher.
      *
      * @param  array  $routeInfo
+     * @param  string $method
+     * @param  string $pathInfo
      * @return mixed
      */
-    protected function handleDispatcherResponse($routeInfo)
+    protected function handleDispatcherResponse($routeInfo, $method, $pathInfo)
     {
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
-                throw new NotFoundHttpException;
+                throw new NotFoundHttpException(sprintf(
+                    'Route "%s %s" is not found',
+                    $method,
+                    $pathInfo
+                ));
 
             case Dispatcher::METHOD_NOT_ALLOWED:
-                throw new MethodNotAllowedHttpException($routeInfo[1]);
+                throw new MethodNotAllowedHttpException($routeInfo[1], sprintf(
+                    'Method "%s %s" is not allowed',
+                    $method,
+                    $pathInfo
+                ));
 
             case Dispatcher::FOUND:
                 return $this->handleFoundRoute($routeInfo);
