@@ -28,10 +28,10 @@ class Handler implements ExceptionHandler
      * Report or log an exception.
      *
      * @param  \Exception  $e
-     * @param  Array       $context
+     * @param  array       $context
      * @return void
      */
-    public function report(Exception $e, Array $context = [])
+    public function report(Exception $e, array $context = [])
     {
         if ($this->shouldntReport($e)) {
             return;
