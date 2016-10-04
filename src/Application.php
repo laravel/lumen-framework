@@ -494,7 +494,7 @@ class Application extends Container
             return $this->make('translator');
         });
     }
-
+    
     /**
      * Get the path to the application's language files.
      *
@@ -724,6 +724,16 @@ class Application extends Container
     public function storagePath($path = null)
     {
         return $this->basePath().'/storage'.($path ? '/'.$path : $path);
+    }
+    
+    /**
+     * Get the path to the resources directory.
+     *
+     * @return string
+     */
+    public function resourcePath()
+    {
+        return $this->basePath().DIRECTORY_SEPARATOR.'resources';
     }
 
     /**
