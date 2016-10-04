@@ -494,7 +494,7 @@ class Application extends Container
             return $this->make('translator');
         });
     }
-    
+
     /**
      * Get the path to the application's language files.
      *
