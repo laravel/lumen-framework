@@ -725,6 +725,16 @@ class Application extends Container
     {
         return $this->basePath().'/storage'.($path ? '/'.$path : $path);
     }
+    
+    /**
+     * Get the path to the resources directory.
+     *
+     * @return string
+     */
+    public function resourcePath()
+    {
+        return $this->basePath().DIRECTORY_SEPARATOR.'resources';
+    }
 
     /**
      * Determine if the application is running in the console.
