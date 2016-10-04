@@ -248,7 +248,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return $this;
     }
-    
+
     /**
      * Mock the job dispatcher so all jobs are silenced and collected.
      *
@@ -267,7 +267,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $this->app->instance(
             'Illuminate\Contracts\Bus\Dispatcher', $mock
         );
-        
+
         return $this;
     }
 
