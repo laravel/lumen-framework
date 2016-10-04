@@ -725,7 +725,7 @@ class Application extends Container
     {
         return $this->basePath().'/storage'.($path ? '/'.$path : $path);
     }
-    
+
     /**
      * Get the path to the resources directory.
      *
