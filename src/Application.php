@@ -239,11 +239,10 @@ class Application extends Container
     protected function registerBroadcastingBindings()
     {
         $this->singleton('Illuminate\Contracts\Broadcasting\Broadcaster', function () {
-            $this->configure('broadcasting');
-
-            $this->register('Illuminate\Broadcasting\BroadcastServiceProvider');
-
-            return $this->make('Illuminate\Contracts\Broadcasting\Broadcaster');
+            return $this->loadComponent('broadcasting', 'Illuminate\Broadcasting\BroadcastServiceProvider', 'Illuminate\Contracts\Broadcasting\Broadcaster');
+        });
+        $this->singleton('Illuminate\Contracts\Broadcasting\Factory', function () {
+            return $this->loadComponent('broadcasting', 'Illuminate\Broadcasting\BroadcastServiceProvider', 'Illuminate\Contracts\Broadcasting\Factory');
         });
     }
 
@@ -844,6 +843,7 @@ class Application extends Container
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Access\Gate' => 'registerAuthBindings',
         'Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
+        'Illuminate\Contracts\Broadcasting\Factory' => 'registerBroadcastingBindings',
         'Illuminate\Contracts\Bus\Dispatcher' => 'registerBusBindings',
         'cache' => 'registerCacheBindings',
         'cache.store' => 'registerCacheBindings',
