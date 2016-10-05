@@ -238,11 +238,12 @@ class Application extends Container
      */
     protected function registerBroadcastingBindings()
     {
-        $this->singleton('Illuminate\Contracts\Broadcasting\Broadcaster', function () {
-            return $this->loadComponent('broadcasting', 'Illuminate\Broadcasting\BroadcastServiceProvider', 'Illuminate\Contracts\Broadcasting\Broadcaster');
-        });
         $this->singleton('Illuminate\Contracts\Broadcasting\Factory', function () {
             return $this->loadComponent('broadcasting', 'Illuminate\Broadcasting\BroadcastServiceProvider', 'Illuminate\Contracts\Broadcasting\Factory');
+        });
+
+        $this->singleton('Illuminate\Contracts\Broadcasting\Broadcaster', function () {
+            return $this->loadComponent('broadcasting', 'Illuminate\Broadcasting\BroadcastServiceProvider', 'Illuminate\Contracts\Broadcasting\Broadcaster');
         });
     }
 
