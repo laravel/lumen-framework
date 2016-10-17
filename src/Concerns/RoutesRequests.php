@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Concerns;
 
 use Closure;
 use Exception;
+use Illuminate\Support\Arr;
 use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
@@ -53,11 +54,11 @@ trait RoutesRequests
     protected $routeMiddleware = [];
 
     /**
-     * The shared attributes for the current route group.
+     * The route group attribute stack.
      *
-     * @var array|null
+     * @var array
      */
-    protected $groupAttributes;
+    protected $groupStack = [];
 
     /**
      * The current route being dispatched.
@@ -82,17 +83,105 @@ trait RoutesRequests
      */
     public function group(array $attributes, Closure $callback)
     {
-        $parentGroupAttributes = $this->groupAttributes;
-
         if (isset($attributes['middleware']) && is_string($attributes['middleware'])) {
             $attributes['middleware'] = explode('|', $attributes['middleware']);
         }
 
-        $this->groupAttributes = $attributes;
+        $this->updateGroupStack($attributes);
 
         call_user_func($callback, $this);
 
-        $this->groupAttributes = $parentGroupAttributes;
+        array_pop($this->groupStack);
+    }
+
+    /**
+     * Update the group stack with the given attributes.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    protected function updateGroupStack(array $attributes)
+    {
+        if (! empty($this->groupStack)) {
+            $attributes = $this->mergeWithLastGroup($attributes);
+        }
+
+        $this->groupStack[] = $attributes;
+    }
+
+    /**
+     * Merge the given group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return array
+     */
+    public function mergeGroup($new, $old)
+    {
+        $new['namespace'] = static::formatUsesPrefix($new, $old);
+        $new['prefix'] = static::formatGroupPrefix($new, $old);
+
+        if (isset($new['domain'])) {
+            unset($old['domain']);
+        }
+
+        if (isset($old['as'])) {
+            $new['as'] = $old['as'].(isset($new['as']) ? '.'.$new['as'] : '');
+        }
+
+        if (isset($old['suffix']) && !isset($new['suffix'])) {
+            $new['suffix'] = $old['suffix'];
+        }
+
+        return array_merge_recursive(Arr::except($old, ['namespace', 'prefix', 'as', 'suffix']), $new);
+    }
+
+    /**
+     * Merge the given group attributes with the last added group
+     *
+     * @param  array $new
+     * @return array
+     */
+    protected function mergeWithLastGroup($new)
+    {
+        return $this->mergeGroup($new, end($this->groupStack));
+    }
+
+    /**
+     * Format the uses prefix for the new group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return string|null
+     */
+    protected static function formatUsesPrefix($new, $old)
+    {
+        if (isset($new['namespace'])) {
+            return isset($old['namespace'])
+                ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
+                : trim($new['namespace'], '\\');
+        }
+
+        return isset($old['namespace']) ? $old['namespace'] : null;
+    }
+
+
+    /**
+     * Format the prefix for the new group attributes.
+     *
+     * @param  array  $new
+     * @param  array  $old
+     * @return string|null
+     */
+    protected static function formatGroupPrefix($new, $old)
+    {
+        $oldPrefix = isset($old['prefix']) ? $old['prefix'] : null;
+
+        if (isset($new['prefix'])) {
+            return trim($oldPrefix, '/').'/'.trim($new['prefix'], '/');
+        }
+
+        return $oldPrefix;
     }
 
     /**
@@ -191,16 +280,21 @@ trait RoutesRequests
     {
         $action = $this->parseAction($action);
 
-        if (isset($this->groupAttributes)) {
-            if (isset($this->groupAttributes['prefix'])) {
-                $uri = trim($this->groupAttributes['prefix'], '/').'/'.trim($uri, '/');
+        $attributes = null;
+        if ($this->hasGroupStack()) {
+            $attributes = $this->mergeWithLastGroup([]);
+        }
+
+        if (isset($attributes) && is_array($attributes)) {
+            if (isset($attributes['prefix'])) {
+                $uri = trim($attributes['prefix'], '/').'/'.trim($uri, '/');
             }
 
-            if (isset($this->groupAttributes['suffix'])) {
-                $uri = trim($uri, '/').rtrim($this->groupAttributes['suffix'], '/');
+            if (isset($attributes['suffix'])) {
+                $uri = trim($uri, '/').rtrim($attributes['suffix'], '/');
             }
 
-            $action = $this->mergeGroupAttributes($action);
+            $action = $this->mergeGroupAttributes($action, $attributes);
         }
 
         $uri = '/'.trim($uri, '/');
@@ -240,15 +334,33 @@ trait RoutesRequests
     }
 
     /**
+     * Determine if the router currently has a group stack.
+     *
+     * @return bool
+     */
+    public function hasGroupStack()
+    {
+        return ! empty($this->groupStack);
+    }
+
+    /**
      * Merge the group attributes into the action.
      *
      * @param  array  $action
+     * @param  array  $attributes The group attributes
      * @return array
      */
-    protected function mergeGroupAttributes(array $action)
+    protected function mergeGroupAttributes(array $action, array $attributes)
     {
+        $namespace  = isset($attributes['namespace'])   ? $attributes['namespace']  : null;
+        $middleware = isset($attributes['middleware'])  ? $attributes['middleware'] : null;
+        $as         = isset($attributes['as'])          ? $attributes['as']         : null;
+
         return $this->mergeNamespaceGroup(
-            $this->mergeMiddlewareGroup($action)
+            $this->mergeMiddlewareGroup(
+                $this->mergeAsGroup($action, $as),
+                $middleware),
+            $namespace
         );
     }
 
@@ -256,12 +368,13 @@ trait RoutesRequests
      * Merge the namespace group into the action.
      *
      * @param  array  $action
+     * @param  string $namespace
      * @return array
      */
-    protected function mergeNamespaceGroup(array $action)
+    protected function mergeNamespaceGroup(array $action, $namespace = null)
     {
-        if (isset($this->groupAttributes['namespace']) && isset($action['uses'])) {
-            $action['uses'] = $this->groupAttributes['namespace'].'\\'.$action['uses'];
+        if (isset($namespace) && isset($action['uses'])) {
+            $action['uses'] = $namespace.'\\'.$action['uses'];
         }
 
         return $action;
@@ -271,15 +384,36 @@ trait RoutesRequests
      * Merge the middleware group into the action.
      *
      * @param  array  $action
+     * @param  array  $middleware
      * @return array
      */
-    protected function mergeMiddlewareGroup($action)
+    protected function mergeMiddlewareGroup(array $action, $middleware = null)
     {
-        if (isset($this->groupAttributes['middleware'])) {
+        if (isset($middleware)) {
             if (isset($action['middleware'])) {
-                $action['middleware'] = array_merge($this->groupAttributes['middleware'], $action['middleware']);
+                $action['middleware'] = array_merge($middleware, $action['middleware']);
             } else {
-                $action['middleware'] = $this->groupAttributes['middleware'];
+                $action['middleware'] = $middleware;
+            }
+        }
+
+        return $action;
+    }
+
+    /**
+     * Merge the as group into the action
+     * 
+     * @param  array $action
+     * @param  string $as
+     * @return array
+     */
+    protected function mergeAsGroup(array $action, $as = null)
+    {
+        if (isset($as) && !empty($as)) {
+            if (isset($action['as'])) {
+                $action['as'] = $as . ".". $action['as'];
+            } else {
+                $action['as'] = $as;
             }
         }
 
