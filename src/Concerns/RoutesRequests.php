@@ -401,7 +401,7 @@ trait RoutesRequests
 
     /**
      * Merge the as group into the action.
-     * 
+     *
      * @param  array $action
      * @param  string $as
      * @return array
