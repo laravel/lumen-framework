@@ -573,10 +573,10 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['middleware' => 'middleware1'], function($app) {
-           $app->group(['middleware' => 'middleware2|middleware3'], function($app) {
-               $app->get('test', "LumenTestController@show");
-           });
+        $app->group(['middleware' => 'middleware1'], function ($app) {
+            $app->group(['middleware' => 'middleware2|middleware3'], function ($app) {
+                $app->get('test', 'LumenTestController@show');
+            });
         });
 
         $route = $app->getRoutes()['GET/test'];
@@ -584,7 +584,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([
             'middleware1',
             'middleware2',
-            'middleware3'
+            'middleware3',
         ], $route['action']['middleware']);
     }
 
@@ -592,16 +592,15 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['namespace' => 'Hello'], function($app) {
-
-            $app->group(['namespace' => 'World'], function($app) {
-                $app->get('/world', "Class@method");
+        $app->group(['namespace' => 'Hello'], function ($app) {
+            $app->group(['namespace' => 'World'], function ($app) {
+                $app->get('/world', 'Class@method');
             });
         });
 
         $routes = $app->getRoutes();
 
-        $route = $routes["GET/world"];
+        $route = $routes['GET/world'];
 
         $this->assertEquals('Hello\\World\\Class@method', $route['action']['uses']);
     }
@@ -610,32 +609,29 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['prefix' => 'hello'], function($app) {
-
-            $app->group(['prefix' => 'world'], function($app) {
-                $app->get('/world', "Class@method");
+        $app->group(['prefix' => 'hello'], function ($app) {
+            $app->group(['prefix' => 'world'], function ($app) {
+                $app->get('/world', 'Class@method');
             });
         });
 
         $routes = $app->getRoutes();
 
-        $this->assertArrayHasKey("GET/hello/world/world", $routes);
-
+        $this->assertArrayHasKey('GET/hello/world/world', $routes);
     }
 
     public function testNestedGroupAsRequest()
     {
         $app = new Application();
 
-        $app->group(['as' => 'hello'], function($app) {
-
-            $app->group(['as' => 'world'], function($app) {
-                $app->get('/world', "Class@method");
+        $app->group(['as' => 'hello'], function ($app) {
+            $app->group(['as' => 'world'], function ($app) {
+                $app->get('/world', 'Class@method');
             });
         });
 
-        $this->assertArrayHasKey("hello.world", $app->namedRoutes);
-        $this->assertEquals("/world", $app->namedRoutes['hello.world']);
+        $this->assertArrayHasKey('hello.world', $app->namedRoutes);
+        $this->assertEquals('/world', $app->namedRoutes['hello.world']);
     }
 }
 

@@ -129,7 +129,7 @@ trait RoutesRequests
             $new['as'] = $old['as'].(isset($new['as']) ? '.'.$new['as'] : '');
         }
 
-        if (isset($old['suffix']) && !isset($new['suffix'])) {
+        if (isset($old['suffix']) && ! isset($new['suffix'])) {
             $new['suffix'] = $old['suffix'];
         }
 
@@ -137,7 +137,7 @@ trait RoutesRequests
     }
 
     /**
-     * Merge the given group attributes with the last added group
+     * Merge the given group attributes with the last added group.
      *
      * @param  array $new
      * @return array
@@ -164,7 +164,6 @@ trait RoutesRequests
 
         return isset($old['namespace']) ? $old['namespace'] : null;
     }
-
 
     /**
      * Format the prefix for the new group attributes.
@@ -352,9 +351,9 @@ trait RoutesRequests
      */
     protected function mergeGroupAttributes(array $action, array $attributes)
     {
-        $namespace  = isset($attributes['namespace'])   ? $attributes['namespace']  : null;
-        $middleware = isset($attributes['middleware'])  ? $attributes['middleware'] : null;
-        $as         = isset($attributes['as'])          ? $attributes['as']         : null;
+        $namespace = isset($attributes['namespace']) ? $attributes['namespace'] : null;
+        $middleware = isset($attributes['middleware']) ? $attributes['middleware'] : null;
+        $as = isset($attributes['as']) ? $attributes['as'] : null;
 
         return $this->mergeNamespaceGroup(
             $this->mergeMiddlewareGroup(
@@ -401,7 +400,7 @@ trait RoutesRequests
     }
 
     /**
-     * Merge the as group into the action
+     * Merge the as group into the action.
      * 
      * @param  array $action
      * @param  string $as
@@ -409,9 +408,9 @@ trait RoutesRequests
      */
     protected function mergeAsGroup(array $action, $as = null)
     {
-        if (isset($as) && !empty($as)) {
+        if (isset($as) && ! empty($as)) {
             if (isset($action['as'])) {
-                $action['as'] = $as . ".". $action['as'];
+                $action['as'] = $as.'.'.$action['as'];
             } else {
                 $action['as'] = $as;
             }
