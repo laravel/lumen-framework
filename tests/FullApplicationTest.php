@@ -574,7 +574,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app = new Application();
 
         $app->group(['middleware' => 'middleware1'], function($app) {
-           $app->group(['middleware' => 'middleware2'], function($app) {
+           $app->group(['middleware' => 'middleware2|middleware3'], function($app) {
                $app->get('test', "LumenTestController@show");
            });
         });
@@ -583,7 +583,8 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals([
             'middleware1',
-            'middleware2'
+            'middleware2',
+            'middleware3'
         ], $route['action']['middleware']);
     }
 
