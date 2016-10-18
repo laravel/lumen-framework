@@ -4,9 +4,9 @@ namespace Laravel\Lumen\Concerns;
 
 use Closure;
 use Exception;
-use Illuminate\Support\Arr;
 use Throwable;
 use FastRoute\Dispatcher;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -119,6 +119,7 @@ trait RoutesRequests
     public function mergeGroup($new, $old)
     {
         $new['namespace'] = static::formatUsesPrefix($new, $old);
+
         $new['prefix'] = static::formatGroupPrefix($new, $old);
 
         if (isset($new['domain'])) {
@@ -280,6 +281,7 @@ trait RoutesRequests
         $action = $this->parseAction($action);
 
         $attributes = null;
+
         if ($this->hasGroupStack()) {
             $attributes = $this->mergeWithLastGroup([]);
         }
