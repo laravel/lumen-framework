@@ -654,7 +654,7 @@ trait RoutesRequests
         if ($response instanceof PsrResponseInterface) {
             $response = (new HttpFoundationFactory)->createResponse($response);
         } elseif (! $response instanceof SymfonyResponse) {
-            $response = new Response($response);
+            $response = response($response);
         } elseif ($response instanceof BinaryFileResponse) {
             $response = $response->prepare(Request::capture());
         }
