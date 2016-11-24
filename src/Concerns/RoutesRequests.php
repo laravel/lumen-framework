@@ -87,11 +87,62 @@ trait RoutesRequests
             $attributes['middleware'] = explode('|', $attributes['middleware']);
         }
 
-        $this->groupAttributes = $attributes;
+        $this->groupAttributes = $this->nestAttributes($attributes);
 
         call_user_func($callback, $this);
 
         $this->groupAttributes = $parentGroupAttributes;
+    }
+
+    /**
+     * Nest the group attributes.
+     *
+     * @param  array  $attributes
+     * @return array
+     */
+    protected function nestAttributes(array $attributes)
+    {
+        $nestedAttributes = $this->groupAttributes;
+
+        foreach ($attributes as $key => $value) {
+            if (! isset($nestedAttributes[$key])) {
+                $nestedAttributes[$key] = $value;
+            } else {
+                $this->concatAttribute($key, $value, $nestedAttributes);
+            }
+        }
+
+        return $nestedAttributes;
+    }
+
+    /**
+     * Concat attributes that exist on parent group attributes.
+     *
+     * @param  string  $key
+     * @param  string  $value
+     * @param  &array  $source
+     * @return void
+     */
+    protected function concatAttribute($key, $value, &$source)
+    {
+        switch ($key) {
+            case 'namespace':
+                $source[$key] .= '\\'.$value;
+                break;
+
+            case 'prefix':
+                $source[$key] = trim($source[$key], '/').'/'.trim($value, '/');
+                break;
+
+            default:
+                if (is_array($value)) {
+                    $source[$key] = array_merge($source[$key], $value);
+                } elseif (is_string($value)) {
+                    $source[$key] .= $value;
+                } else {
+                    $source[$key] = $value;
+                }
+        }
     }
 
     /**
