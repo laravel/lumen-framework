@@ -692,7 +692,8 @@ trait RoutesRequests
     {
         $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
 
-        return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
+        /* APP_BASEURL should be like /app or null */
+        return '/'.substr('/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/'), strlen(env('APP_BASEURL' ,'')));
     }
 
     /**
