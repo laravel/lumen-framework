@@ -66,6 +66,24 @@ trait CrawlerTrait
     }
 
     /**
+     * Visit the given URI with a POST request and JSON payload.
+     *
+     * @param  string  $uri
+     * @param  mixed  $content
+     * @param  array  $headers
+     * @return $this
+     */
+    public function postJson($uri, $content, array $headers = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+        $json = json_encode($content)
+
+        $this->call('POST', $uri, [], [], [], $server, $json);
+
+        return $this;
+    }
+
+    /**
      * Visit the given URI with a POST request.
      *
      * @param  string  $uri
@@ -100,6 +118,24 @@ trait CrawlerTrait
     }
 
     /**
+     * Visit the given URI with a PUT request and JSON payload.
+     *
+     * @param  string  $uri
+     * @param  mixed  $content
+     * @param  array  $headers
+     * @return $this
+     */
+    public function putJson($uri, $content, array $headers = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+        $json = json_encode($content)
+
+        $this->call('PUT', $uri, [], [], [], $server, $json);
+
+        return $this;
+    }
+
+    /**
      * Visit the given URI with a PATCH request.
      *
      * @param  string  $uri
@@ -112,6 +148,24 @@ trait CrawlerTrait
         $server = $this->transformHeadersToServerVars($headers);
 
         $this->call('PATCH', $uri, $data, [], [], $server);
+
+        return $this;
+    }
+
+    /**
+     * Visit the given URI with a PATCH request and JSON payload.
+     *
+     * @param  string  $uri
+     * @param  mixed  $content
+     * @param  array  $headers
+     * @return $this
+     */
+    public function patchJson($uri, $content, array $headers = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+        $json = json_encode($content)
+
+        $this->call('PATCH', $uri, [], [], [], $server, $json);
 
         return $this;
     }
