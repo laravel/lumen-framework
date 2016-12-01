@@ -534,9 +534,11 @@ trait RoutesRequests
                 );
             });
         } catch (Exception $e) {
-            return $this->sendExceptionToHandler($e);
+            $response = $this->sendExceptionToHandler($e);
+            return $this->prepareResponse($response);
         } catch (Throwable $e) {
-            return $this->sendExceptionToHandler($e);
+            $response = $this->sendExceptionToHandler($e);
+            return $this->prepareResponse($response);
         }
     }
 
