@@ -261,6 +261,30 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(404, $response->getStatusCode());
     }
 
+    public function testNotFoundResponseOnDebugMode()
+    {
+        $oldAppDebug = getenv('APP_DEBUG');
+        putenv('APP_DEBUG=true');
+
+        $app = new Application;
+        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $mock->shouldIgnoreMissing();
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/foo', 'GET'));
+
+        $this->assertEquals(404, $response->getStatusCode());
+        $this->assertContains(
+            htmlentities('Route "GET /foo" is not found'),
+            $response->getContent()
+        );
+
+        putenv('APP_DEBUG='.$oldAppDebug);
+    }
+
     public function testMethodNotAllowedResponse()
     {
         $app = new Application;
@@ -274,6 +298,30 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertEquals(405, $response->getStatusCode());
+    }
+
+    public function testMethodNotAllowedResponseOnDebugMode()
+    {
+        $oldAppDebug = getenv('APP_DEBUG');
+        putenv('APP_DEBUG=true');
+
+        $app = new Application;
+        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $mock->shouldIgnoreMissing();
+
+        $app->post('/', function () {
+            return response('Hello World');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals(405, $response->getStatusCode());
+        $this->assertContains(
+            htmlentities('Method "GET /" is not allowed'),
+            $response->getContent()
+        );
+
+        putenv('APP_DEBUG='.$oldAppDebug);
     }
 
     public function testUncaughtExceptionResponse()
