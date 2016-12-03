@@ -2,8 +2,8 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Throwable;
 use Exception;
+use Throwable;
 use Closure as BaseClosure;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Debug\ExceptionHandler;
