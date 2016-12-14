@@ -543,7 +543,7 @@ trait RoutesRequests
     /**
      * Parse the incoming request and return the method and path info.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param  \Symfony\Component\HttpFoundation\Request|null  $request
      * @return array
      */
     protected function parseIncomingRequest($request)
