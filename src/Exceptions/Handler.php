@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Exceptions;
 
 use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -78,7 +79,7 @@ class Handler implements ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $e)
     {
@@ -94,11 +95,14 @@ class Handler implements ExceptionHandler
 
         $fe = FlattenException::create($e);
 
-        $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
-
-        $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
-
-        $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
+        if ($request->wantsJson()) {
+            $content = $this->getJsonContent($fe, env('APP_DEBUG', false));
+            $response = new JsonResponse($content, $fe->getStatusCode(), $fe->getHeaders());
+        } else {
+            $handler = new SymfonyExceptionHandler(env('APP_DEBUG', false));
+            $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
+            $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
+        }
 
         $response->exception = $e;
 
@@ -133,6 +137,36 @@ class Handler implements ExceptionHandler
     </body>
 </html>
 EOF;
+    }
+
+    /**
+     * Gets the JSON content associated with the given exception.
+     *
+     * @param FlattenException $e
+     * @param bool             $debug
+     *
+     * @return array
+     */
+    protected function getJsonContent(FlattenException $e, $debug = false)
+    {
+        if ($e->getStatusCode() === 404) {
+            $message = 'Sorry, the page you are looking for could not be found.';
+        } else {
+            $message = 'Whoops, looks like something went wrong.';
+        }
+
+        $content = [
+            'error' => [
+                'message' => $message,
+                'code'    => $e->getStatusCode(),
+            ],
+        ];
+
+        if ($debug) {
+            $content['error']['data'] = $e->toArray();
+        }
+
+        return $content;
     }
 
     /**

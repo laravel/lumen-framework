@@ -290,6 +290,26 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Illuminate\Http\Response', $response);
     }
 
+    public function testExceptionResponseForJsonRequest()
+    {
+        $app = new Application;
+        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $mock->shouldIgnoreMissing();
+
+        $app->get('/', function () {
+            throw new \RuntimeException('app exception');
+        });
+
+        $response = $app->handle(Request::create('/', 'GET', [], [], [], ['HTTP_ACCEPT' => 'application/json']));
+        $this->assertJson($response->getContent());
+        $this->assertArraySubset([
+            'error' => [
+                'code'    => 500,
+                'message' => 'Whoops, looks like something went wrong.',
+            ],
+        ], json_decode($response->getContent(), true));
+    }
+
     public function testGeneratingUrls()
     {
         $app = new Application;
