@@ -899,6 +899,38 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
 
         return $this;
     }
+    
+    /**
+     * Register a controller route with the application.
+     *
+     * @param string $uri
+     * @param string $class
+     * @param string $namePrefix
+     *
+     */
+    public function controller($uri, $className, $namePrefix = '')
+    {
+        static $patternMethod = '#^
+            (GET|POST|ANY|PATCH|PUT|DELETE|HEAD|CONNECT|OPTIONS|TRACE)
+            ((?!MiddlewareForMethod)[\w_]+)+
+        $#ix';
+
+        $class = new ReflectionClass($className);
+        $namePrefix = $namePrefix ?: strtolower($class->getShortName());
+
+        foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            $methodName = $method->getName();
+            if (preg_match($patternMethod, $methodName, $match)) {
+                $viaMethod = strtoupper($match[1]);
+                $action = strtolower($match[2]);
+                $pattern = sprintf('/{action:%s}', $action == 'index' ? 'index|' : $action);
+
+                $this->addRoute($viaMethod, $uri.$pattern, [
+                                'uses' => $className.'@'.$methodName,
+                                'as' => $namePrefix.'.'.$action, ]);
+            }
+        }
+    }
 
     /**
      * Add a route to the collection.
