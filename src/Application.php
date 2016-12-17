@@ -354,7 +354,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, $parameters = [])
+    public function make($abstract, array $parameters = [])
     {
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
