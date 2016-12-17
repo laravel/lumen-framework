@@ -1503,6 +1503,14 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * @return mixed
+     */
+    public function getLocale()
+    {
+        return $this['translator']->getLocale();
+    }
+
+    /**
      * Set the cached routes.
      *
      * @param  array  $routes
