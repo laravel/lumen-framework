@@ -841,6 +841,7 @@ class Application extends Container
     public $availableBindings = [
         'auth' => 'registerAuthBindings',
         'auth.driver' => 'registerAuthBindings',
+        'Illuminate\Auth\AuthManager' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Guard' => 'registerAuthBindings',
         'Illuminate\Contracts\Auth\Access\Gate' => 'registerAuthBindings',
         'Illuminate\Contracts\Broadcasting\Broadcaster' => 'registerBroadcastingBindings',
