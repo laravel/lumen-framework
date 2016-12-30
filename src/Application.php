@@ -777,8 +777,7 @@ class Application extends Container
         $this->configure('database');
 
         $this->register('Illuminate\Database\MigrationServiceProvider');
-        $this->register('Illuminate\Database\SeedServiceProvider');
-        $this->register('Illuminate\Queue\ConsoleServiceProvider');
+        $this->register('Laravel\Lumen\Console\ConsoleServiceProvider');
     }
 
     /**

@@ -8,6 +8,7 @@ use RuntimeException;
 use Laravel\Lumen\Application;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
@@ -64,7 +65,7 @@ class Kernel implements KernelContract
     protected function defineConsoleSchedule()
     {
         $this->app->instance(
-            'Illuminate\Console\Scheduling\Schedule', $schedule = new Schedule
+            'Illuminate\Console\Scheduling\Schedule', $schedule = new Schedule($this->app[Cache::class])
         );
 
         $this->schedule($schedule);
