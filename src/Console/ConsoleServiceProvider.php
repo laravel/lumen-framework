@@ -8,13 +8,10 @@ use Illuminate\Auth\Console\ClearResetsCommand;
 use Illuminate\Cache\Console\CacheTableCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Database\Console\Seeds\SeedCommand;
-use Illuminate\Routing\Console\ControllerMakeCommand;
-use Illuminate\Routing\Console\MiddlewareMakeCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Database\Console\Migrations\MigrateCommand;
 use Illuminate\Queue\Console\WorkCommand as QueueWorkCommand;
 use Illuminate\Database\Console\Migrations\MigrateMakeCommand;
-use Illuminate\Notifications\Console\NotificationTableCommand;
 use Illuminate\Cache\Console\ClearCommand as CacheClearCommand;
 use Illuminate\Queue\Console\RetryCommand as QueueRetryCommand;
 use Illuminate\Cache\Console\ForgetCommand as CacheForgetCommand;
@@ -72,10 +69,7 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     protected $devCommands = [
         'CacheTable' => 'command.cache.table',
-        'ControllerMake' => 'command.controller.make',
-        'MiddlewareMake' => 'command.middleware.make',
         'MigrateMake' => 'command.migrate.make',
-        'NotificationTable' => 'command.notification.table',
         'QueueFailedTable' => 'command.queue.failed-table',
         'QueueTable' => 'command.queue.table',
         'SeederMake' => 'command.seeder.make',
@@ -153,30 +147,6 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.auth.resets.clear', function () {
             return new ClearResetsCommand;
-        });
-    }
-
-    /**
-     * Register the command.
-     *
-     * @return void
-     */
-    protected function registerControllerMakeCommand()
-    {
-        $this->app->singleton('command.controller.make', function ($app) {
-            return new ControllerMakeCommand($app['files']);
-        });
-    }
-
-    /**
-     * Register the command.
-     *
-     * @return void
-     */
-    protected function registerMiddlewareMakeCommand()
-    {
-        $this->app->singleton('command.middleware.make', function ($app) {
-            return new MiddlewareMakeCommand($app['files']);
         });
     }
 
@@ -421,18 +391,6 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleRunCommand()
     {
         $this->app->singleton('Illuminate\Console\Scheduling\ScheduleRunCommand');
-    }
-
-    /**
-     * Register the command.
-     *
-     * @return void
-     */
-    protected function registerNotificationTableCommand()
-    {
-        $this->app->singleton('command.notification.table', function ($app) {
-            return new NotificationTableCommand($app['files'], $app['composer']);
-        });
     }
 
     /**
