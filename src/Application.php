@@ -200,7 +200,7 @@ class Application extends Container
      */
     public function make($abstract, array $parameters = [])
     {
-        $abstract = $this->getAlias($this->normalize($abstract));
+        $abstract = $this->getAlias($abstract);
 
         if (array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
