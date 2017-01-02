@@ -158,7 +158,7 @@ trait RoutesRequests
     protected static function formatUsesPrefix($new, $old)
     {
         if (isset($new['namespace'])) {
-            return isset($old['namespace'])
+            return isset($old['namespace']) && strpos($new['namespace'], '\\') !== 0
                 ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
                 : trim($new['namespace'], '\\');
         }
