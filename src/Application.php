@@ -809,11 +809,12 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      */
     public function group(array $attributes, Closure $callback)
     {
-        $this->groupAttributes = $attributes;
+        $previousAttributes = $this->groupAttributes;
+        $this->groupAttributes = $this->mergeParentGroupAttributes($attributes);
 
         call_user_func($callback, $this);
 
-        $this->groupAttributes = null;
+        $this->groupAttributes = $previousAttributes;
     }
 
     /**
@@ -943,6 +944,21 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
         }
 
         return $action;
+    }
+
+    /**
+     * Merge parent group attributes.
+     *
+     * @param  array $attributes
+     * @return array
+     */
+    protected function mergeParentGroupAttributes(array $attributes)
+    {
+        if (isset($this->groupAttributes)) {
+            return array_merge($this->groupAttributes, $attributes);
+        }
+
+        return $attributes;
     }
 
     /**
