@@ -287,12 +287,13 @@ if (! function_exists('route')) {
      *
      * @param  string  $name
      * @param  array   $parameters
+     * @param  bool    $secure
      * @return string
      */
-    function route($name, $parameters = [])
+    function route($name, $parameters = [], $secure = null)
     {
         return (new Laravel\Lumen\Routing\UrlGenerator(app()))
-                ->route($name, $parameters);
+                ->route($name, $parameters, $secure);
     }
 }
 
