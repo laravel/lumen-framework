@@ -162,6 +162,30 @@ class ExampleTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testAccessRequestRouteInMiddleware()
+    {
+        $app = new Application;
+
+        $app->routeMiddleware(['foo' => 'LumenRequestWithRouteDefinitionMiddleware']);
+
+        $app->get('/', function () {
+            return response('Hello World');
+        });
+
+        $app->get('/foo', ['middleware' => 'foo', 'as' => 'TestRoute', function() {
+            return response('Hello World');
+        }]);
+
+        $response = $app->handle(Request::create('/', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('Hello World', $response->getContent());
+
+        $response = $app->handle(Request::create('/foo', 'GET'));
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('TestRoute', $response->getContent());
+    }
+
+
     public function testGroupRouteMiddleware()
     {
         $app = new Application;
@@ -366,6 +390,19 @@ class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 class LumenTestMiddleware {
     public function handle($request, $next) {
           return response('Middleware');
+    }
+}
+
+class LumenRequestWithRouteDefinitionMiddleware {
+    public function handle($request, $next)
+    {
+        $route = $request->route();
+
+        if (!$route) {
+            return $next($request);
+        }
+
+        return response($route[1]['as']);
     }
 }
 
