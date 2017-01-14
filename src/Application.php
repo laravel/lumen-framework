@@ -1087,15 +1087,19 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
             $pathInfo = $this->getPathInfo();
         }
 
+        if ($withoutParam = isset($this->routes[$method.$pathInfo])) {
+            $this->currentRoute = [true, $this->routes[$method.$pathInfo]['action'], []];
+        } else {
+            $this->currentRoute = $this->createDispatcher()->dispatch($method, $pathInfo);
+        }
+
         try {
-            return $this->sendThroughPipeline($this->middleware, function () use ($method, $pathInfo) {
-                if (isset($this->routes[$method.$pathInfo])) {
-                    return $this->handleFoundRoute([true, $this->routes[$method.$pathInfo]['action'], []]);
+            return $this->sendThroughPipeline($this->middleware, function () use ($withoutParam) {
+                if ($withoutParam) {
+                    return $this->handleFoundRoute($this->currentRoute);
                 }
 
-                return $this->handleDispatcherResponse(
-                    $this->createDispatcher()->dispatch($method, $pathInfo)
-                );
+                return $this->handleDispatcherResponse($this->currentRoute);
             });
         } catch (Exception $e) {
             return $this->sendExceptionToHandler($e);
@@ -1511,6 +1515,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function setRoutes(array $routes)
     {
         $this->routes = $routes;
+    }
+
+    /**
+     * Get the matched current route.
+     * 
+     * @return array
+     */
+    public function getCurrentRoute()
+    {
+        return $this->currentRoute;
     }
 
     /**
