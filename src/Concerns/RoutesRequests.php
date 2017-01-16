@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Pipeline;
 use Illuminate\Http\Exception\HttpResponseException;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Laravel\Lumen\Routing\Controller as LumenController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
