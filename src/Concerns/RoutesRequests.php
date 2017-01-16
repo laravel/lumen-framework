@@ -454,7 +454,7 @@ trait RoutesRequests
     /**
      * {@inheritdoc}
      */
-    public function handle(SymfonyRequest $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    public function handle(SymfonyRequest $request)
     {
         $response = $this->dispatch($request);
 
