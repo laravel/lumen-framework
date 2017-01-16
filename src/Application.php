@@ -154,11 +154,9 @@ class Application extends Container
      * Register a service provider with the application.
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
-     * @param  array  $options
-     * @param  bool   $force
      * @return \Illuminate\Support\ServiceProvider
      */
-    public function register($provider, $options = [], $force = false)
+    public function register($provider)
     {
         if (! $provider instanceof ServiceProvider) {
             $provider = new $provider($this);
@@ -183,10 +181,9 @@ class Application extends Container
      * Register a deferred provider and service.
      *
      * @param  string  $provider
-     * @param  string|null  $service
      * @return void
      */
-    public function registerDeferredProvider($provider, $service = null)
+    public function registerDeferredProvider($provider)
     {
         return $this->register($provider);
     }
@@ -195,10 +192,9 @@ class Application extends Container
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
-     * @param  array   $parameters
      * @return mixed
      */
-    public function make($abstract, array $parameters = [])
+    public function make($abstract)
     {
         $abstract = $this->getAlias($abstract);
 
@@ -209,7 +205,7 @@ class Application extends Container
             $this->ranServiceBinders[$method] = true;
         }
 
-        return parent::make($abstract, $parameters);
+        return parent::make($abstract);
     }
 
     /**

@@ -38,7 +38,7 @@ class UrlGenerator
     /**
      * Create a new URL redirector instance.
      *
-     * @param  Application  $application
+     * @param  Application  $app
      * @return void
      */
     public function __construct(Application $app)
