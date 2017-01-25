@@ -264,7 +264,7 @@ if (! function_exists('response')) {
     /**
      * Return a new response from the application.
      *
-     * @param  string  $content
+     * @param  object|string  $content
      * @param  int     $status
      * @param  array   $headers
      * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
