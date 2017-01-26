@@ -288,6 +288,44 @@ trait MakesHttpRequests
     }
 
     /**
+     * Assert that the JSON response has a given structure with contents.
+     *
+     * @param  array|null  $structuredData
+     * @param  array|null  $responseData
+     * @return $this
+     */
+    public function seeJsonStructureContains(array $structuredData = null, $responseData = null)
+    {
+        if (is_null($structuredData)) {
+            return $this->seeJson();
+        }
+
+        if (! $responseData) {
+            $responseData = json_decode($this->response->getContent(), true);
+        }
+
+        foreach ($structuredData as $key => $value) {
+            if (is_array($value) && $key === '*') {
+                PHPUnit::assertInternalType('array', $responseData);
+
+                foreach ($responseData as $responseDataItem) {
+                    $this->seeJsonStructureContains($structuredData['*'], $responseDataItem);
+                }
+            } elseif (is_array($value)) {
+                PHPUnit::assertArrayHasKey($key, $responseData);
+                $this->seeJsonStructureContains($structuredData[$key], $responseData[$key]);
+            } else {
+                PHPUnit::assertArrayHasKey($key, $responseData);
+                if ($value !== '*') {
+                    $this->assertEquals($value, $responseData[$key]);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Format the given key and value into a JSON string for expectation checks.
      *
      * @param  string  $key
