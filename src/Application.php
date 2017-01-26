@@ -1385,6 +1385,17 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * Set the base path for the application.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function setBasePath($path = null)
+    {
+        $this->basePath = $path;
+    }
+    
+    /**
      * Get the storage path for the application.
      *
      * @param  string  $path
