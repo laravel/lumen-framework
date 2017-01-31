@@ -549,10 +549,11 @@ trait RoutesRequests
     {
         if ($request) {
             $this->instance(Request::class, $this->prepareRequest($request));
-            $this->ranServiceBinders['registerRequestBindings'] = true;
 
             return [$request->getMethod(), $request->getPathInfo()];
         } else {
+            $this->instance(Request::class, Request::capture());
+
             return [$this->getMethod(), $this->getPathInfo()];
         }
     }
