@@ -4,7 +4,7 @@ namespace Laravel\Lumen\Testing\Concerns;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use PHPUnit_Framework_Assert as PHPUnit;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 trait MakesHttpRequests
 {
