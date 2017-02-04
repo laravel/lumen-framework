@@ -4,9 +4,9 @@ namespace Laravel\Lumen\Testing;
 
 use Mockery;
 use Exception;
-use PHPUnit\Framework\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Contracts\Auth\Authenticatable;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
