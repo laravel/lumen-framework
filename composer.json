@@ -48,7 +48,8 @@
         "mockery/mockery": "~0.9"
     },
     "suggest": {
-        "vlucas/phpdotenv": "Required to use .env files (~2.2)."
+        "vlucas/phpdotenv": "Required to use .env files (~2.2).",
+        "laravel/tinker": "Required to use the tinker console command (~1.0).",
     },
     "autoload": {
         "psr-4": {
