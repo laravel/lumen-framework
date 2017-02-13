@@ -216,6 +216,8 @@ class UrlGenerator
         }
 
         $uri = $this->app->namedRoutes[$name];
+        
+        $parameters = $this->formatParametersForUrl($parameters);
 
         $parameters = $this->formatParametersForUrl($parameters);
 
