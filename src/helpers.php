@@ -289,7 +289,7 @@ if (! function_exists('response')) {
      */
     function response($content = '', $status = 200, array $headers = [])
     {
-        $factory = new Laravel\Lumen\Http\ResponseFactory;
+        $factory = app('abstract.response.factory')->make(config('response_factory'));
 
         if (func_num_args() === 0) {
             return $factory;
