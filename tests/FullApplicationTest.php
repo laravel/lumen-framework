@@ -57,44 +57,6 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
-    public function testRequestWithoutSymfonyClass()
-    {
-        $app = new Application;
-
-        $app->get('/', function () {
-            return response('Hello World');
-        });
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/';
-
-        $response = $app->dispatch();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Hello World', $response->getContent());
-
-        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
-    }
-
-    public function testRequestWithoutSymfonyClassTrailingSlash()
-    {
-        $app = new Application;
-
-        $app->get('/foo', function () {
-            return response('Hello World');
-        });
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/foo/';
-
-        $response = $app->dispatch();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Hello World', $response->getContent());
-
-        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
-    }
-
     public function testRequestWithParameters()
     {
         $app = new Application;
