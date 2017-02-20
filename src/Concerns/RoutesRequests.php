@@ -547,15 +547,13 @@ trait RoutesRequests
      */
     protected function parseIncomingRequest($request)
     {
-        if ($request) {
-            $this->instance(Request::class, $this->prepareRequest($request));
-
-            return [$request->getMethod(), $request->getPathInfo()];
-        } else {
-            $this->instance(Request::class, Request::capture());
-
-            return [$this->getMethod(), $this->getPathInfo()];
+        if (! $request) {
+            $request = Request::capture();
         }
+
+        $this->instance(Request::class, $this->prepareRequest($request));
+
+        return [$request->getMethod(), $request->getPathInfo()];
     }
 
     /**
@@ -800,32 +798,6 @@ trait RoutesRequests
         }
 
         return $response;
-    }
-
-    /**
-     * Get the current HTTP request method.
-     *
-     * @return string
-     */
-    protected function getMethod()
-    {
-        if (isset($_POST['_method'])) {
-            return strtoupper($_POST['_method']);
-        } else {
-            return $_SERVER['REQUEST_METHOD'];
-        }
-    }
-
-    /**
-     * Get the current HTTP path info.
-     *
-     * @return string
-     */
-    protected function getPathInfo()
-    {
-        $query = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '';
-
-        return '/'.trim(str_replace('?'.$query, '', $_SERVER['REQUEST_URI']), '/');
     }
 
     /**
