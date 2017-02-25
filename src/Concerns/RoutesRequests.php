@@ -514,15 +514,14 @@ trait RoutesRequests
         foreach ($action as $value) {
             if ($value instanceof Closure) {
                 $closure = $value->bindTo(new RoutingClosure);
-                break;
+                try {
+                    return $this->prepareResponse($this->call($closure, $routeInfo[2]));
+                } catch (HttpResponseException $e) {
+                    return $e->getResponse();
+                }
             }
         }
-
-        try {
-            return $this->prepareResponse($this->call($closure, $routeInfo[2]));
-        } catch (HttpResponseException $e) {
-            return $e->getResponse();
-        }
+        throw new NotFoundHttpException;
     }
 
     /**
