@@ -3,7 +3,7 @@
 namespace Laravel\Lumen\Routing;
 
 use Closure as BaseClosure;
-use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Validator;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -50,7 +50,7 @@ trait ProvidesConvenienceMethods
     /**
      * Validate the given request with the given rules.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Lumen\Http\Request  $request
      * @param  array  $rules
      * @param  array  $messages
      * @param  array  $customAttributes
@@ -68,7 +68,7 @@ trait ProvidesConvenienceMethods
     /**
      * Throw the failed validation exception.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Lumen\Http\Request  $request
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
      */

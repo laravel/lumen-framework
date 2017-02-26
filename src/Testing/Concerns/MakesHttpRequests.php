@@ -3,7 +3,7 @@
 namespace Laravel\Lumen\Testing\Concerns;
 
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 trait MakesHttpRequests
@@ -137,7 +137,7 @@ trait MakesHttpRequests
      *
      * This method allows you to fully customize the entire Request object.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Lumen\Http\Request  $request
      * @return $this
      */
     public function handle(Request $request)

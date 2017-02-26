@@ -76,7 +76,7 @@ class Handler implements ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Lumen\Http\Request  $request
      * @param  \Exception  $e
      * @return \Illuminate\Http\Response
      */
