@@ -5,7 +5,7 @@ namespace Laravel\Lumen;
 use Monolog\Logger;
 use RuntimeException;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request;
 use Illuminate\Support\Composer;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
@@ -425,7 +425,7 @@ class Application extends Container
      * Prepare the given request instance for use with the application.
      *
      * @param  \Symfony\Component\HttpFoundation\Request $request
-     * @return \Illuminate\Http\Request
+     * @return \Laravel\Lumen\Http\Request
      */
     protected function prepareRequest(SymfonyRequest $request)
     {
@@ -814,7 +814,7 @@ class Application extends Container
             'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
-            'request' => 'Illuminate\Http\Request',
+            'request' => 'Laravel\Lumen\Http\Request',
             'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\Validation\Factory' => 'validator',
             'Illuminate\Contracts\View\Factory' => 'view',
