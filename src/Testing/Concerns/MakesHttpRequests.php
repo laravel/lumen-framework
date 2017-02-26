@@ -5,6 +5,7 @@ namespace Laravel\Lumen\Testing\Concerns;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Assert as PHPUnit;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait MakesHttpRequests
 {
@@ -325,13 +326,13 @@ trait MakesHttpRequests
     {
         $this->currentUri = $this->prepareUrlForRequest($uri);
 
-        $request = Request::create(
+        $symfonyRequest = SymfonyRequest::create(
             $this->currentUri, $method, $parameters,
             $cookies, $files, $server, $content
         );
 
         return $this->response = $this->app->prepareResponse(
-            $this->app->handle($request)
+            $this->app->handle(Request::createFromBase($symfonyRequest))
         );
     }
 
