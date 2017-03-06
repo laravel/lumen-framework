@@ -279,7 +279,7 @@ trait MakesHttpRequests
         foreach (array_sort_recursive($data) as $key => $value) {
             $expected = $this->formatToExpectedJson($key, $value);
 
-            call_user_func(['PHPUnit\Framework\Assert', $method],
+            call_user_func([PHPUnit::class, $method],
                 Str::contains($actual, $expected),
                 ($negate ? 'Found unexpected' : 'Unable to find')." JSON fragment [{$expected}] within [{$actual}]."
             );
