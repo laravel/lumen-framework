@@ -112,7 +112,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.4.0-Dev) (Laravel Components 5.4.*)';
+        return 'Lumen (5.4.5) (Laravel Components 5.4.*)';
     }
 
     /**
@@ -419,18 +419,6 @@ class Application extends Container
     {
         return (new StreamHandler(storage_path('logs/lumen.log'), Logger::DEBUG))
                             ->setFormatter(new LineFormatter(null, null, true, true));
-    }
-
-    /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerRequestBindings()
-    {
-        $this->singleton('Illuminate\Http\Request', function () {
-            return $this->prepareRequest(Request::capture());
-        });
     }
 
     /**
@@ -868,10 +856,8 @@ class Application extends Container
         'queue.connection' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
-        'request' => 'registerRequestBindings',
         'Psr\Http\Message\ServerRequestInterface' => 'registerPsrRequestBindings',
         'Psr\Http\Message\ResponseInterface' => 'registerPsrResponseBindings',
-        'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
         'url' => 'registerUrlGeneratorBindings',
         'validator' => 'registerValidatorBindings',
