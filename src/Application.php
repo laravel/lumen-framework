@@ -1320,6 +1320,8 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
                 $closure = $value->bindTo(new Routing\Closure);
                 break;
             }
+            
+            throw new NotFoundHttpException;
         }
 
         try {
