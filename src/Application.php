@@ -695,13 +695,14 @@ class Application extends Container
     }
 
     /**
-     * Get the database path for the application.
+     * Get the path to the database directory.
      *
+     * @param  string  $path
      * @return string
      */
-    public function databasePath()
+    public function databasePath($path = '')
     {
-        return $this->basePath().'/database';
+        return $this->basePath.DIRECTORY_SEPARATOR.'database'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 
     /**
