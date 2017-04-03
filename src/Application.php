@@ -711,7 +711,7 @@ class Application extends Container
      * @param  string|null  $path
      * @return string
      */
-    public function storagePath($path = null)
+    public function storagePath($path = '')
     {
         return $this->basePath().'/storage'.($path ? '/'.$path : $path);
     }
@@ -719,11 +719,12 @@ class Application extends Container
     /**
      * Get the path to the resources directory.
      *
+     * @param  string|null  $path
      * @return string
      */
-    public function resourcePath()
+    public function resourcePath($path = '')
     {
-        return $this->basePath().DIRECTORY_SEPARATOR.'resources';
+        return $this->basePath.DIRECTORY_SEPARATOR.'resources'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 
     /**

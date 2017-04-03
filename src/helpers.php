@@ -255,7 +255,7 @@ if (! function_exists('resource_path')) {
      */
     function resource_path($path = '')
     {
-        return app()->basePath().'/resources'.($path ? '/'.$path : $path);
+        return app()->resourcePath($path);
     }
 }
 
