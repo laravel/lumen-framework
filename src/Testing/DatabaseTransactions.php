@@ -14,7 +14,9 @@ trait DatabaseTransactions
         $this->app->make('db')->beginTransaction();
 
         $this->beforeApplicationDestroyed(function () {
-            $this->app->make('db')->rollBack();
+            $db = $this->app->make('db');
+            $db->rollBack();
+            $db->disconnect();
         });
     }
 }
