@@ -1021,6 +1021,25 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     }
 
     /**
+     * Register resource routes with the application.
+     *
+     * @param  string  $uri
+     * @param  string  $action
+     * @return $this
+     */
+    public function resource($uri, $action)
+    {
+        $this->addRoute('GET', $uri, $action.'@index');
+        $this->addRoute('POST', $uri, $action.'@store');
+        $this->addRoute('GET', $uri.'/{id}', $action.'@show');
+        $this->addRoute('PUT', $uri.'/{id}', $action.'@update');
+        $this->addRoute('PATCH', $uri.'/{id}', $action.'@update');
+        $this->addRoute('DELETE', $uri.'/{id}', $action.'@delete');
+
+        return $this;
+    }
+
+    /**
      * Add a route to the collection.
      *
      * @param  string  $method
