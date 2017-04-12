@@ -3,7 +3,7 @@
     "description": "The Laravel Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
-    "homepage": "http://laravel.com",
+    "homepage": "https://lumen.laravel.com",
     "support": {
         "issues": "https://github.com/laravel/lumen-framework/issues",
         "source": "https://github.com/laravel/lumen-framework"
