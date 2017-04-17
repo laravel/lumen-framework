@@ -801,6 +801,26 @@ class Application extends Container
 
         throw new RuntimeException('Unable to detect application namespace.');
     }
+    
+    /**
+     * Get the path to the cached "compiled.php" file.
+     *
+     * @return string
+     */
+    public function getCachedCompilePath()
+    {
+        return $this->basePath().'/bootstrap/cache/compiled.php';
+    }
+
+    /**
+     * Get the path to the cached services.json file.
+     *
+     * @return string
+     */
+    public function getCachedServicesPath()
+    {
+        return $this->basePath().'/bootstrap/cache/services.json';
+    }
 
     /**
      * Register the core container aliases.
