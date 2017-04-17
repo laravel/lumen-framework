@@ -205,11 +205,12 @@ class UrlGenerator
      *
      * @param  string  $name
      * @param  mixed   $parameters
+     * @param  bool|null  $secure
      * @return string
      *
      * @throws \InvalidArgumentException
      */
-    public function route($name, $parameters = [])
+    public function route($name, $parameters = [], $secure = null)
     {
         if (! isset($this->app->namedRoutes[$name])) {
             throw new \InvalidArgumentException("Route [{$name}] not defined.");
@@ -223,7 +224,7 @@ class UrlGenerator
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
 
-        $uri = $this->to($uri, []);
+        $uri = $this->to($uri, [], $secure);
 
         if (! empty($parameters)) {
             $uri .= '?'.http_build_query($parameters);
@@ -257,7 +258,7 @@ class UrlGenerator
     {
         if (is_null($secure)) {
             if (is_null($this->cachedScheme)) {
-                $this->cachedScheme = $this->app->make('request')->getScheme().'://';
+                $this->cachedScheme = $this->getScheme($secure);
             }
 
             return $this->cachedScheme;
