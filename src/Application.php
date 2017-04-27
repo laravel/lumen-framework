@@ -574,7 +574,7 @@ class Application extends Container
         if ($path) {
             $config = $this->make('config');
 
-            $config->set($name, array_merge(require $path, $config->get($name, [])));
+            $config->set($name, array_replace_recursive(require $path, $config->get($name, [])));
         }
     }
 
