@@ -572,7 +572,9 @@ class Application extends Container
         $path = $this->getConfigurationPath($name);
 
         if ($path) {
-            $this->make('config')->set($name, require $path);
+            $config = $this->make('config');
+
+            $config->set($name, array_merge(require $path, $config->get($name, [])));
         }
     }
 
