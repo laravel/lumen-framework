@@ -327,6 +327,22 @@ if (! function_exists('trans')) {
     }
 }
 
+if (! function_exists('trans_choice')) {
+    /**
+     * Translates the given message based on a count.
+     *
+     * @param  string  $id
+     * @param  int|array|\Countable  $number
+     * @param  array   $replace
+     * @param  string  $locale
+     * @return string
+     */
+    function trans_choice($id, $number, array $replace = [], $locale = null)
+    {
+        return app('translator')->transChoice($id, $number, $replace, $locale);
+    }
+}
+
 if (! function_exists('url')) {
     /**
      * Generate a url for the application.
