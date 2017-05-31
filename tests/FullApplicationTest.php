@@ -1,8 +1,8 @@
 <?php
 
 use Mockery as m;
-use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
+use Laravel\Lumen\Http\Request;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class FullApplicationTest extends PHPUnit_Framework_TestCase
@@ -466,7 +466,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->get('/', function (Laravel\Lumen\Http\Request $request) {
             $this->validate($request, ['name' => 'required']);
         });
 
@@ -479,7 +479,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->get('/', function (Laravel\Lumen\Http\Request $request) {
             return redirect('home');
         });
 
@@ -492,11 +492,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('login', ['as' => 'login', function (Illuminate\Http\Request $request) {
+        $app->get('login', ['as' => 'login', function (Laravel\Lumen\Http\Request $request) {
             return 'login';
         }]);
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->get('/', function (Laravel\Lumen\Http\Request $request) {
             return redirect()->route('login');
         });
 
@@ -513,13 +513,26 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
             return new \Illuminate\Auth\GenericUser(['id' => 1234]);
         });
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->get('/', function (Laravel\Lumen\Http\Request $request) {
             return $request->user()->getAuthIdentifier();
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
 
         $this->assertSame('1234', $response->getContent());
+    }
+
+    public function testRequestRouteParam()
+    {
+        $app = new Application();
+
+        $app->get('/{id}', function (Laravel\Lumen\Http\Request $request) {
+            return $request->route('id');
+        });
+
+        $response = $app->handle(Request::create('/4321', 'GET'));
+
+        $this->assertSame('4321', $response->getContent());
     }
 
     public function testCanResolveValidationFactoryFromContract()
