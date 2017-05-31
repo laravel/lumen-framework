@@ -5,7 +5,7 @@ namespace Laravel\Lumen\Routing;
 use Exception;
 use Throwable;
 use Closure as BaseClosure;
-use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
