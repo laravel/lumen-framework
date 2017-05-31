@@ -422,6 +422,18 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRequestBindings()
+    {
+        $this->singleton('Illuminate\Http\Request', function () {
+            return $this->prepareRequest(Request::capture());
+        });
+    }
+
+    /**
      * Prepare the given request instance for use with the application.
      *
      * @param  \Symfony\Component\HttpFoundation\Request $request
@@ -860,6 +872,7 @@ class Application extends Container
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
         'Psr\Http\Message\ServerRequestInterface' => 'registerPsrRequestBindings',
         'Psr\Http\Message\ResponseInterface' => 'registerPsrResponseBindings',
+        'Illuminate\Http\Request' => 'registerRequestBindings',
         'translator' => 'registerTranslationBindings',
         'url' => 'registerUrlGeneratorBindings',
         'validator' => 'registerValidatorBindings',
