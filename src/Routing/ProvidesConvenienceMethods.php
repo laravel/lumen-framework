@@ -58,7 +58,8 @@ trait ProvidesConvenienceMethods
      */
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
-        $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
+        $validate_fields = $request->all() + $request->json()->all();
+        $validator = $this->getValidationFactory()->make($validate_fields, $rules, $messages, $customAttributes);
 
         if ($validator->fails()) {
             $this->throwValidationException($request, $validator);
