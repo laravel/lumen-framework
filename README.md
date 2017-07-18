@@ -14,7 +14,7 @@ Laravel Lumen is a stunningly fast PHP micro-framework for building web applicat
 
 ## Official Documentation
 
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
+Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
 
 ## Security Vulnerabilities
 
@@ -22,4 +22,4 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
