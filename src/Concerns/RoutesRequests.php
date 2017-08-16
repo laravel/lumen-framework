@@ -4,13 +4,13 @@ namespace Laravel\Lumen\Concerns;
 
 use Closure;
 use Exception;
-use Illuminate\Contracts\Support\Responsable;
 use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Pipeline;
+use Illuminate\Contracts\Support\Responsable;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Lumen\Routing\Controller as LumenController;
