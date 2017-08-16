@@ -6,7 +6,6 @@ use Closure;
 use Exception;
 use Throwable;
 use FastRoute\Dispatcher;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -196,7 +195,7 @@ trait RoutesRequests
     protected function createDispatcher()
     {
         return $this->dispatcher ?: \FastRoute\simpleDispatcher(function ($r) {
-            foreach ($this->router->getRoutes ()as $route) {
+            foreach ($this->router->getRoutes() as $route) {
                 $r->addRoute($route['method'], $route['uri'], $route['action']);
             }
         });
