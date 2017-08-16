@@ -7,6 +7,7 @@ use RuntimeException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Composer;
+use Laravel\Lumen\Routing\Router;
 use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
 use Monolog\Formatter\LineFormatter;
@@ -73,6 +74,13 @@ class Application extends Container
     protected $namespace;
 
     /**
+     * The Router instance.
+     *
+     * @var \Laravel\Lumen\Routing\Router
+     */
+    public $router;
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -88,6 +96,7 @@ class Application extends Container
 
         $this->bootstrapContainer();
         $this->registerErrorHandling();
+        $this->bootstrapRouter();
     }
 
     /**
@@ -108,13 +117,23 @@ class Application extends Container
     }
 
     /**
+     * Bootstrap the router instance.
+     *
+     * @return void
+     */
+    public function bootstrapRouter()
+    {
+        $this->router = new Router($this);
+    }
+
+    /**
      * Get the version number of the application.
      *
      * @return string
      */
     public function version()
     {
-        return 'Lumen (5.4.6) (Laravel Components 5.4.*)';
+        return 'Lumen (5.5.0) (Laravel Components 5.5.*)';
     }
 
     /**
@@ -194,9 +213,10 @@ class Application extends Container
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
+     * @param  array  $parameters
      * @return mixed
      */
-    public function make($abstract)
+    public function make($abstract, array $parameters = [])
     {
         $abstract = $this->getAlias($abstract);
 
@@ -207,7 +227,7 @@ class Application extends Container
             $this->ranServiceBinders[$method] = true;
         }
 
-        return parent::make($abstract);
+        return parent::make($abstract, $parameters);
     }
 
     /**
