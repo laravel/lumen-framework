@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Http\Response;
+use PHPUnit\Framework\TestCase;
 use Laravel\Lumen\Http\ResponseFactory;
 
-class ResponseFactoryTest extends PHPUnit_Framework_TestCase
+class ResponseFactoryTest extends TestCase
 {
     public function testMakeDefaultResponse()
     {

@@ -3,9 +3,10 @@
 use Mockery as m;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
-class FullApplicationTest extends PHPUnit_Framework_TestCase
+class FullApplicationTest extends TestCase
 {
     public function tearDown()
     {
@@ -16,7 +17,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -30,7 +31,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -42,7 +43,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->addRoute(['GET', 'POST'], '/', function () {
+        $app->router->addRoute(['GET', 'POST'], '/', function () {
             return response('Hello World');
         });
 
@@ -57,49 +58,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Hello World', $response->getContent());
     }
 
-    public function testRequestWithoutSymfonyClass()
-    {
-        $app = new Application;
-
-        $app->get('/', function () {
-            return response('Hello World');
-        });
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/';
-
-        $response = $app->dispatch();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Hello World', $response->getContent());
-
-        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
-    }
-
-    public function testRequestWithoutSymfonyClassTrailingSlash()
-    {
-        $app = new Application;
-
-        $app->get('/foo', function () {
-            return response('Hello World');
-        });
-
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/foo/';
-
-        $response = $app->dispatch();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('Hello World', $response->getContent());
-
-        unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
-    }
-
     public function testRequestWithParameters()
     {
         $app = new Application;
 
-        $app->get('/foo/{bar}/{baz}', function ($bar, $baz) {
+        $app->router->get('/foo/{bar}/{baz}', function ($bar, $baz) {
             return response($bar.$baz);
         });
 
@@ -112,7 +75,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     public function testCallbackRouteWithDefaultParameter()
     {
         $app = new Application;
-        $app->get('/foo-bar/{baz}', function ($baz = 'default-value') {
+        $app->router->get('/foo-bar/{baz}', function ($baz = 'default-value') {
             return response($baz);
         });
 
@@ -128,7 +91,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->middleware(['LumenTestMiddleware']);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -144,19 +107,19 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
-        $app->get('/foo', ['middleware' => 'foo', function () {
+        $app->router->get('/foo', ['middleware' => 'foo', function () {
             return response('Hello World');
         }]);
 
-        $app->get('/bar', ['middleware' => ['foo'], function () {
+        $app->router->get('/bar', ['middleware' => ['foo'], function () {
             return response('Hello World');
         }]);
 
-        $app->get('/fooBar', ['middleware' => 'passing|foo', function () {
+        $app->router->get('/fooBar', ['middleware' => 'passing|foo', function () {
             return response('Hello World');
         }]);
 
@@ -183,7 +146,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->middleware(['LumenTestParameterizedMiddleware:foo,bar']);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -199,7 +162,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
 
-        $app->get('/', ['middleware' => 'passing|foo:bar,boom', function () {
+        $app->router->get('/', ['middleware' => 'passing|foo:bar,boom', function () {
             return response('Hello World');
         }]);
 
@@ -216,7 +179,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->middleware(['LumenTestMiddleware']);
         $app->instance('middleware.disable', true);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -232,7 +195,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->middleware(['LumenTestTerminateMiddleware']);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -249,7 +212,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->middleware(['LumenTestTerminateMiddleware']);
         $app->instance('middleware.disable', true);
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -265,7 +228,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             return response('Hello World');
         });
 
@@ -280,7 +243,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
-        $app->post('/', function () {
+        $app->router->post('/', function () {
             return response('Hello World');
         });
 
@@ -295,7 +258,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
-        $app->get('/', function () {
+        $app->router->get('/', function () {
             throw new \RuntimeException('app exception');
         });
 
@@ -309,11 +272,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function () {
+        $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
+        $app->router->get('/foo-bar/{baz}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
@@ -329,19 +292,19 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
         unset($app->availableBindings['request']);
 
-        $app->get('/foo-bar', ['as' => 'foo', function () {
+        $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
+        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom}', ['as' => 'bar', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
+        $app->router->get('/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}', ['as' => 'baz', function () {
             //
         }]);
 
-        $app->get('/foo-bar/{baz:[0-9]{2,5}}', ['as' => 'boom', function () {
+        $app->router->get('/foo-bar/{baz:[0-9]{2,5}}', ['as' => 'boom', function () {
             //
         }]);
 
@@ -386,7 +349,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
 
         $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
 
-        $app->get('/', ['middleware' => 'foo', function () {
+        $app->router->get('/', ['middleware' => 'foo', function () {
             return 'Hello World';
         }]);
 
@@ -400,7 +363,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/show/{id}', 'LumenTestController@show');
+        $app->router->get('/show/{id}', 'LumenTestController@show');
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
 
@@ -413,8 +376,8 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app = new Application;
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
-        $app->group(['middleware' => 'test'], function ($app) {
-            $app->get('/show/{id}', 'LumenTestController@show');
+        $app->router->group(['middleware' => 'test'], function ($router) {
+            $router->get('/show/{id}', 'LumenTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
@@ -428,8 +391,8 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app = new Application;
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
-        $app->group(['suffix' => '.{format:json|xml}'], function ($app) {
-            $app->get('/show/{id}', 'LumenTestController@show');
+        $app->router->group(['suffix' => '.{format:json|xml}'], function ($router) {
+            $router->get('/show/{id}', 'LumenTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/25.xml', 'GET'));
@@ -443,8 +406,8 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
         $app = new Application;
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
 
-        $app->group(['suffix' => '/{format:json|xml}'], function ($app) {
-            $app->get('/show/{id}', 'LumenTestController@show');
+        $app->router->group(['suffix' => '/{format:json|xml}'], function ($router) {
+            $router->get('/show/{id}', 'LumenTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/test/json', 'GET'));
@@ -457,7 +420,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
         $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
-        $app->get('/show/{id}', 'LumenTestControllerWithMiddleware@show');
+        $app->router->get('/show/{id}', 'LumenTestControllerWithMiddleware@show');
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
 
@@ -469,7 +432,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/action/{id}', 'LumenTestAction');
+        $app->router->get('/action/{id}', 'LumenTestAction');
 
         $response = $app->handle(Request::create('/action/199', 'GET'));
 
@@ -489,7 +452,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     public function testNamespaceDetection()
     {
         $app = new Application;
-        $this->setExpectedException('RuntimeException');
+        $this->expectException('RuntimeException');
         $app->getNamespace();
     }
 
@@ -504,7 +467,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->router->get('/', function (Illuminate\Http\Request $request) {
             $this->validate($request, ['name' => 'required']);
         });
 
@@ -517,7 +480,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->router->get('/', function (Illuminate\Http\Request $request) {
             return redirect('home');
         });
 
@@ -530,11 +493,11 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application;
 
-        $app->get('login', ['as' => 'login', function (Illuminate\Http\Request $request) {
+        $app->router->get('login', ['as' => 'login', function (Illuminate\Http\Request $request) {
             return 'login';
         }]);
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->router->get('/', function (Illuminate\Http\Request $request) {
             return redirect()->route('login');
         });
 
@@ -551,7 +514,7 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
             return new \Illuminate\Auth\GenericUser(['id' => 1234]);
         });
 
-        $app->get('/', function (Illuminate\Http\Request $request) {
+        $app->router->get('/', function (Illuminate\Http\Request $request) {
             return $request->user()->getAuthIdentifier();
         });
 
@@ -586,13 +549,13 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['middleware' => 'middleware1'], function ($app) {
-            $app->group(['middleware' => 'middleware2|middleware3'], function ($app) {
-                $app->get('test', 'LumenTestController@show');
+        $app->router->group(['middleware' => 'middleware1'], function ($router) {
+            $router->group(['middleware' => 'middleware2|middleware3'], function ($router) {
+                $router->get('test', 'LumenTestController@show');
             });
         });
 
-        $route = $app->getRoutes()['GET/test'];
+        $route = $app->router->getRoutes()['GET/test'];
 
         $this->assertEquals([
             'middleware1',
@@ -605,13 +568,13 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['namespace' => 'Hello'], function ($app) {
-            $app->group(['namespace' => 'World'], function ($app) {
-                $app->get('/world', 'Class@method');
+        $app->router->group(['namespace' => 'Hello'], function ($router) {
+            $router->group(['namespace' => 'World'], function ($router) {
+                $router->get('/world', 'Class@method');
             });
         });
 
-        $routes = $app->getRoutes();
+        $routes = $app->router->getRoutes();
 
         $route = $routes['GET/world'];
 
@@ -622,13 +585,13 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['prefix' => 'hello'], function ($app) {
-            $app->group(['prefix' => 'world'], function ($app) {
-                $app->get('/world', 'Class@method');
+        $app->router->group(['prefix' => 'hello'], function ($router) {
+            $router->group(['prefix' => 'world'], function ($router) {
+                $router->get('/world', 'Class@method');
             });
         });
 
-        $routes = $app->getRoutes();
+        $routes = $app->router->getRoutes();
 
         $this->assertArrayHasKey('GET/hello/world/world', $routes);
     }
@@ -637,14 +600,14 @@ class FullApplicationTest extends PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-        $app->group(['as' => 'hello'], function ($app) {
-            $app->group(['as' => 'world'], function ($app) {
-                $app->get('/world', 'Class@method');
+        $app->router->group(['as' => 'hello'], function ($router) {
+            $router->group(['as' => 'world'], function ($router) {
+                $router->get('/world', 'Class@method');
             });
         });
 
-        $this->assertArrayHasKey('hello.world', $app->namedRoutes);
-        $this->assertEquals('/world', $app->namedRoutes['hello.world']);
+        $this->assertArrayHasKey('hello.world', $app->router->namedRoutes);
+        $this->assertEquals('/world', $app->router->namedRoutes['hello.world']);
     }
 }
 

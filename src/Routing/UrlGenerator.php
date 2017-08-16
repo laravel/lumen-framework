@@ -212,11 +212,11 @@ class UrlGenerator
      */
     public function route($name, $parameters = [], $secure = null)
     {
-        if (! isset($this->app->namedRoutes[$name])) {
+        if (! isset($this->app->router->namedRoutes[$name])) {
             throw new \InvalidArgumentException("Route [{$name}] not defined.");
         }
 
-        $uri = $this->app->namedRoutes[$name];
+        $uri = $this->app->router->namedRoutes[$name];
 
         $parameters = $this->formatParametersForUrl($parameters);
 

@@ -111,7 +111,7 @@ if (! function_exists('database_path')) {
      */
     function database_path($path = '')
     {
-        return app()->databasePath().($path ? '/'.$path : $path);
+        return app()->databasePath($path);
     }
 }
 
@@ -174,7 +174,7 @@ if (! function_exists('event')) {
     /**
      * Fire an event and call the listeners.
      *
-     * @param  string  $event
+     * @param  object|string  $event
      * @param  mixed   $payload
      * @param  bool    $halt
      * @return array|null
@@ -201,7 +201,7 @@ if (! function_exists('factory')) {
         $arguments = func_get_args();
 
         if (isset($arguments[1]) && is_string($arguments[1])) {
-            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : 1);
+            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : null);
         } elseif (isset($arguments[1])) {
             return $factory->of($arguments[0])->times($arguments[1]);
         } else {
@@ -255,7 +255,7 @@ if (! function_exists('resource_path')) {
      */
     function resource_path($path = '')
     {
-        return app()->basePath().'/resources'.($path ? '/'.$path : $path);
+        return app()->resourcePath($path);
     }
 }
 
@@ -291,8 +291,7 @@ if (! function_exists('route')) {
      */
     function route($name, $parameters = [], $secure = null)
     {
-        return (new Laravel\Lumen\Routing\UrlGenerator(app()))
-                ->route($name, $parameters, $secure);
+        return app('url')->route($name, $parameters, $secure);
     }
 }
 
@@ -314,18 +313,33 @@ if (! function_exists('trans')) {
      * Translate the given message.
      *
      * @param  string  $id
-     * @param  array   $parameters
-     * @param  string  $domain
+     * @param  array   $replace
      * @param  string  $locale
-     * @return string
+     * @return \Illuminate\Contracts\Translation\Translator|string
      */
-    function trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
+    function trans($id = null, $replace = [], $locale = null)
     {
         if (is_null($id)) {
             return app('translator');
         }
 
-        return app('translator')->trans($id, $parameters, $domain, $locale);
+        return app('translator')->trans($id, $replace, $locale);
+    }
+}
+
+if (! function_exists('trans_choice')) {
+    /**
+     * Translates the given message based on a count.
+     *
+     * @param  string  $id
+     * @param  int|array|\Countable  $number
+     * @param  array   $replace
+     * @param  string  $locale
+     * @return string
+     */
+    function trans_choice($id, $number, array $replace = [], $locale = null)
+    {
+        return app('translator')->transChoice($id, $number, $replace, $locale);
     }
 }
 
@@ -340,8 +354,7 @@ if (! function_exists('url')) {
      */
     function url($path = null, $parameters = [], $secure = null)
     {
-        return (new Laravel\Lumen\Routing\UrlGenerator(app()))
-                                ->to($path, $parameters, $secure);
+        return app('url')->to($path, $parameters, $secure);
     }
 }
 
