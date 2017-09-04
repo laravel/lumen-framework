@@ -421,14 +421,16 @@ trait RoutesRequests
      */
     public function prepareResponse($response)
     {
+        if ($response instanceof Responsable) {
+            $response = $response->toResponse(Request::capture());
+        }
+
         if ($response instanceof PsrResponseInterface) {
             $response = (new HttpFoundationFactory)->createResponse($response);
         } elseif (! $response instanceof SymfonyResponse) {
             $response = new Response($response);
         } elseif ($response instanceof BinaryFileResponse) {
             $response = $response->prepare(Request::capture());
-        } elseif ($response instanceof Responsable) {
-            $response = $response->toResponse(Request::capture());
         }
 
         return $response;
