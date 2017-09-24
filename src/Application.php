@@ -674,6 +674,7 @@ class Application extends Container
             'Illuminate\Support\Facades\Schema' => 'Schema',
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
+            'Illuminate\Support\Facades\Route' => 'Route',
         ];
 
         if (! static::$aliasesRegistered) {
@@ -900,5 +901,6 @@ class Application extends Container
         'Illuminate\Contracts\Validation\Factory' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
+        'router' => 'registerRouterBindings',
     ];
 }
