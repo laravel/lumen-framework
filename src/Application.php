@@ -405,6 +405,18 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRouterBindings()
+    {
+        $this->singleton('router', function () {
+            return $this->router;
+        });
+    }
+
+    /**
      * Define a callback to be used to configure Monolog.
      *
      * @param  callable  $callback
