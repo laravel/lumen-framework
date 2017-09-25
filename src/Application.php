@@ -405,6 +405,18 @@ class Application extends Container
     }
 
     /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRouterBindings()
+    {
+        $this->singleton('router', function () {
+            return $this->router;
+        });
+    }
+
+    /**
      * Define a callback to be used to configure Monolog.
      *
      * @param  callable  $callback
@@ -662,6 +674,7 @@ class Application extends Container
             'Illuminate\Support\Facades\Schema' => 'Schema',
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
+            'Illuminate\Support\Facades\Route' => 'Route',
         ];
 
         if (! static::$aliasesRegistered) {
@@ -842,6 +855,7 @@ class Application extends Container
             'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\Validation\Factory' => 'validator',
             'Illuminate\Contracts\View\Factory' => 'view',
+            'Laravel\Lumen\Routing\Router' => 'router',
         ];
     }
 
@@ -888,5 +902,6 @@ class Application extends Container
         'Illuminate\Contracts\Validation\Factory' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
+        'router' => 'registerRouterBindings',
     ];
 }
