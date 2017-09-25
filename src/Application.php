@@ -405,18 +405,6 @@ class Application extends Container
     }
 
     /**
-     * Register container bindings for the application.
-     *
-     * @return void
-     */
-    protected function registerRouterBindings()
-    {
-        $this->singleton('router', function () {
-            return $this->router;
-        });
-    }
-
-    /**
      * Define a callback to be used to configure Monolog.
      *
      * @param  callable  $callback
@@ -441,6 +429,18 @@ class Application extends Container
         });
         $this->singleton('queue.connection', function () {
             return $this->loadComponent('queue', 'Illuminate\Queue\QueueServiceProvider', 'queue.connection');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerRouterBindings()
+    {
+        $this->singleton('router', function () {
+            return $this->router;
         });
     }
 
@@ -671,10 +671,10 @@ class Application extends Container
             'Illuminate\Support\Facades\Gate' => 'Gate',
             'Illuminate\Support\Facades\Log' => 'Log',
             'Illuminate\Support\Facades\Queue' => 'Queue',
+            'Illuminate\Support\Facades\Route' => 'Route',
             'Illuminate\Support\Facades\Schema' => 'Schema',
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
-            'Illuminate\Support\Facades\Route' => 'Route',
         ];
 
         if (! static::$aliasesRegistered) {
@@ -852,10 +852,10 @@ class Application extends Container
             'Illuminate\Contracts\Queue\Factory' => 'queue',
             'Illuminate\Contracts\Queue\Queue' => 'queue.connection',
             'request' => 'Illuminate\Http\Request',
+            'Laravel\Lumen\Routing\Router' => 'router',
             'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\Validation\Factory' => 'validator',
             'Illuminate\Contracts\View\Factory' => 'view',
-            'Laravel\Lumen\Routing\Router' => 'router',
         ];
     }
 
@@ -894,6 +894,7 @@ class Application extends Container
         'queue.connection' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Factory' => 'registerQueueBindings',
         'Illuminate\Contracts\Queue\Queue' => 'registerQueueBindings',
+        'router' => 'registerRouterBindings',
         'Psr\Http\Message\ServerRequestInterface' => 'registerPsrRequestBindings',
         'Psr\Http\Message\ResponseInterface' => 'registerPsrResponseBindings',
         'translator' => 'registerTranslationBindings',
@@ -902,6 +903,5 @@ class Application extends Container
         'Illuminate\Contracts\Validation\Factory' => 'registerValidatorBindings',
         'view' => 'registerViewBindings',
         'Illuminate\Contracts\View\Factory' => 'registerViewBindings',
-        'router' => 'registerRouterBindings',
     ];
 }
