@@ -102,6 +102,8 @@ trait RegistersExceptionHandlers
 
         $handler->report($e);
 
+        error_clear_last();
+
         return $handler->render($this->make('request'), $e);
     }
 
