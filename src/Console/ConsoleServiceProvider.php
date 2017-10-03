@@ -110,7 +110,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerCacheClearCommand()
     {
         $this->app->singleton('command.cache.clear', function ($app) {
-            return new CacheClearCommand($app['cache']);
+            return new CacheClearCommand($app['cache'], $app['files']);
         });
     }
 
