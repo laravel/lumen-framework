@@ -336,7 +336,7 @@ trait MakesHttpRequests
         );
 
         return $this->response = $this->app->prepareResponse(
-            $this->app->handle(Request::createFromBase($symfonyRequest))
+            $this->app->handle(app('request')::createFromBase($symfonyRequest))
         );
     }
 
