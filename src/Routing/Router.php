@@ -35,6 +35,13 @@ class Router
     public $namedRoutes = [];
 
     /**
+     * Stock the Router instance
+     *
+     * @var Router
+     */
+    private static $_instance;
+
+    /**
      * Router constructor.
      *
      * @param  \Laravel\Lumen\Application  $app
@@ -42,7 +49,20 @@ class Router
     public function __construct($app)
     {
         $this->app = $app;
+
+        self::$_instance = $this;
     }
+
+    /**
+     * Get the current instance
+     *
+     * @return $this|null
+     */
+    public static function getInstance()
+    {
+        return self::$_instance ?: null;
+    }
+
 
     /**
      * Register a set of routes with a set of shared attributes.
