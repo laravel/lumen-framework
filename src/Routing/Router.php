@@ -35,7 +35,7 @@ class Router
     public $namedRoutes = [];
 
     /**
-     * Stock the Router instance
+     * Stock the Router instance.
      *
      * @var Router
      */
@@ -54,7 +54,7 @@ class Router
     }
 
     /**
-     * Get the current instance
+     * Get the current instance.
      *
      * @return $this|null
      */
