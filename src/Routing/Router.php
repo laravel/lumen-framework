@@ -63,7 +63,6 @@ class Router
         return self::$_instance ?: null;
     }
 
-
     /**
      * Register a set of routes with a set of shared attributes.
      *
