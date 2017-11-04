@@ -133,7 +133,7 @@ class Router
                 : trim($new['namespace'], '\\');
         }
 
-        return isset($old['namespace']) ? $old['namespace'] : null;
+        return $old['namespace'] ?? null;
     }
 
     /**
@@ -145,7 +145,7 @@ class Router
      */
     protected static function formatGroupPrefix($new, $old)
     {
-        $oldPrefix = isset($old['prefix']) ? $old['prefix'] : null;
+        $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
             return trim($oldPrefix, '/').'/'.trim($new['prefix'], '/');
@@ -239,9 +239,9 @@ class Router
      */
     protected function mergeGroupAttributes(array $action, array $attributes)
     {
-        $namespace = isset($attributes['namespace']) ? $attributes['namespace'] : null;
-        $middleware = isset($attributes['middleware']) ? $attributes['middleware'] : null;
-        $as = isset($attributes['as']) ? $attributes['as'] : null;
+        $namespace = $attributes['namespace'] ?? null;
+        $middleware = $attributes['middleware'] ?? null;
+        $as = $attributes['as'] ?? null;
 
         return $this->mergeNamespaceGroup(
             $this->mergeMiddlewareGroup(
