@@ -469,6 +469,7 @@ class FullApplicationTest extends TestCase
 
         $app->router->get('/', function (Illuminate\Http\Request $request) {
             $data = $this->validate($request, ['name' => 'required']);
+
             return $data;
         });
 
