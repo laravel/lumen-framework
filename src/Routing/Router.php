@@ -115,6 +115,10 @@ class Router
      */
     protected function mergeWithLastGroup($new)
     {
+        if(isset($new['nested']) && $new['nested'] == false){
+            return $this->mergeGroup($new,[]);
+        }
+        
         return $this->mergeGroup($new, end($this->groupStack));
     }
 
