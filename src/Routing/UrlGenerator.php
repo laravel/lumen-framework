@@ -258,7 +258,7 @@ class UrlGenerator
     {
         if (is_null($secure)) {
             if (is_null($this->cachedScheme)) {
-                $this->cachedScheme = $this->app->make('request')->getScheme().'://';
+                $this->cachedScheme = $this->getScheme($secure);
             }
 
             return $this->cachedScheme;
