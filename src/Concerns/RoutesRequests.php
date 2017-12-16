@@ -311,11 +311,11 @@ trait RoutesRequests
 
         if ($instance instanceof LumenController) {
             return $this->callLumenController($instance, $method, $routeInfo);
-        } else {
-            return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
-            );
         }
+
+        return $this->callControllerCallable(
+            [$instance, $method], $routeInfo[2]
+        );
     }
 
     /**
@@ -334,11 +334,11 @@ trait RoutesRequests
             return $this->callLumenControllerWithMiddleware(
                 $instance, $method, $routeInfo, $middleware
             );
-        } else {
-            return $this->callControllerCallable(
-                [$instance, $method], $routeInfo[2]
-            );
         }
+
+        return $this->callControllerCallable(
+            [$instance, $method], $routeInfo[2]
+        );
     }
 
     /**

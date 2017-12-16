@@ -398,9 +398,9 @@ class Application extends Container
         $this->singleton('Psr\Log\LoggerInterface', function () {
             if ($this->monologConfigurator) {
                 return call_user_func($this->monologConfigurator, new Logger('lumen'));
-            } else {
-                return new Logger('lumen', [$this->getMonologHandler()]);
             }
+
+            return new Logger('lumen', [$this->getMonologHandler()]);
         });
     }
 
@@ -527,9 +527,9 @@ class Application extends Container
     {
         if (is_dir($langPath = $this->basePath().'/resources/lang')) {
             return $langPath;
-        } else {
-            return __DIR__.'/../resources/lang';
         }
+
+        return __DIR__.'/../resources/lang';
     }
 
     /**
