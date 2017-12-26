@@ -20,6 +20,7 @@ use Illuminate\Queue\Console\RestartCommand as QueueRestartCommand;
 use Illuminate\Queue\Console\ListFailedCommand as ListFailedQueueCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand as ForgetFailedQueueCommand;
+use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
 use Illuminate\Database\Console\Migrations\ResetCommand as MigrateResetCommand;
 use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand;
 use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
@@ -46,6 +47,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'ClearResets' => 'command.auth.resets.clear',
         'Migrate' => 'command.migrate',
         'MigrateInstall' => 'command.migrate.install',
+        'MigrateFresh' => 'command.migrate.fresh',
         'MigrateRefresh' => 'command.migrate.refresh',
         'MigrateReset' => 'command.migrate.reset',
         'MigrateRollback' => 'command.migrate.rollback',
@@ -190,6 +192,18 @@ class ConsoleServiceProvider extends ServiceProvider
             $composer = $app['composer'];
 
             return new MigrateMakeCommand($creator, $composer);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerMigrateFreshCommand()
+    {
+        $this->app->singleton('command.migrate.fresh', function () {
+            return new MigrateFreshCommand;
         });
     }
 

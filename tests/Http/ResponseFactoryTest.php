@@ -38,7 +38,7 @@ class ResponseFactoryTest extends TestCase
         $response = $responseFactory->download($temp);
 
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
-        $this->assertEquals(false, $response->getContent());
+        $this->assertFalse($response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         unlink($temp);

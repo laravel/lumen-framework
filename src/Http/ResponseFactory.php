@@ -5,7 +5,6 @@ namespace Laravel\Lumen\Http;
 use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\Support\Arrayable;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResponseFactory
@@ -34,10 +33,6 @@ class ResponseFactory
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
-        if ($data instanceof Arrayable) {
-            $data = $data->toArray();
-        }
-
         return new JsonResponse($data, $status, $headers, $options);
     }
 
