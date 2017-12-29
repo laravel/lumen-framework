@@ -166,6 +166,18 @@ trait ProvidesConvenienceMethods
     }
 
     /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    public function dispatch_now($job, $handler = null)
+    {
+        return app('Illuminate\Contracts\Bus\Dispatcher')->dispatchNow($job, $handler);
+    }
+
+    /**
      * Get a validation factory instance.
      *
      * @return \Illuminate\Contracts\Validation\Factory
