@@ -176,7 +176,7 @@ trait ProvidesConvenienceMethods
     {
         return app('Illuminate\Contracts\Bus\Dispatcher')->dispatchNow($job, $handler);
     }
-    
+
     /**
      * Get a validation factory instance.
      *
