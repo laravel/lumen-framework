@@ -28,6 +28,7 @@ class Handler implements ExceptionHandler
      * Report or log an exception.
      *
      * @param  \Exception  $e
+     * @throws Exception If any error occurs creating logger then rethrow original exception.
      * @return void
      */
     public function report(Exception $e)
