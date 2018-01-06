@@ -358,6 +358,28 @@ if (! function_exists('url')) {
     }
 }
 
+if (! function_exists('validator')) {
+    /**
+     * Create a new Validator instance.
+     *
+     * @param  array  $data
+     * @param  array  $rules
+     * @param  array  $messages
+     * @param  array  $customAttributes
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    function validator(array $data = [], array $rules = [], array $messages = [], array $customAttributes = [])
+    {
+        $factory = app('validator');
+
+        if (func_num_args() === 0) {
+            return $factory;
+        }
+
+        return $factory->make($data, $rules, $messages, $customAttributes);
+    }
+}
+
 if (! function_exists('view')) {
     /**
      * Get the evaluated view contents for the given view.
