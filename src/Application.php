@@ -2,16 +2,13 @@
 
 namespace Laravel\Lumen;
 
-use Monolog\Logger;
 use RuntimeException;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Composer;
 use Laravel\Lumen\Routing\Router;
-use Monolog\Handler\StreamHandler;
 use Illuminate\Container\Container;
-use Monolog\Formatter\LineFormatter;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
