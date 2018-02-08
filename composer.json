@@ -36,7 +36,7 @@
         "illuminate/translation": "5.6.*",
         "illuminate/validation": "5.6.*",
         "illuminate/view": "5.6.*",
-        "monolog/monolog": "~1.12",
+        "illuminate/log": "5.6.*",
         "mtdowling/cron-expression": "~1.0",
         "nikic/fast-route": "~1.2",
         "symfony/http-kernel": "~4.0",
