@@ -12,39 +12,27 @@ use Illuminate\Validation\ValidationException;
 trait ProvidesConvenienceMethods
 {
     /**
-     * The response builder callback.
-     *
-     * @var \Closure
-     */
-    protected static $responseBuilder;
-
-    /**
-     * The error formatter callback.
-     *
-     * @var \Closure
-     */
-    protected static $errorFormatter;
-
-    /**
      * Set the response builder callback.
      *
+     * @deprecated
      * @param  \Closure  $callback
      * @return void
      */
     public static function buildResponseUsing(BaseClosure $callback)
     {
-        static::$responseBuilder = $callback;
+        app()->buildResponseUsing($callback);
     }
 
     /**
      * Set the error formatter callback.
      *
+     * @deprecated
      * @param  \Closure  $callback
      * @return void
      */
     public static function formatErrorsUsing(BaseClosure $callback)
     {
-        static::$errorFormatter = $callback;
+        app()->formatErrorsUsing($callback);
     }
 
     /**
@@ -86,8 +74,8 @@ trait ProvidesConvenienceMethods
      */
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
-        if (isset(static::$responseBuilder)) {
-            return call_user_func(static::$responseBuilder, $request, $errors);
+        if ($this->getResponseBuilder()) {
+            return call_user_func($this->getResponseBuilder(), $request, $errors);
         }
 
         return new JsonResponse($errors, 422);
@@ -98,8 +86,8 @@ trait ProvidesConvenienceMethods
      */
     protected function formatValidationErrors(Validator $validator)
     {
-        if (isset(static::$errorFormatter)) {
-            return call_user_func(static::$errorFormatter, $validator);
+        if ($this->getErrorFormatter()) {
+            return call_user_func($this->getErrorFormatter(), $validator);
         }
 
         return $validator->errors()->getMessages();
@@ -185,5 +173,25 @@ trait ProvidesConvenienceMethods
     protected function getValidationFactory()
     {
         return app('validator');
+    }
+
+    /**
+     * Get a response builder.
+     *
+     * @return callable|null
+     */
+    protected function getResponseBuilder()
+    {
+        return app()->has('routing.responseBuilder') ? app('routing.responseBuilder') : null;
+    }
+
+    /**
+     * Get a error formatter.
+     *
+     * @return callable|null
+     */
+    protected function getErrorFormatter()
+    {
+        return app()->has('routing.errorFormatter') ? app('routing.errorFormatter') : null;
     }
 }

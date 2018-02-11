@@ -485,6 +485,41 @@ class FullApplicationTest extends TestCase
         $this->assertEquals($response->getContent(), '{"name":"Jon"}');
     }
 
+    public function testApplicationCanSetResponseBuilder()
+    {
+        $app = new Application();
+
+        $resp = new Illuminate\Http\JsonResponse([], 422);
+        $app->buildResponseUsing(function ($req, $errors) use ($resp) {
+            return $resp;
+        });
+
+        $app->router->get('/', function (Request $request) {
+            $this->validate($request, ['name' => 'required']);
+        });
+
+        $appResponse = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertSame($resp, $appResponse);
+    }
+
+    public function testApplicationCanSetErrorFormatter()
+    {
+        $app = new Application();
+
+        $app->formatErrorsUsing(function ($validator) {
+            return [count($validator->errors()->getMessages())];
+        });
+
+        $app->router->get('/', function (Request $request) {
+            $this->validate($request, ['name' => 'required']);
+        });
+
+        $response = $app->handle(Request::create('/', 'GET'));
+
+        $this->assertEquals('[1]', $response->getContent());
+    }
+
     public function testRedirectResponse()
     {
         $app = new Application;
