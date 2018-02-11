@@ -576,6 +576,32 @@ class Application extends Container
     }
 
     /**
+     * Define a response builder for building the failed validation responses.
+     *
+     * @param  callable  $fn
+     * @return $this
+     */
+    public function buildResponseUsing(callable $fn)
+    {
+        $this->instance('routing.responseBuilder', $fn);
+
+        return $this;
+    }
+
+    /**
+     * Define a error formatter for formatting the validation errors.
+     *
+     * @param  callable  $fn
+     * @return $this
+     */
+    public function formatErrorsUsing(callable $fn)
+    {
+        $this->instance('routing.errorFormatter', $fn);
+
+        return $this;
+    }
+
+    /**
      * Get the path to the given configuration file.
      *
      * If no name is provided, then we'll return the path to the config folder.
