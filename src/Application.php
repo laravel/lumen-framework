@@ -65,6 +65,13 @@ class Application extends Container
     protected $namespace;
 
     /**
+     * Indicates if the application has "booted".
+     *
+     * @var bool
+     */
+    protected $booted = false;
+
+    /**
      * The Router instance.
      *
      * @var \Laravel\Lumen\Routing\Router
@@ -108,6 +115,19 @@ class Application extends Container
     }
 
     /**
+     * Boot the given service provider.
+     *
+     * @param  \Illuminate\Support\ServiceProvider  $provider
+     * @return mixed
+     */
+    protected function bootProvider(ServiceProvider $provider)
+    {
+        if (method_exists($provider, 'boot')) {
+            return $this->call([$provider, 'boot']);
+        }
+    }
+
+    /**
      * Bootstrap the router instance.
      *
      * @return void
@@ -115,6 +135,22 @@ class Application extends Container
     public function bootstrapRouter()
     {
         $this->router = new Router($this);
+    }
+
+    /**
+     * Boots the registered providers.
+     */
+    public function boot()
+    {
+        if ($this->booted) {
+            return;
+        }
+
+        array_walk($this->loadedProviders, function ($p) {
+            $this->bootProvider($p);
+        });
+
+        $this->booted = true;
     }
 
     /**
@@ -178,14 +214,14 @@ class Application extends Container
             return;
         }
 
-        $this->loadedProviders[$providerName] = true;
+        $this->loadedProviders[$providerName] = $provider;
 
         if (method_exists($provider, 'register')) {
             $provider->register();
         }
 
-        if (method_exists($provider, 'boot')) {
-            return $this->call([$provider, 'boot']);
+        if ($this->booted) {
+            $this->bootProvider($provider);
         }
     }
 

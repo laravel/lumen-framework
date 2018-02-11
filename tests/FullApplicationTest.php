@@ -325,6 +325,54 @@ class FullApplicationTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function testApplicationBootsServiceProvidersOnBoot()
+    {
+        $app = new Application();
+
+        $provider = new LumenBootableTestServiceProvider($app);
+        $app->register($provider);
+
+        $this->assertFalse($provider->booted);
+        $app->boot();
+        $this->assertTrue($provider->booted);
+    }
+
+    public function testRegisterServiceProviderAfterBoot()
+    {
+        $app = new Application();
+        $provider = new LumenBootableTestServiceProvider($app);
+        $app->boot();
+        $app->register($provider);
+        $this->assertTrue($provider->booted);
+    }
+
+    public function testApplicationBootsOnlyOnce()
+    {
+        $app = new Application();
+        $provider = new class($app) extends \Illuminate\Support\ServiceProvider {
+            public $bootCount = 0;
+
+            public function boot()
+            {
+                $this->bootCount += 1;
+            }
+        };
+
+        $app->register($provider);
+        $app->boot();
+        $app->boot();
+        $this->assertEquals(1, $provider->bootCount);
+    }
+
+    public function testApplicationBootsWhenRequestIsDispatched()
+    {
+        $app = new Application();
+        $provider = new LumenBootableTestServiceProvider($app);
+        $app->register($provider);
+        $resp = $app->dispatch();
+        $this->assertTrue($provider->booted);
+    }
+
     public function testUsingCustomDispatcher()
     {
         $routes = new FastRoute\RouteCollector(new FastRoute\RouteParser\Std, new FastRoute\DataGenerator\GroupCountBased);
@@ -628,6 +676,16 @@ class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
     public function register()
     {
+    }
+}
+
+class LumenBootableTestServiceProvider extends Illuminate\Support\ServiceProvider
+{
+    public $booted = false;
+
+    public function boot()
+    {
+        $this->booted = true;
     }
 }
 
