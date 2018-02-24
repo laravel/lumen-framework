@@ -392,6 +392,20 @@ class Router
     }
 
     /**
+     * Register a route with the application.
+     *
+     * @param  string  $uri
+     * @param  mixed  $action
+     * @return $this
+     */
+    public function head($uri, $action)
+    {
+        $this->addRoute('HEAD', $uri, $action);
+
+        return $this;
+    }
+
+    /**
      * Get the raw routes for the application.
      *
      * @return array
