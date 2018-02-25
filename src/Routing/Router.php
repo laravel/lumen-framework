@@ -314,6 +314,20 @@ class Router
      * @param  mixed  $action
      * @return $this
      */
+    public function head($uri, $action)
+    {
+        $this->addRoute('HEAD', $uri, $action);
+
+        return $this;
+    }
+
+    /**
+     * Register a route with the application.
+     *
+     * @param  string  $uri
+     * @param  mixed  $action
+     * @return $this
+     */
     public function get($uri, $action)
     {
         $this->addRoute('GET', $uri, $action);
@@ -387,20 +401,6 @@ class Router
     public function options($uri, $action)
     {
         $this->addRoute('OPTIONS', $uri, $action);
-
-        return $this;
-    }
-
-    /**
-     * Register a route with the application.
-     *
-     * @param  string  $uri
-     * @param  mixed  $action
-     * @return $this
-     */
-    public function head($uri, $action)
-    {
-        $this->addRoute('HEAD', $uri, $action);
 
         return $this;
     }
