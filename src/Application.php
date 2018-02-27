@@ -821,6 +821,7 @@ class Application extends Container
             'Laravel\Lumen\Routing\UrlGenerator' => 'url',
             'Illuminate\Contracts\Validation\Factory' => 'validator',
             'Illuminate\Contracts\View\Factory' => 'view',
+            'Illuminate\Contracts\Translation\Translator' => 'translator',
         ];
     }
 
