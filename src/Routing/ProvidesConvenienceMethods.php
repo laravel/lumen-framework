@@ -56,6 +56,8 @@ trait ProvidesConvenienceMethods
      * @param  array  $messages
      * @param  array  $customAttributes
      * @return array
+     *
+     * @throws ValidationException
      */
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
@@ -88,6 +90,8 @@ trait ProvidesConvenienceMethods
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Contracts\Validation\Validator  $validator
      * @return void
+     *
+     * @throws ValidationException
      */
     protected function throwValidationException(Request $request, $validator)
     {
