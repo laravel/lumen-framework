@@ -37,7 +37,7 @@
         "illuminate/validation": "5.6.*",
         "illuminate/view": "5.6.*",
         "illuminate/log": "5.6.*",
-        "mtdowling/cron-expression": "~1.0",
+        "dragonmantank/cron-expression": "~2.0",
         "nikic/fast-route": "~1.2",
         "symfony/http-kernel": "~4.0",
         "symfony/http-foundation": "~4.0"
