@@ -59,6 +59,32 @@ class Kernel implements KernelContract
     }
 
     /**
+     * Set the request instance for URL generation.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    protected function setRequestForConsole(Application $app)
+    {
+        $uri = $app->make('config')->get('app.url', env('APP_URL', 'http://localhost'));
+
+        $components = parse_url($uri);
+
+        $server = $_SERVER;
+
+        if (isset($components['path'])) {
+            $server = array_merge($server, [
+                'SCRIPT_FILENAME' => $components['path'],
+                'SCRIPT_NAME' => $components['path'],
+            ]);
+        }
+
+        $app->instance('request', Request::create(
+            $uri, 'GET', [], [], [], $server
+        ));
+    }
+
+    /**
      * Define the application's command schedule.
      *
      * @return void
@@ -203,31 +229,5 @@ class Kernel implements KernelContract
     protected function renderException($output, Exception $e)
     {
         $this->app['Illuminate\Contracts\Debug\ExceptionHandler']->renderForConsole($output, $e);
-    }
-
-    /**
-     * Set the request for url generation.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @return void
-     */
-    protected function setRequestForConsole(Application $app)
-    {
-        $uri = $app->make('config')->get('app.url', env('APP_URL', 'http://localhost'));
-
-        $components = parse_url($uri);
-
-        $server = $_SERVER;
-
-        if (isset($components['path'])) {
-            $server = array_merge($server, [
-                'SCRIPT_FILENAME' => $components['path'],
-                'SCRIPT_NAME' => $components['path'],
-            ]);
-        }
-
-        $app->instance('request', Request::create(
-            $uri, 'GET', [], [], [], $server
-        ));
     }
 }
