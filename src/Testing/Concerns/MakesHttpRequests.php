@@ -478,6 +478,7 @@ trait MakesHttpRequests
                 $data[$key] = $value;
             }
         }
+
         return $files;
     }
 }
