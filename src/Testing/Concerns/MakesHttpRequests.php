@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 
 trait MakesHttpRequests
 {
@@ -34,6 +35,8 @@ trait MakesHttpRequests
      */
     public function json($method, $uri, array $data = [], array $headers = [])
     {
+        $files = $this->extractFilesFromDataArray($data);
+
         $content = json_encode($data);
 
         $headers = array_merge([
@@ -42,8 +45,8 @@ trait MakesHttpRequests
             'Accept' => 'application/json',
         ], $headers);
 
-        $this->call(
-            $method, $uri, [], [], [], $this->transformHeadersToServerVars($headers), $content
+        return $this->call(
+            $method, $uri, [], [], $files, $this->transformHeadersToServerVars($headers), $content
         );
 
         return $this;
@@ -454,5 +457,27 @@ trait MakesHttpRequests
         $this->app->instance('middleware.disable', true);
 
         return $this;
+    }
+
+    /**
+     * Extract the file uploads from the given data array.
+     *
+     * @param  array  $data
+     * @return array
+     */
+    protected function extractFilesFromDataArray(&$data)
+    {
+        $files = [];
+        foreach ($data as $key => $value) {
+            if ($value instanceof SymfonyUploadedFile) {
+                $files[$key] = $value;
+                unset($data[$key]);
+            }
+            if (is_array($value)) {
+                $files[$key] = $this->extractFilesFromDataArray($value);
+                $data[$key] = $value;
+            }
+        }
+        return $files;
     }
 }
