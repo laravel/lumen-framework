@@ -78,6 +78,20 @@ if (! function_exists('dispatch')) {
     }
 }
 
+if (! function_exists('dispatch_now')) {
+    /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    function dispatch_now($job, $handler = null)
+    {
+        return app(Dispatcher::class)->dispatchNow($job, $handler);
+    }
+}
+
 if (! function_exists('config')) {
     /**
      * Get / set the specified configuration value.
