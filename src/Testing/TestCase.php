@@ -255,7 +255,7 @@ abstract class TestCase extends BaseTestCase
 
 
     /**
-     * Specify a list of jobs that should not be fired by applications.
+     * Specify a list of jobs that should not be fired by application.
      *
      * @param  array|string  $jobs
      * @return $this
