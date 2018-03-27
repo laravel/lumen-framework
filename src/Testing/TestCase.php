@@ -253,7 +253,6 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
-
     /**
      * Specify a list of jobs that should not be fired by application.
      *
