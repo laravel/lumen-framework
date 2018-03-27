@@ -253,6 +253,34 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+
+    /**
+     * Specify a list of jobs that should not be fired by applications.
+     *
+     * @param  array|string  $jobs
+     * @return $this
+     */
+    protected function notExpectsJobs($jobs)
+    {
+        $jobs = is_array($jobs) ? $jobs : func_get_args();
+
+        unset($this->app->availableBindings['Illuminate\Contracts\Bus\Dispatcher']);
+
+        $mock = Mockery::mock('Illuminate\Bus\Dispatcher[dispatch]', [$this->app]);
+
+        foreach ($jobs as $job) {
+            $mock->shouldReceive('dispatch')->never()
+                ->with(Mockery::type($job));
+        }
+
+        $this->app->instance(
+            'Illuminate\Contracts\Bus\Dispatcher',
+            $mock
+        );
+
+        return $this;
+    }
+
     /**
      * Mock the job dispatcher so all jobs are silenced and collected.
      *
