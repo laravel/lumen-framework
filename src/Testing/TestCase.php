@@ -184,6 +184,8 @@ abstract class TestCase extends BaseTestCase
     {
         $events = is_array($events) ? $events : func_get_args();
 
+        unset($this->app->availableBindings['events']);
+
         $mock = Mockery::spy('Illuminate\Contracts\Events\Dispatcher');
 
         $mock->shouldReceive('fire')->andReturnUsing(function ($called) use (&$events) {
