@@ -218,7 +218,7 @@ abstract class TestCase extends BaseTestCase
     {
         $mock = Mockery::mock('Illuminate\Contracts\Events\Dispatcher');
 
-        $mock->shouldReceive('fire');
+        $mock->shouldReceive('fire', 'dispatch');
 
         $this->app->instance('events', $mock);
 
