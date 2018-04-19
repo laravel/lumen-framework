@@ -186,7 +186,7 @@ abstract class TestCase extends BaseTestCase
 
         $mock = Mockery::spy('Illuminate\Contracts\Events\Dispatcher');
 
-        $mock->shouldReceive('fire')->andReturnUsing(function ($called) use (&$events) {
+        $mock->shouldReceive('fire', 'dispatch')->andReturnUsing(function ($called) use (&$events) {
             foreach ($events as $key => $event) {
                 if ((is_string($called) && $called === $event) ||
                     (is_string($called) && is_subclass_of($called, $event)) ||
