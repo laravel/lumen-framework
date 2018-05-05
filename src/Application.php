@@ -163,7 +163,7 @@ class Application extends Container
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function bound($abstract)
     {
