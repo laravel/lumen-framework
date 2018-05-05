@@ -163,6 +163,14 @@ class Application extends Container
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function bound($abstract)
+    {
+        return array_key_exists($abstract, $this->availableBindings) || parent::bound($abstract);
+    }
+
+    /**
      * Register a service provider with the application.
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
