@@ -570,8 +570,6 @@ class Application extends Container
         foreach ($names as $name) {
             $this->loadConfiguration($name);
         }
-
-        return;
     }
 
     /**
