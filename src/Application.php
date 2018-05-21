@@ -555,12 +555,30 @@ class Application extends Container
     }
 
     /**
+     * Configure and load the given configuration file names.
+     *
+     * @param  array|string  $names
+     * @return void
+     */
+    public function configure($names)
+    {
+        if (gettype($names) !== 'array') {
+            $this->loadConfiguration($names);
+            return;
+        }
+
+        foreach ($names as $name) {
+            $this->loadConfiguration($name);
+        }
+    }
+
+    /**
      * Load a configuration file into the application.
      *
      * @param  string  $name
      * @return void
      */
-    public function configure($name)
+    public function loadConfiguration($name)
     {
         if (isset($this->loadedConfigurations[$name])) {
             return;
