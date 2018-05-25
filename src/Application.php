@@ -104,6 +104,8 @@ class Application extends Container
 
         $this->instance('path', $this->path());
 
+        $this->instance('env', $this->environment());
+
         $this->registerContainerAliases();
     }
 
