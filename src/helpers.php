@@ -26,7 +26,7 @@ if (! function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string  $make
+     * @param  string|null  $make
      * @return mixed|\Laravel\Lumen\Application
      */
     function app($make = null)
@@ -84,7 +84,7 @@ if (! function_exists('config')) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param  array|string  $key
+     * @param  array|string|null  $key
      * @param  mixed  $default
      * @return mixed
      */
@@ -132,8 +132,8 @@ if (! function_exists('env')) {
     /**
      * Gets the value of an environment variable. Supports boolean, empty and null.
      *
-     * @param  string  $key
-     * @param  mixed   $default
+     * @param  string|null  $key
+     * @param  mixed  $default
      * @return mixed
      */
     function env($key, $default = null)
@@ -229,9 +229,9 @@ if (! function_exists('redirect')) {
      * Get an instance of the redirector.
      *
      * @param  string|null  $to
-     * @param  int     $status
-     * @param  array   $headers
-     * @param  bool    $secure
+     * @param  int  $status
+     * @param  array  $headers
+     * @param  bool|null  $secure
      * @return \Laravel\Lumen\Http\Redirector|\Illuminate\Http\RedirectResponse
      */
     function redirect($to = null, $status = 302, $headers = [], $secure = null)
@@ -285,8 +285,8 @@ if (! function_exists('route')) {
      * Generate a URL to a named route.
      *
      * @param  string  $name
-     * @param  array   $parameters
-     * @param  bool    $secure
+     * @param  array  $parameters
+     * @param  bool|null  $secure
      * @return string
      */
     function route($name, $parameters = [], $secure = null)
@@ -312,9 +312,9 @@ if (! function_exists('trans')) {
     /**
      * Translate the given message.
      *
-     * @param  string  $id
+     * @param  string|null  $id
      * @param  array   $replace
-     * @param  string  $locale
+     * @param  string|null  $locale
      * @return \Illuminate\Contracts\Translation\Translator|string
      */
     function trans($id = null, $replace = [], $locale = null)
@@ -333,7 +333,7 @@ if (! function_exists('__')) {
      *
      * @param  string  $key
      * @param  array  $replace
-     * @param  string  $locale
+     * @param  string|null  $locale
      * @return string|array|null
      */
     function __($key, $replace = [], $locale = null)
@@ -348,8 +348,8 @@ if (! function_exists('trans_choice')) {
      *
      * @param  string  $id
      * @param  int|array|\Countable  $number
-     * @param  array   $replace
-     * @param  string  $locale
+     * @param  array  $replace
+     * @param  string|null  $locale
      * @return string
      */
     function trans_choice($id, $number, array $replace = [], $locale = null)
@@ -363,8 +363,8 @@ if (! function_exists('url')) {
      * Generate a url for the application.
      *
      * @param  string  $path
-     * @param  mixed   $parameters
-     * @param  bool    $secure
+     * @param  mixed  $parameters
+     * @param  bool|null  $secure
      * @return string
      */
     function url($path = null, $parameters = [], $secure = null)
@@ -400,8 +400,8 @@ if (! function_exists('view')) {
      * Get the evaluated view contents for the given view.
      *
      * @param  string  $view
-     * @param  array   $data
-     * @param  array   $mergeData
+     * @param  array  $data
+     * @param  array  $mergeData
      * @return \Illuminate\View\View
      */
     function view($view = null, $data = [], $mergeData = [])
