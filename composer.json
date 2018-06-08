@@ -40,7 +40,8 @@
         "dragonmantank/cron-expression": "~2.0",
         "nikic/fast-route": "~1.2",
         "symfony/http-kernel": "~4.0",
-        "symfony/http-foundation": "~4.0"
+        "symfony/http-foundation": "~4.0",
+        "ramsey/uuid": "^3.7"
     },
     "require-dev": {
         "mockery/mockery": "~1.0",
