@@ -237,7 +237,7 @@ trait MakesHttpRequests
             return $this->seeJson();
         }
 
-        if (! $responseData) {
+        if (!is_array($responseData)) {
             $responseData = json_decode($this->response->getContent(), true);
         }
 
