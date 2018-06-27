@@ -793,7 +793,7 @@ class Application extends Container
 
         throw new RuntimeException('Unable to detect application namespace.');
     }
-    
+
     /**
      * Flush the container of all bindings and resolved instances.
      *
