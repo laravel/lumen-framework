@@ -793,6 +793,29 @@ class Application extends Container
 
         throw new RuntimeException('Unable to detect application namespace.');
     }
+    
+    /**
+     * Flush the container of all bindings and resolved instances.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        parent::flush();
+        $this->reboundCallbacks = [];
+        $this->resolvingCallbacks = [];
+        $this->afterResolvingCallbacks = [];
+        $this->middleware = [];
+        $this->routeMiddleware = [];
+        $this->currentRoute = [];
+        $this->availableBindings = [];
+        $this->ranServiceBinders = [];
+        $this->loadedProviders = [];
+        $this->loadedConfigurations = [];
+        $this->router = null;
+        $this->dispatcher = null;
+        static::$instance = null;
+    }
 
     /**
      * Register the core container aliases.
