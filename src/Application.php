@@ -802,16 +802,18 @@ class Application extends Container
     public function flush()
     {
         parent::flush();
+
+        $this->middleware = [];
+        $this->currentRoute = [];
+        $this->loadedProviders = [];
+        $this->routeMiddleware = [];
         $this->reboundCallbacks = [];
         $this->resolvingCallbacks = [];
-        $this->afterResolvingCallbacks = [];
-        $this->middleware = [];
-        $this->routeMiddleware = [];
-        $this->currentRoute = [];
         $this->availableBindings = [];
         $this->ranServiceBinders = [];
-        $this->loadedProviders = [];
         $this->loadedConfigurations = [];
+        $this->afterResolvingCallbacks = [];
+
         $this->router = null;
         $this->dispatcher = null;
         static::$instance = null;
