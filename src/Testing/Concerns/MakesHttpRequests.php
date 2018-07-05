@@ -335,10 +335,10 @@ trait MakesHttpRequests
             $cookies, $files, $server, $content
         );
 
-        $this->app['request'] = Request::createFromBase($symfonyRequest);
+        $this->app[Request::class] = Request::createFromBase($symfonyRequest);
 
         return $this->response = $this->app->prepareResponse(
-            $this->app->handle($this->app['request'])
+            $this->app->handle($this->app[Request::class])
         );
     }
 
