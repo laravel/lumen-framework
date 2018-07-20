@@ -730,6 +730,16 @@ class Application extends Container
     }
 
     /**
+     * Determine if the application routes are cached.
+     *
+     * @return bool
+     */
+    public function routesAreCached()
+    {
+        return false;
+    }
+
+    /**
      * Determine if the application is running in the console.
      *
      * @return bool
@@ -817,16 +827,6 @@ class Application extends Container
         $this->router = null;
         $this->dispatcher = null;
         static::$instance = null;
-    }
-
-    /**
-     * Determine if the application routes are cached.
-     *
-     * @return bool
-     */
-    public function routesAreCached()
-    {
-        return false;
     }
 
     /**
