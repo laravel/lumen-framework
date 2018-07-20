@@ -820,6 +820,16 @@ class Application extends Container
     }
 
     /**
+     * Determine if the application routes are cached.
+     *
+     * @return bool
+     */
+    public function routesAreCached()
+    {
+        return false;
+    }
+
+    /**
      * Register the core container aliases.
      *
      * @return void
