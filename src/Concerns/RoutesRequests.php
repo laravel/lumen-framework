@@ -8,6 +8,7 @@ use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request as ExtendedRequest;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Pipeline;
 use Illuminate\Contracts\Support\Responsable;
@@ -180,7 +181,7 @@ trait RoutesRequests
     protected function parseIncomingRequest($request)
     {
         if (! $request) {
-            $request = Request::capture();
+            $request = ExtendedRequest::capture();
         }
 
         $this->instance(Request::class, $this->prepareRequest($request));
