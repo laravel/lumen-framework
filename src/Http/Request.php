@@ -3,6 +3,7 @@
 namespace Laravel\Lumen\Http;
 
 use Illuminate\Http\Request as BaseRequest;
+use Illuminate\Support\Arr;
 
 class Request extends BaseRequest
 {
