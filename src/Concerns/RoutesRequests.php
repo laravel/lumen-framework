@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Concerns;
 
 use Closure;
 use Exception;
+use Laravel\Lumen\Http\Request as LumenRequest;
 use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
@@ -180,7 +181,7 @@ trait RoutesRequests
     protected function parseIncomingRequest($request)
     {
         if (! $request) {
-            $request = Request::capture();
+            $request = LumenRequest::capture();
         }
 
         $this->instance(Request::class, $this->prepareRequest($request));

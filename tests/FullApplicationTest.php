@@ -3,6 +3,7 @@
 use Mockery as m;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
+use Laravel\Lumen\Http\Request as LumenRequest;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
@@ -70,6 +71,21 @@ class FullApplicationTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('12', $response->getContent());
+    }
+
+    public function testLumenRequestWithParameters()
+    {
+        $app = new Application;
+
+        $app->router->get('/foo/{bar}/{baz}', function ($bar, $baz) {
+            return response($bar.$baz);
+        });
+
+        $app->handle(LumenRequest::create('/foo/1/test', 'GET'));
+        $request = $app['Illuminate\Http\Request'];
+
+        $this->assertEquals('1', $request->route('bar'));
+        $this->assertEquals('test', $request->route('baz'));
     }
 
     public function testCallbackRouteWithDefaultParameter()
