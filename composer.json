@@ -1,12 +1,11 @@
 {
-    "name": "laravel/lumen-framework",
+    "name": "fangcaiquan/lumen-framework",
     "description": "The Laravel Lumen Framework.",
     "keywords": ["framework", "laravel", "lumen"],
     "license": "MIT",
-    "homepage": "http://laravel.com",
     "support": {
-        "issues": "https://github.com/laravel/lumen-framework/issues",
-        "source": "https://github.com/laravel/lumen-framework"
+        "issues": "https://github.com/fangcaiquan/lumen-framework/issues",
+        "source": "https://github.com/fangcaiquan/lumen-framework"
     },
     "authors": [
         {
