@@ -70,6 +70,34 @@ return [
             'timezone'  => env('DB_TIMEZONE', '+00:00'),
             'strict'    => env('DB_STRICT_MODE', false),
         ],
+		
+		'mysql_api' => [
+			'driver'   => 'mysql',
+			'host'     => env('DB_HOST_API', 'localhost'),
+			'port' 	   => env('DB_PORT_API', '3306'),
+			'database' => env('DB_DATABASE_API', 'forge'),
+			'username' => env('DB_USERNAME_API', 'forge'),
+			'password' => env('DB_PASSWORD_API', 'forge'),
+			'charset'  => 'utf8',
+			'collation'=> 'utf8_general_ci',
+			'prefix'   => '',
+			'strict'   => false,
+			'engine'   => null,
+        ],
+
+        'mysql_back' => [
+            'driver'   => 'mysql',
+            'host'     => env('DB_HOST_BACK', 'localhost'),
+            'port' 	   => env('DB_PORT_BACK', '3306'),
+            'database' => env('DB_DATABASE_BACK', 'forge'),
+            'username' => env('DB_USERNAME_BACK', 'forge'),
+            'password' => env('DB_PASSWORD_BACK', 'forge'),
+            'charset'  => 'utf8',
+            'collation'=> 'utf8_general_ci',
+            'prefix'   => '',
+            'strict'   => false,
+            'engine'   => null,
+        ],
 
         'pgsql' => [
             'driver'   => 'pgsql',
