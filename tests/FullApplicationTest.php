@@ -1,7 +1,7 @@
 <?php
 
 use Mockery as m;
-use Illuminate\Http\Request;
+use Laravel\Lumen\Http\Request;
 use Laravel\Lumen\Application;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -66,10 +66,13 @@ class FullApplicationTest extends TestCase
             return response($bar.$baz);
         });
 
-        $response = $app->handle(Request::create('/foo/1/2', 'GET'));
+        $response = $app->handle($request = Request::create('/foo/1/2', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('12', $response->getContent());
+
+        $this->assertEquals(1, $request->route('bar'));
+        $this->assertEquals(2, $request->route('baz'));
     }
 
     public function testCallbackRouteWithDefaultParameter()
