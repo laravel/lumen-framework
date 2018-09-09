@@ -24,4 +24,5 @@ class Request extends BaseRequest
 
         return Arr::get($route[2], $param);
     }
+    
 }
