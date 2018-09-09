@@ -53,7 +53,7 @@ class Kernel implements KernelContract
     {
         $this->app = $app;
 
-        if (! $this->app->bound('request')) {
+        if ($this->app->runningInConsole()) {
             $this->setRequestForConsole($this->app);
         }
 
