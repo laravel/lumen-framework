@@ -21,10 +21,12 @@ class FullApplicationTest extends TestCase
             return response('Hello World');
         });
 
-        $response = $app->handle(Request::create('/', 'GET'));
+        $response = $app->handle($request = Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
+
+        $this->assertInstanceOf('Illuminate\Http\Request', $request);
     }
 
     public function testBasicSymfonyRequest()
