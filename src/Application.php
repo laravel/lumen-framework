@@ -111,6 +111,8 @@ class Application extends Container
 
         $this->instance('path', $this->path());
 
+        $this->instance('env', $this->environment());
+
         $this->registerContainerAliases();
     }
 
@@ -131,7 +133,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.6.1) (Laravel Components 5.6.*)';
+        return 'Lumen (5.6.4) (Laravel Components 5.6.*)';
     }
 
     /**
@@ -764,13 +766,23 @@ class Application extends Container
     }
 
     /**
+     * Determine if the application routes are cached.
+     *
+     * @return bool
+     */
+    public function routesAreCached()
+    {
+        return false;
+    }
+
+    /**
      * Determine if the application is running in the console.
      *
      * @return bool
      */
     public function runningInConsole()
     {
-        return php_sapi_name() == 'cli';
+        return php_sapi_name() === 'cli' || php_sapi_name() === 'phpdbg';
     }
 
     /**
@@ -826,6 +838,31 @@ class Application extends Container
         }
 
         throw new RuntimeException('Unable to detect application namespace.');
+    }
+
+    /**
+     * Flush the container of all bindings and resolved instances.
+     *
+     * @return void
+     */
+    public function flush()
+    {
+        parent::flush();
+
+        $this->middleware = [];
+        $this->currentRoute = [];
+        $this->loadedProviders = [];
+        $this->routeMiddleware = [];
+        $this->reboundCallbacks = [];
+        $this->resolvingCallbacks = [];
+        $this->availableBindings = [];
+        $this->ranServiceBinders = [];
+        $this->loadedConfigurations = [];
+        $this->afterResolvingCallbacks = [];
+
+        $this->router = null;
+        $this->dispatcher = null;
+        static::$instance = null;
     }
 
     /**

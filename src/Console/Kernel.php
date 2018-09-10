@@ -5,6 +5,7 @@ namespace Laravel\Lumen\Console;
 use Exception;
 use Throwable;
 use RuntimeException;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\Application as Artisan;
@@ -52,9 +53,38 @@ class Kernel implements KernelContract
     {
         $this->app = $app;
 
-        $this->app->prepareForConsoleCommand($this->aliases);
+        if (! $this->app->bound('request')) {
+            $this->setRequestForConsole($this->app);
+        }
 
+        $this->app->prepareForConsoleCommand($this->aliases);
         $this->defineConsoleSchedule();
+    }
+
+    /**
+     * Set the request instance for URL generation.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    protected function setRequestForConsole(Application $app)
+    {
+        $uri = $app->make('config')->get('app.url', env('APP_URL', 'http://localhost'));
+
+        $components = parse_url($uri);
+
+        $server = $_SERVER;
+
+        if (isset($components['path'])) {
+            $server = array_merge($server, [
+                'SCRIPT_FILENAME' => $components['path'],
+                'SCRIPT_NAME' => $components['path'],
+            ]);
+        }
+
+        $app->instance('request', Request::create(
+            $uri, 'GET', [], [], [], $server
+        ));
     }
 
     /**
