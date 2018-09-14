@@ -53,7 +53,7 @@ class Kernel implements KernelContract
     {
         $this->app = $app;
 
-        if (! $this->app->bound('request')) {
+        if ($this->app->runningInConsole()) {
             $this->setRequestForConsole($this->app);
         }
 
@@ -111,6 +111,8 @@ class Kernel implements KernelContract
     public function handle($input, $output = null)
     {
         try {
+            $this->app->boot();
+
             return $this->getArtisan()->run($input, $output);
         } catch (Exception $e) {
             $this->reportException($e);

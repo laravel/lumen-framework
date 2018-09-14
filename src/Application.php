@@ -44,6 +44,13 @@ class Application extends Container
     protected $loadedConfigurations = [];
 
     /**
+     * Indicates if the application has "booted".
+     *
+     * @var bool
+     */
+    protected $booted = false;
+
+    /**
      * The loaded service providers.
      *
      * @var array
@@ -126,7 +133,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.6.4) (Laravel Components 5.6.*)';
+        return 'Lumen (5.7.0) (Laravel Components 5.7.*)';
     }
 
     /**
@@ -180,14 +187,14 @@ class Application extends Container
             return;
         }
 
-        $this->loadedProviders[$providerName] = true;
+        $this->loadedProviders[$providerName] = $provider;
 
         if (method_exists($provider, 'register')) {
             $provider->register();
         }
 
-        if (method_exists($provider, 'boot')) {
-            return $this->call([$provider, 'boot']);
+        if ($this->booted) {
+            $this->bootProvider($provider);
         }
     }
 
@@ -200,6 +207,35 @@ class Application extends Container
     public function registerDeferredProvider($provider)
     {
         return $this->register($provider);
+    }
+
+    /**
+     * Boots the registered providers.
+     */
+    public function boot()
+    {
+        if ($this->booted) {
+            return;
+        }
+
+        array_walk($this->loadedProviders, function ($p) {
+            $this->bootProvider($p);
+        });
+
+        $this->booted = true;
+    }
+
+    /**
+     * Boot the given service provider.
+     *
+     * @param  \Illuminate\Support\ServiceProvider  $provider
+     * @return mixed
+     */
+    protected function bootProvider(ServiceProvider $provider)
+    {
+        if (method_exists($provider, 'boot')) {
+            return $this->call([$provider, 'boot']);
+        }
     }
 
     /**
