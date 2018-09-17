@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Routing\Pipeline;
 use Illuminate\Contracts\Support\Responsable;
+use Laravel\Lumen\Http\Request as LumenRequest;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Lumen\Routing\Controller as LumenController;
@@ -182,7 +183,7 @@ trait RoutesRequests
     protected function parseIncomingRequest($request)
     {
         if (! $request) {
-            $request = Request::capture();
+            $request = LumenRequest::capture();
         }
 
         $this->instance(Request::class, $this->prepareRequest($request));
