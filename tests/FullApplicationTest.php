@@ -285,10 +285,19 @@ class FullApplicationTest extends TestCase
             //
         }]);
 
+        $app->router->get('/test/{required}[/{optional}]', ['as' => 'test', function () {
+            //
+        }]);
+
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
+
+        $this->assertEquals('http://lumen.laravel.com/test/nice/parameters', route('test', [
+            'required' => 'nice',
+            'optional' => 'parameters',
+        ]));
     }
 
     public function testGeneratingUrlsForRegexParameters()
