@@ -254,6 +254,7 @@ class UrlGenerator
         }
 
         $uri = $this->app->router->namedRoutes[$name];
+        $uri = str_replace(['[', ']'], '', $uri);
 
         $parameters = $this->formatParametersForUrl($parameters);
 
@@ -261,7 +262,6 @@ class UrlGenerator
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
 
-        $uri = str_replace(['[', ']'], '', $uri);
         $uri = $this->to($uri, [], $secure);
 
         if (! empty($parameters)) {
