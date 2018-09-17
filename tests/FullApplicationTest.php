@@ -296,7 +296,7 @@ class FullApplicationTest extends TestCase
 
         $this->assertEquals('http://lumen.laravel.com/test/nice/parameters', route('test', [
             'required' => 'nice',
-            'optional' => 'parameters'
+            'optional' => 'parameters',
         ]));
     }
 
