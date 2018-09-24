@@ -25,7 +25,7 @@ class ResponseFactory
     /**
      * Return a new JSON response from the application.
      *
-     * @param  string|array  $data
+     * @param  mixed  $data
      * @param  int    $status
      * @param  array  $headers
      * @param  int    $options
