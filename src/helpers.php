@@ -315,7 +315,7 @@ if (! function_exists('trans')) {
      * @param  string|null  $id
      * @param  array   $replace
      * @param  string|null  $locale
-     * @return \Illuminate\Contracts\Translation\Translator|string
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */
     function trans($id = null, $replace = [], $locale = null)
     {
