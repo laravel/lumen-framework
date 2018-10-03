@@ -425,7 +425,7 @@ trait RoutesRequests
     public function prepareResponse($response)
     {
         if ($response instanceof Responsable) {
-            $response = $response->toResponse(Request::capture());
+            $response = $response->toResponse(app(Request::class));
         }
 
         if ($response instanceof PsrResponseInterface) {

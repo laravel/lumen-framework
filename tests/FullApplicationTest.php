@@ -257,6 +257,21 @@ class FullApplicationTest extends TestCase
         $this->assertEquals(405, $response->getStatusCode());
     }
 
+    public function testResponsableInterface()
+    {
+        $app = new Application;
+
+        $app->router->get('/foo/{foo}', function () {
+            return new ResponsableResponse;
+        });
+
+        $request = Request::create('/foo/999', 'GET');
+        $response = $app->handle($request);
+
+        $this->assertEquals(999, $request->route('foo'));
+        $this->assertEquals(999, $response->original);
+    }
+
     public function testUncaughtExceptionResponse()
     {
         $app = new Application;
@@ -769,5 +784,13 @@ class LumenTestTerminateMiddleware
     public function terminate($request, Illuminate\Http\Response $response)
     {
         $response->setContent('TERMINATED');
+    }
+}
+
+class ResponsableResponse implements \Illuminate\Contracts\Support\Responsable
+{
+    public function toResponse($request)
+    {
+        return $request->route('foo');
     }
 }
