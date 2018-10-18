@@ -3,7 +3,6 @@
 namespace Laravel\Lumen\Concerns;
 
 use Closure;
-use Exception;
 use Throwable;
 use FastRoute\Dispatcher;
 use Illuminate\Support\Str;
