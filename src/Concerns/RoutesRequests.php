@@ -166,8 +166,6 @@ trait RoutesRequests
                     $this->createDispatcher()->dispatch($method, $pathInfo)
                 );
             });
-        } catch (Exception $e) {
-            return $this->prepareResponse($this->sendExceptionToHandler($e));
         } catch (Throwable $e) {
             return $this->prepareResponse($this->sendExceptionToHandler($e));
         }
