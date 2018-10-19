@@ -55,6 +55,8 @@ abstract class TestCase extends BaseTestCase
 
         $this->app = $this->createApplication();
 
+        $this->app->make('url')->forceRootUrl(env('APP_URL', 'http://localhost/'));
+
         $this->app->boot();
     }
 
