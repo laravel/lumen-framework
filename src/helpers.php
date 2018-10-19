@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Laravel\Lumen\Bus\PendingDispatch;
+use Illuminate\Contracts\Bus\Dispatcher;
 
 if (! function_exists('abort')) {
     /**
