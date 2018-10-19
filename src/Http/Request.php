@@ -41,7 +41,7 @@ class Request extends BaseRequest
         }
 
         return sha1(implode('|', [
-            $this->getMethod(), $this->root(), $this->path(), $this->ip()
+            $this->getMethod(), $this->root(), $this->path(), $this->ip(),
         ]));
     }
 }
