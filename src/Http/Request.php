@@ -2,6 +2,7 @@
 
 namespace Laravel\Lumen\Http;
 
+use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request as BaseRequest;
 
@@ -24,5 +25,23 @@ class Request extends BaseRequest
         }
 
         return Arr::get($route[2], $param, $default);
+    }
+
+    /**
+     * Get a unique fingerprint for the request / route / IP address.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     */
+    public function fingerprint()
+    {
+        if (! $route = $this->route()) {
+            throw new RuntimeException('Unable to generate fingerprint. Route unavailable.');
+        }
+
+        return sha1(implode('|', [
+            $this->getMethod(), $this->root(), $this->path(), $this->ip()
+        ]));
     }
 }
