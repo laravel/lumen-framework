@@ -3,6 +3,7 @@
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Laravel\Lumen\Bus\PendingDispatch;
 
 if (! function_exists('abort')) {
     /**
@@ -74,7 +75,21 @@ if (! function_exists('dispatch')) {
      */
     function dispatch($job)
     {
-        return app(Dispatcher::class)->dispatch($job);
+        return new PendingDispatch($job);
+    }
+}
+
+if (! function_exists('dispatch_now')) {
+    /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    function dispatch_now($job, $handler = null)
+    {
+        return app(Dispatcher::class)->dispatchNow($job, $handler);
     }
 }
 
