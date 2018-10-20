@@ -290,7 +290,6 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -310,7 +309,6 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
