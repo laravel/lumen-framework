@@ -334,6 +334,30 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
     }
 
+    public function testGeneratingUrlsForOptionalParameters()
+    {
+        $app = new Application;
+        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
+
+        $app->router->get('/users[/{id:\d+}]', ['as' => 'users', function () {
+            //
+        }]);
+
+        $app->router->get('/users[/{id:\d+}/profile]', ['as' => 'profile', function () {
+            //
+        }]);
+
+        $app->router->get('/foo[bar]', ['as' => 'foo', function () {
+            //
+        }]);
+
+        $this->assertEquals('http://lumen.laravel.com/users', route('users'));
+        $this->assertEquals('http://lumen.laravel.com/users/1', route('users', ['id' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/users/1/profile', route('profile', ['id' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/users', route('profile'));
+        $this->assertEquals('http://lumen.laravel.com/foo', route('foo'));
+    }
+
     public function testRegisterServiceProvider()
     {
         $app = new Application;

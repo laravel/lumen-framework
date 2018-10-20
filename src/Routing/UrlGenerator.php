@@ -257,6 +257,14 @@ class UrlGenerator
 
         $parameters = $this->formatParametersForUrl($parameters);
 
+        $uri = preg_replace_callback('/\[([^{]*)\{?(.*?)(:.*?)?(\{[0-9,]+\})?\}?([^}]*)\]$/', function ($m) use (&$parameters) {
+            if (! isset($parameters[$m[2]])) {
+                return '';
+            }
+
+            return $m[1].array_pull($parameters, $m[2]).$m[5];
+        }, $uri);
+
         $uri = preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
             return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
         }, $uri);
