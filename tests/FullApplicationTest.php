@@ -666,6 +666,20 @@ class FullApplicationTest extends TestCase
         $this->assertArrayHasKey('hello.world', $app->router->namedRoutes);
         $this->assertEquals('/world', $app->router->namedRoutes['hello.world']);
     }
+
+    public function testContainerBindingsAreNotOverwritten()
+    {
+        $app = new Application();
+
+        $mock = m::mock(Illuminate\Bus\Dispatcher::class);
+
+        $app->instance(Illuminate\Contracts\Bus\Dispatcher::class, $mock);
+
+        $this->assertSame(
+            $mock,
+            $app->make(Illuminate\Contracts\Bus\Dispatcher::class)
+        );
+    }
 }
 
 class LumenTestService
