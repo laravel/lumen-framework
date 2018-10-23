@@ -133,7 +133,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.7.0) (Laravel Components 5.7.*)';
+        return 'Lumen (5.7.2) (Laravel Components 5.7.*)';
     }
 
     /**
@@ -249,7 +249,8 @@ class Application extends Container
     {
         $abstract = $this->getAlias($abstract);
 
-        if (array_key_exists($abstract, $this->availableBindings) &&
+        if (! $this->bound($abstract) &&
+            array_key_exists($abstract, $this->availableBindings) &&
             ! array_key_exists($this->availableBindings[$abstract], $this->ranServiceBinders)) {
             $this->{$method = $this->availableBindings[$abstract]}();
 

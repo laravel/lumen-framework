@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
+use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
 
 if (! function_exists('abort')) {
@@ -74,7 +75,21 @@ if (! function_exists('dispatch')) {
      */
     function dispatch($job)
     {
-        return app(Dispatcher::class)->dispatch($job);
+        return new PendingDispatch($job);
+    }
+}
+
+if (! function_exists('dispatch_now')) {
+    /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    function dispatch_now($job, $handler = null)
+    {
+        return app(Dispatcher::class)->dispatchNow($job, $handler);
     }
 }
 
@@ -315,7 +330,7 @@ if (! function_exists('trans')) {
      * @param  string|null  $id
      * @param  array   $replace
      * @param  string|null  $locale
-     * @return \Illuminate\Contracts\Translation\Translator|string
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */
     function trans($id = null, $replace = [], $locale = null)
     {

@@ -1,8 +1,8 @@
 <?php
 
 use Mockery as m;
-use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
+use Laravel\Lumen\Http\Request;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
@@ -21,10 +21,12 @@ class FullApplicationTest extends TestCase
             return response('Hello World');
         });
 
-        $response = $app->handle(Request::create('/', 'GET'));
+        $response = $app->handle($request = Request::create('/', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
+
+        $this->assertInstanceOf('Illuminate\Http\Request', $request);
     }
 
     public function testBasicSymfonyRequest()
@@ -66,10 +68,13 @@ class FullApplicationTest extends TestCase
             return response($bar.$baz);
         });
 
-        $response = $app->handle(Request::create('/foo/1/2', 'GET'));
+        $response = $app->handle($request = Request::create('/foo/1/2', 'GET'));
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('12', $response->getContent());
+
+        $this->assertEquals(1, $request->route('bar'));
+        $this->assertEquals(2, $request->route('baz'));
     }
 
     public function testCallbackRouteWithDefaultParameter()
@@ -252,6 +257,21 @@ class FullApplicationTest extends TestCase
         $this->assertEquals(405, $response->getStatusCode());
     }
 
+    public function testResponsableInterface()
+    {
+        $app = new Application;
+
+        $app->router->get('/foo/{foo}', function () {
+            return new ResponsableResponse;
+        });
+
+        $request = Request::create('/foo/999', 'GET');
+        $response = $app->handle($request);
+
+        $this->assertEquals(999, $request->route('foo'));
+        $this->assertEquals(999, $response->original);
+    }
+
     public function testUncaughtExceptionResponse()
     {
         $app = new Application;
@@ -270,7 +290,6 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -290,7 +309,6 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -666,6 +684,20 @@ class FullApplicationTest extends TestCase
         $this->assertArrayHasKey('hello.world', $app->router->namedRoutes);
         $this->assertEquals('/world', $app->router->namedRoutes['hello.world']);
     }
+
+    public function testContainerBindingsAreNotOverwritten()
+    {
+        $app = new Application();
+
+        $mock = m::mock(Illuminate\Bus\Dispatcher::class);
+
+        $app->instance(Illuminate\Contracts\Bus\Dispatcher::class, $mock);
+
+        $this->assertSame(
+            $mock,
+            $app->make(Illuminate\Contracts\Bus\Dispatcher::class)
+        );
+    }
 }
 
 class LumenTestService
@@ -764,5 +796,13 @@ class LumenTestTerminateMiddleware
     public function terminate($request, Illuminate\Http\Response $response)
     {
         $response->setContent('TERMINATED');
+    }
+}
+
+class ResponsableResponse implements \Illuminate\Contracts\Support\Responsable
+{
+    public function toResponse($request)
+    {
+        return $request->route('foo');
     }
 }

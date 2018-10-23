@@ -54,6 +54,10 @@ abstract class TestCase extends BaseTestCase
         Facade::clearResolvedInstances();
 
         $this->app = $this->createApplication();
+
+        $this->app->make('url')->forceRootUrl(env('APP_URL', 'http://localhost/'));
+
+        $this->app->boot();
     }
 
     /**
@@ -237,8 +241,6 @@ abstract class TestCase extends BaseTestCase
     {
         $jobs = is_array($jobs) ? $jobs : func_get_args();
 
-        unset($this->app->availableBindings['Illuminate\Contracts\Bus\Dispatcher']);
-
         $mock = Mockery::mock('Illuminate\Bus\Dispatcher[dispatch]', [$this->app]);
 
         foreach ($jobs as $job) {
@@ -260,8 +262,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function withoutJobs()
     {
-        unset($this->app->availableBindings['Illuminate\Contracts\Bus\Dispatcher']);
-
         $mock = Mockery::mock('Illuminate\Bus\Dispatcher[dispatch]', [$this->app]);
 
         $mock->shouldReceive('dispatch')->andReturnUsing(function ($dispatched) {
