@@ -689,6 +689,7 @@ class Application extends Container
             'Illuminate\Support\Facades\Queue' => 'Queue',
             'Illuminate\Support\Facades\Route' => 'Route',
             'Illuminate\Support\Facades\Schema' => 'Schema',
+            'Illuminate\Support\Facades\Storage' => 'Storage',
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
         ];
