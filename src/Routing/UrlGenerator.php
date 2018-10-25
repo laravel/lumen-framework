@@ -257,9 +257,13 @@ class UrlGenerator
 
         $parameters = $this->formatParametersForUrl($parameters);
 
-        $uri = preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
-            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+        $uri = preg_replace_callback('/\[([^\]]*)\]$/', function ($matches) use ($uri, &$parameters) {
+            $uri = $this->replaceRouteParameters($matches[1], $parameters);
+
+            return ($matches[1] == $uri) ? '' : $uri;
         }, $uri);
+
+        $uri = $this->replaceRouteParameters($uri, $parameters);
 
         $uri = $this->to($uri, [], $secure);
 
@@ -332,6 +336,20 @@ class UrlGenerator
         }
 
         return $parameters;
+    }
+
+    /**
+     * Replace the route parameters with their parameter.
+     *
+     * @param  string  $route
+     * @param  array $parameters
+     * @return string
+     */
+    protected function replaceRouteParameters($route, &$parameters = [])
+    {
+        return preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
+            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+        }, $route);
     }
 
     /**
