@@ -371,6 +371,18 @@ class Application extends Container
      *
      * @return void
      */
+    protected function registerFilesystemBindings()
+    {
+        $this->singleton('filesystem', function () {
+            return $this->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem');
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
     protected function registerEncrypterBindings()
     {
         $this->singleton('encrypter', function () {
@@ -921,6 +933,8 @@ class Application extends Container
         'config' => 'registerConfigBindings',
         'db' => 'registerDatabaseBindings',
         'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
+        'filesystem' => 'registerFilesystemBindings',
+        'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesystemBindings',
         'encrypter' => 'registerEncrypterBindings',
         'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
         'events' => 'registerEventBindings',
