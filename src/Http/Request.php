@@ -8,6 +8,20 @@ use Illuminate\Http\Request as BaseRequest;
 class Request extends BaseRequest
 {
     /**
+     * Determine if the given offset exists.
+     *
+     * @param  string  $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return Arr::has(
+            $this->all() + $this->route()[2],
+            $offset
+        );
+    }
+
+    /**
      * Get the route handling the request.
      *
      * @param  string|null  $param
