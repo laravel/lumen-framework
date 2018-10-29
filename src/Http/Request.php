@@ -10,20 +10,6 @@ use Illuminate\Http\Request as BaseRequest;
 class Request extends BaseRequest
 {
     /**
-     * Determine if the given offset exists.
-     *
-     * @param  string  $offset
-     * @return bool
-     */
-    public function offsetExists($offset)
-    {
-        return Arr::has(
-            $this->all() + $this->route()[2],
-            $offset
-        );
-    }
-
-    /**
      * Determine if the route name matches a given pattern.
      *
      * @param  mixed  $patterns
@@ -79,5 +65,19 @@ class Request extends BaseRequest
         return sha1(implode('|', [
             $this->getMethod(), $this->root(), $this->path(), $this->ip(),
         ]));
+    }
+
+    /**
+     * Determine if the given offset exists.
+     *
+     * @param  string  $offset
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return Arr::has(
+            $this->all() + $this->route()[2],
+            $offset
+        );
     }
 }
