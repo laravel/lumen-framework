@@ -3,6 +3,7 @@
 namespace Laravel\Lumen\Http;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request as BaseRequest;
 
 class Request extends BaseRequest
@@ -19,6 +20,27 @@ class Request extends BaseRequest
             $this->all() + $this->route()[2],
             $offset
         );
+    }
+
+    /**
+     * Determine if the route name matches a given pattern.
+     *
+     * @param  mixed  $patterns
+     * @return bool
+     */
+    public function routeIs(...$patterns)
+    {
+        if (! Arr::exists($route = $this->route()[1], 'as')) {
+            return false;
+        }
+
+        foreach ($patterns as $pattern) {
+            if (Str::is($pattern, $route['as'])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
