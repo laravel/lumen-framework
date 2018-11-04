@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class ResponseFactory
 {
     use Macroable;
-    
+
     /**
      * Return a new response from the application.
      *
