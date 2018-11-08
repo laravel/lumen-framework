@@ -11,9 +11,11 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
+    | Supported: "apc", "array", "database", "file", "memcached", "redis"
+    |
     */
 
-    'default' => env('CACHE_DRIVER', 'memcached'),
+    'default' => env('CACHE_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,20 +40,30 @@ return [
 
         'database' => [
             'driver' => 'database',
-            'table'  => env('CACHE_DATABASE_TABLE', 'cache'),
+            'table' => env('CACHE_DATABASE_TABLE', 'cache'),
             'connection' => env('CACHE_DATABASE_CONNECTION', null),
         ],
 
         'file' => [
             'driver' => 'file',
-            'path'   => storage_path('framework/cache'),
+            'path' => storage_path('framework/cache/data'),
         ],
 
         'memcached' => [
-            'driver'  => 'memcached',
+            'driver' => 'memcached',
+            'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
+            'sasl' => [
+                env('MEMCACHED_USERNAME'),
+                env('MEMCACHED_PASSWORD'),
+            ],
+            'options' => [
+                // Memcached::OPT_CONNECT_TIMEOUT  => 2000,
+            ],
             'servers' => [
                 [
-                    'host' => env('MEMCACHED_HOST', '127.0.0.1'), 'port' => env('MEMCACHED_PORT', 11211), 'weight' => 100,
+                    'host' => env('MEMCACHED_HOST', '127.0.0.1'),
+                    'port' => env('MEMCACHED_PORT', 11211),
+                    'weight' => 100,
                 ],
             ],
         ],
@@ -74,6 +86,9 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', 'laravel'),
+    'prefix' => env(
+        'CACHE_PREFIX',
+        str_slug(env('APP_NAME', 'lumen'), '_').'_cache'
+    ),
 
 ];

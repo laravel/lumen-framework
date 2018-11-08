@@ -424,8 +424,10 @@ trait RoutesRequests
      */
     public function prepareResponse($response)
     {
+        $request = app(Request::class);
+
         if ($response instanceof Responsable) {
-            $response = $response->toResponse(app(Request::class));
+            $response = $response->toResponse($request);
         }
 
         if ($response instanceof PsrResponseInterface) {
@@ -436,7 +438,7 @@ trait RoutesRequests
             $response = $response->prepare(Request::capture());
         }
 
-        return $response;
+        return $response->prepare($request);
     }
 
     /**

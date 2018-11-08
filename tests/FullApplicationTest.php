@@ -290,7 +290,6 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -300,17 +299,28 @@ class FullApplicationTest extends TestCase
             //
         }]);
 
+        $app->router->get('/foo-bar/{baz}[/{boom}]', ['as' => 'optional', function () {
+            //
+        }]);
+
+        $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}]', ['as' => 'regex', function () {
+            //
+        }]);
+
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('optional', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('optional', ['baz' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('regex', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('regex', ['baz' => 1]));
     }
 
     public function testGeneratingUrlsForRegexParameters()
     {
         $app = new Application;
         $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
-        unset($app->availableBindings['request']);
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -685,6 +695,20 @@ class FullApplicationTest extends TestCase
 
         $this->assertArrayHasKey('hello.world', $app->router->namedRoutes);
         $this->assertEquals('/world', $app->router->namedRoutes['hello.world']);
+    }
+
+    public function testContainerBindingsAreNotOverwritten()
+    {
+        $app = new Application();
+
+        $mock = m::mock(Illuminate\Bus\Dispatcher::class);
+
+        $app->instance(Illuminate\Contracts\Bus\Dispatcher::class, $mock);
+
+        $this->assertSame(
+            $mock,
+            $app->make(Illuminate\Contracts\Bus\Dispatcher::class)
+        );
     }
 }
 
