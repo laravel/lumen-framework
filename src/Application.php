@@ -107,7 +107,7 @@ class Application extends Container
         static::setInstance($this);
 
         $this->instance('app', $this);
-        $this->instance(static::class, $this);
+        $this->instance('Laravel\Lumen\Application', $this);
 
         $this->instance('path', $this->path());
 
