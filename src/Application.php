@@ -108,6 +108,9 @@ class Application extends Container
 
         $this->instance('app', $this);
         $this->instance(self::class, $this);
+        if (self::class !== static::class) {
+            $this->instance(static::class, $this);
+        }
 
         $this->instance('path', $this->path());
 
