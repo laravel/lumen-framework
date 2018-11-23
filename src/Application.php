@@ -107,7 +107,7 @@ class Application extends Container
         static::setInstance($this);
 
         $this->instance('app', $this);
-        $this->instance('Laravel\Lumen\Application', $this);
+        $this->instance(self::class, $this);
 
         $this->instance('path', $this->path());
 
@@ -133,7 +133,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (5.7.2) (Laravel Components 5.7.*)';
+        return 'Lumen (5.7.6) (Laravel Components 5.7.*)';
     }
 
     /**
@@ -401,6 +401,18 @@ class Application extends Container
     {
         $this->singleton('files', function () {
             return new Filesystem;
+        });
+    }
+
+    /**
+     * Register container bindings for the application.
+     *
+     * @return void
+     */
+    protected function registerFilesystemBindings()
+    {
+        $this->singleton('filesystem', function () {
+            return $this->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem');
         });
     }
 
@@ -677,6 +689,7 @@ class Application extends Container
             'Illuminate\Support\Facades\Queue' => 'Queue',
             'Illuminate\Support\Facades\Route' => 'Route',
             'Illuminate\Support\Facades\Schema' => 'Schema',
+            'Illuminate\Support\Facades\Storage' => 'Storage',
             'Illuminate\Support\Facades\URL' => 'URL',
             'Illuminate\Support\Facades\Validator' => 'Validator',
         ];
@@ -921,6 +934,8 @@ class Application extends Container
         'config' => 'registerConfigBindings',
         'db' => 'registerDatabaseBindings',
         'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
+        'filesystem' => 'registerFilesystemBindings',
+        'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesystemBindings',
         'encrypter' => 'registerEncrypterBindings',
         'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
         'events' => 'registerEventBindings',

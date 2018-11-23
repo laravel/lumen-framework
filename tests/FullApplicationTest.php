@@ -299,10 +299,22 @@ class FullApplicationTest extends TestCase
             //
         }]);
 
+        $app->router->get('/foo-bar/{baz}[/{boom}]', ['as' => 'optional', function () {
+            //
+        }]);
+
+        $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}]', ['as' => 'regex', function () {
+            //
+        }]);
+
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('optional', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('optional', ['baz' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('regex', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('regex', ['baz' => 1]));
     }
 
     public function testGeneratingUrlsForRegexParameters()
@@ -698,6 +710,13 @@ class FullApplicationTest extends TestCase
             $app->make(Illuminate\Contracts\Bus\Dispatcher::class)
         );
     }
+
+    public function testApplicationClassCanBeOverwritten()
+    {
+        $app = new LumenTestApplication();
+
+        $this->assertInstanceOf(LumenTestApplication::class, $app->make(Application::class));
+    }
 }
 
 class LumenTestService
@@ -779,6 +798,14 @@ class LumenTestAction
     public function __invoke($id)
     {
         return $id;
+    }
+}
+
+class LumenTestApplication extends Application
+{
+    public function version()
+    {
+        return 'Custom Lumen App';
     }
 }
 
