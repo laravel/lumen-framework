@@ -244,10 +244,6 @@ trait RoutesRequests
     {
         $this->currentRoute = $routeInfo;
 
-        $this['request']->setRouteResolver(function () {
-            return $this->currentRoute;
-        });
-
         $action = $routeInfo[1];
 
         // Pipe through route middleware...
