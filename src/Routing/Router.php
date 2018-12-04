@@ -260,11 +260,25 @@ class Router
      */
     protected function mergeNamespaceGroup(array $action, $namespace = null)
     {
-        if (isset($namespace) && isset($action['uses'])) {
-            $action['uses'] = $namespace.'\\'.$action['uses'];
+        if (isset($namespace, $action['uses'])) {
+            $action['uses'] = $this->prependGroupNamespace($action['uses'], $namespace);
         }
 
         return $action;
+    }
+
+    /**
+     * Prepend the namespace onto the use clause.
+     *
+     * @param $class
+     * @param $namespace
+     *
+     * @return string
+     */
+    protected function prependGroupNamespace($class, $namespace)
+    {
+        return $namespace !== null && strpos($class, '\\') !== 0
+            ? $namespace .'\\'. $class : $class;
     }
 
     /**
