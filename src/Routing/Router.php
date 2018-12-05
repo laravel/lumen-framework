@@ -270,15 +270,14 @@ class Router
     /**
      * Prepend the namespace onto the use clause.
      *
-     * @param $class
-     * @param $namespace
-     *
+     * @param  string  $class
+     * @param  string $namespace
      * @return string
      */
-    protected function prependGroupNamespace($class, $namespace)
+    protected function prependGroupNamespace($class, $namespace = null)
     {
         return $namespace !== null && strpos($class, '\\') !== 0
-            ? $namespace .'\\'. $class : $class;
+            ? $namespace.'\\'.$class : $class;
     }
 
     /**
