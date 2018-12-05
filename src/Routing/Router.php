@@ -270,7 +270,7 @@ class Router
     /**
      * Prepend the namespace onto the use clause.
      *
-     * @param  string  $class
+     * @param  string $class
      * @param  string $namespace
      * @return string
      */
