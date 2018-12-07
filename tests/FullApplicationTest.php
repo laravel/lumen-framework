@@ -734,6 +734,17 @@ class FullApplicationTest extends TestCase
 
         $this->assertInstanceOf(LumenTestApplication::class, $app->make(Application::class));
     }
+
+    public function testRequestIsReboundOnDispatch()
+    {
+        $app = new Application();
+        $rebound = false;
+        $app->rebinding('request', function () use (&$rebound) {
+            $rebound = true;
+        });
+        $app->handle(Request::create('/'));
+        $this->assertTrue($rebound);
+    }
 }
 
 class LumenTestService
