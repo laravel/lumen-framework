@@ -668,6 +668,23 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('Hello\\World\\Class@method', $route['action']['uses']);
     }
 
+    public function testNestedGroupNamespaceWithFQCNClassName()
+    {
+        $app = new Application();
+
+        $app->router->group(['namespace' => 'Hello'], function ($router) {
+            $router->group(['namespace' => 'World'], function ($router) {
+                $router->get('/world', '\Global\Namespaced\Class@method');
+            });
+        });
+
+        $routes = $app->router->getRoutes();
+
+        $route = $routes['GET/world'];
+
+        $this->assertEquals('\\Global\\Namespaced\\Class@method', $route['action']['uses']);
+    }
+
     public function testNestedGroupPrefixRequest()
     {
         $app = new Application();
@@ -716,6 +733,17 @@ class FullApplicationTest extends TestCase
         $app = new LumenTestApplication();
 
         $this->assertInstanceOf(LumenTestApplication::class, $app->make(Application::class));
+    }
+
+    public function testRequestIsReboundOnDispatch()
+    {
+        $app = new Application();
+        $rebound = false;
+        $app->rebinding('request', function () use (&$rebound) {
+            $rebound = true;
+        });
+        $app->handle(Request::create('/'));
+        $this->assertTrue($rebound);
     }
 }
 

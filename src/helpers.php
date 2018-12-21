@@ -28,15 +28,16 @@ if (! function_exists('app')) {
      * Get the available container instance.
      *
      * @param  string|null  $make
+     * @param  array  $parameters
      * @return mixed|\Laravel\Lumen\Application
      */
-    function app($make = null)
+    function app($make = null, array $parameters = [])
     {
         if (is_null($make)) {
             return Container::getInstance();
         }
 
-        return Container::getInstance()->make($make);
+        return Container::getInstance()->make($make, $parameters);
     }
 }
 
