@@ -2,6 +2,7 @@
 
 namespace Laravel\Lumen\Routing;
 
+use Illuminate\Support\Arr;
 use Laravel\Lumen\Application;
 use Illuminate\Contracts\Routing\UrlRoutable;
 
@@ -92,7 +93,7 @@ class UrlGenerator
 
         $scheme = $this->getSchemeForUrl($secure);
 
-        $extra = $this->formatParametersForUrl($extra);
+        $extra = $this->formatParameters($extra);
 
         $tail = implode('/', array_map(
             'rawurlencode', (array) $extra)
@@ -255,7 +256,7 @@ class UrlGenerator
 
         $uri = $this->app->router->namedRoutes[$name];
 
-        $parameters = $this->formatParametersForUrl($parameters);
+        $parameters = $this->formatParameters($parameters);
 
         $uri = preg_replace_callback('/\[([^\]]*)\]$/', function ($matches) use ($uri, &$parameters) {
             $uri = $this->replaceRouteParameters($matches[1], $parameters);
@@ -314,6 +315,26 @@ class UrlGenerator
      * @param  mixed|array  $parameters
      * @return array
      */
+    public function formatParameters($parameters)
+    {
+        $parameters = Arr::wrap($parameters);
+
+        foreach ($parameters as $key => $parameter) {
+            if ($parameter instanceof UrlRoutable) {
+                $parameters[$key] = $parameter->getRouteKey();
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Format the array of URL parameters.
+     *
+     * @param  mixed|array  $parameters
+     * @return array
+     * @deprecated v5.8.0
+     */
     protected function formatParametersForUrl($parameters)
     {
         return $this->replaceRoutableParametersForUrl($parameters);
@@ -324,18 +345,11 @@ class UrlGenerator
      *
      * @param  array  $parameters
      * @return array
+     * @deprecated v5.8.0
      */
     protected function replaceRoutableParametersForUrl($parameters = [])
     {
-        $parameters = is_array($parameters) ? $parameters : [$parameters];
-
-        foreach ($parameters as $key => $parameter) {
-            if ($parameter instanceof UrlRoutable) {
-                $parameters[$key] = $parameter->getRouteKey();
-            }
-        }
-
-        return $parameters;
+        return $this->formatParameters($parameters);
     }
 
     /**
