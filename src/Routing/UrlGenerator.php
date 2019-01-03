@@ -329,30 +329,6 @@ class UrlGenerator
     }
 
     /**
-     * Format the array of URL parameters.
-     *
-     * @param  mixed|array  $parameters
-     * @return array
-     * @deprecated v5.8.0
-     */
-    protected function formatParametersForUrl($parameters)
-    {
-        return $this->replaceRoutableParametersForUrl($parameters);
-    }
-
-    /**
-     * Replace UrlRoutable parameters with their route parameter.
-     *
-     * @param  array  $parameters
-     * @return array
-     * @deprecated v5.8.0
-     */
-    protected function replaceRoutableParametersForUrl($parameters = [])
-    {
-        return $this->formatParameters($parameters);
-    }
-
-    /**
      * Replace the route parameters with their parameter.
      *
      * @param  string  $route
