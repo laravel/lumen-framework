@@ -183,30 +183,6 @@ class UrlGenerator
     }
 
     /**
-     * Get the scheme for a raw URL.
-     *
-     * @param  bool|null  $secure
-     * @return string
-     * @deprecated v5.5.x
-     */
-    protected function getScheme($secure)
-    {
-        return $this->formatScheme($secure);
-    }
-
-    /**
-     * Force the schema for URLs.
-     *
-     * @param  string  $schema
-     * @return void
-     * @deprecated v5.5.x
-     */
-    public function forceSchema($schema)
-    {
-        $this->forceScheme($schema);
-    }
-
-    /**
      * Force the schema for URLs.
      *
      * @param  string  $schema
