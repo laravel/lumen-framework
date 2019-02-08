@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class FullApplicationTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
