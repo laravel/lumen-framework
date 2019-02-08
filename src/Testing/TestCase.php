@@ -67,7 +67,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         if (! $this->app) {
             $this->refreshApplication();
@@ -107,7 +107,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         if (class_exists('Mockery')) {
             if (($container = Mockery::getContainer()) !== null) {
