@@ -67,7 +67,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (! $this->app) {
             $this->refreshApplication();
@@ -107,10 +107,10 @@ abstract class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (class_exists('Mockery')) {
-            if (($container = \Mockery::getContainer()) !== null) {
+            if (($container = Mockery::getContainer()) !== null) {
                 $this->addToAssertionCount($container->mockery_getExpectationCount());
             }
 
