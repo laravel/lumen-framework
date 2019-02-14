@@ -47,7 +47,7 @@ class LoadEnvironmentVariables
      */
     public function bootstrap()
     {
-        if (!class_exists(DotenvFactory::class)) {
+        if (! class_exists(DotenvFactory::class)) {
             $this->writeErrorAndDie([
                 'Unable to load the environment file!',
                 'Please install "vlucas/phpdotenv:^3.3".',
