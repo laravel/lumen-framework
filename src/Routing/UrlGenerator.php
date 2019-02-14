@@ -314,7 +314,7 @@ class UrlGenerator
     protected function replaceRouteParameters($route, &$parameters = [])
     {
         return preg_replace_callback('/\{(.*?)(:.*?)?(\{[0-9,]+\})?\}/', function ($m) use (&$parameters) {
-            return isset($parameters[$m[1]]) ? array_pull($parameters, $m[1]) : $m[0];
+            return isset($parameters[$m[1]]) ? Arr::pull($parameters, $m[1]) : $m[0];
         }, $route);
     }
 
