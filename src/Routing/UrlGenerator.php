@@ -3,6 +3,7 @@
 namespace Laravel\Lumen\Routing;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Lumen\Application;
 use Illuminate\Contracts\Routing\UrlRoutable;
 
@@ -168,7 +169,7 @@ class UrlGenerator
     {
         $i = 'index.php';
 
-        return str_contains($root, $i) ? str_replace('/'.$i, '', $root) : $root;
+        return Str::contains($root, $i) ? str_replace('/'.$i, '', $root) : $root;
     }
 
     /**
