@@ -1,7 +1,6 @@
 <?php
 
 use PhpOption\Option;
-use Illuminate\Support\Str;
 use Illuminate\Container\Container;
 use Dotenv\Environment\DotenvFactory;
 use Laravel\Lumen\Bus\PendingDispatch;
