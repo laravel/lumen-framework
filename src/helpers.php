@@ -1,9 +1,13 @@
 <?php
 
+use PhpOption\Option;
 use Illuminate\Support\Str;
 use Illuminate\Container\Container;
+use Dotenv\Environment\DotenvFactory;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Dotenv\Environment\Adapter\EnvConstAdapter;
+use Dotenv\Environment\Adapter\ServerConstAdapter;
 
 if (! function_exists('abort')) {
     /**
@@ -146,43 +150,42 @@ if (! function_exists('encrypt')) {
 
 if (! function_exists('env')) {
     /**
-     * Gets the value of an environment variable. Supports boolean, empty and null.
+     * Gets the value of an environment variable.
      *
-     * @param  string|null  $key
-     * @param  mixed  $default
+     * @param  string  $key
+     * @param  mixed   $default
      * @return mixed
      */
     function env($key, $default = null)
     {
-        $value = getenv($key);
+        static $variables;
 
-        if ($value === false) {
-            return value($default);
+        if ($variables === null) {
+            $variables = (new DotenvFactory([new EnvConstAdapter, new ServerConstAdapter]))->createImmutable();
         }
 
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
+        return Option::fromValue($variables->get($key))
+            ->map(function ($value) {
+                switch (strtolower($value)) {
+                    case 'true':
+                    case '(true)':
+                        return true;
+                    case 'false':
+                    case '(false)':
+                        return false;
+                    case 'empty':
+                    case '(empty)':
+                        return '';
+                    case 'null':
+                    case '(null)':
+                        return;
+                }
 
-            case 'false':
-            case '(false)':
-                return false;
-
-            case 'empty':
-            case '(empty)':
-                return '';
-
-            case 'null':
-            case '(null)':
-                return;
-        }
-
-        if (Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
-            return substr($value, 1, -1);
-        }
-
-        return $value;
+                return $value;
+            })
+            ->getOrCall(function () use ($default) {
+                return value($default);
+            });
     }
 }
 
