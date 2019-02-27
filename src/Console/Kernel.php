@@ -17,7 +17,7 @@ class Kernel implements KernelContract
     /**
      * The application implementation.
      *
-     * @var \Illuminate\Contracts\Foundation\Application
+     * @var \Laravel\Lumen\Application
      */
     protected $app;
 
