@@ -139,7 +139,7 @@ class Kernel implements KernelContract
      */
     public function terminate($input, $status)
     {
-        $this->app->terminate();
+        //
     }
 
     /**
