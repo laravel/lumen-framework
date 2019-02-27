@@ -30,13 +30,6 @@ use Illuminate\Database\Console\Migrations\RollbackCommand as MigrateRollbackCom
 class ConsoleServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = true;
-
-    /**
      * The commands to be registered.
      *
      * @var array
