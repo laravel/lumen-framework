@@ -190,7 +190,7 @@ if (! function_exists('env')) {
 
 if (! function_exists('event')) {
     /**
-     * Fire an event and call the listeners.
+     * Dispatch an event and call the listeners.
      *
      * @param  object|string  $event
      * @param  mixed   $payload
@@ -199,7 +199,7 @@ if (! function_exists('event')) {
      */
     function event($event, $payload = [], $halt = false)
     {
-        return app('events')->fire($event, $payload, $halt);
+        return app('events')->dispatch($event, $payload, $halt);
     }
 }
 
