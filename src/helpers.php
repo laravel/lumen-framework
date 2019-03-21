@@ -5,6 +5,7 @@ use Illuminate\Container\Container;
 use Dotenv\Environment\DotenvFactory;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Dotenv\Environment\Adapter\PutenvAdapter;
 use Dotenv\Environment\Adapter\EnvConstAdapter;
 use Dotenv\Environment\Adapter\ServerConstAdapter;
 
@@ -160,7 +161,7 @@ if (! function_exists('env')) {
         static $variables;
 
         if ($variables === null) {
-            $variables = (new DotenvFactory([new EnvConstAdapter, new ServerConstAdapter]))->createImmutable();
+            $variables = (new DotenvFactory([new EnvConstAdapter, new ServerConstAdapter, PutenvAdapter::class]))->createImmutable();
         }
 
         return Option::fromValue($variables->get($key))
