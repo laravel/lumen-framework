@@ -75,7 +75,7 @@ class LoadEnvironmentVariables
         return Dotenv::create(
             $this->filePath,
             $this->fileName,
-            new DotenvFactory([new EnvConstAdapter, new ServerConstAdapter, PutenvAdapter::class])
+            new DotenvFactory([new EnvConstAdapter, new PutenvAdapter, new ServerConstAdapter])
         );
     }
 
