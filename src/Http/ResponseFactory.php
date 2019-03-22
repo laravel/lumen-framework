@@ -32,7 +32,7 @@ class ResponseFactory
      * @param  int    $status
      * @param  array  $headers
      * @param  int    $options
-     * @return \Illuminate\Http\JsonResponse;
+     * @return \Illuminate\Http\JsonResponse
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
