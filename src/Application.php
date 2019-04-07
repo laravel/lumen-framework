@@ -645,6 +645,7 @@ class Application extends Container
                 return $path;
             }
         } else {
+            $name = str_replace('.', '/', $name);
             $appConfigPath = $this->basePath('config').'/'.$name.'.php';
 
             if (file_exists($appConfigPath)) {
