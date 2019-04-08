@@ -614,9 +614,9 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application();
 
-        $filesystem = $app['Illuminate\Contracts\Filesystem\Factory'];
+        $filesystem = $app[Illuminate\Contracts\Filesystem\Factory::class];
 
-        $this->assertInstanceOf('Illuminate\Contracts\Filesystem\Factory', $filesystem);
+        $this->assertInstanceOf(Illuminate\Contracts\Filesystem\Factory::class, $filesystem);
     }
 
     public function testCanResolveValidationFactoryFromContract()
