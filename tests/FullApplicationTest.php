@@ -610,6 +610,15 @@ class FullApplicationTest extends TestCase
         $this->assertSame('1234', $response->getContent());
     }
 
+    public function testCanResolveFilesystemFactoryFromContract()
+    {
+        $app = new Application();
+
+        $filesystem = $app[Illuminate\Contracts\Filesystem\Factory::class];
+
+        $this->assertInstanceOf(Illuminate\Contracts\Filesystem\Factory::class, $filesystem);
+    }
+
     public function testCanResolveValidationFactoryFromContract()
     {
         $app = new Application();
