@@ -49,7 +49,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function refreshApplication()
     {
-        putenv('APP_ENV=testing');
+        $_ENV['APP_ENV'] = 'testing';
 
         Facade::clearResolvedInstances();
 
