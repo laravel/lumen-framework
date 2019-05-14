@@ -135,7 +135,7 @@ trait ProvidesConvenienceMethods
      */
     public function authorize($ability, $arguments = [])
     {
-        list($ability, $arguments) = $this->parseAbilityAndArguments($ability, $arguments);
+        [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
 
         return app(Gate::class)->authorize($ability, $arguments);
     }
@@ -152,7 +152,7 @@ trait ProvidesConvenienceMethods
      */
     public function authorizeForUser($user, $ability, $arguments = [])
     {
-        list($ability, $arguments) = $this->parseAbilityAndArguments($ability, $arguments);
+        [$ability, $arguments] = $this->parseAbilityAndArguments($ability, $arguments);
 
         return app(Gate::class)->forUser($user)->authorize($ability, $arguments);
     }
