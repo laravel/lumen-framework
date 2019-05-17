@@ -65,6 +65,13 @@ class Application extends Container
     protected $ranServiceBinders = [];
 
     /**
+     * The custom storage path defined by the developer.
+     *
+     * @var string
+     */
+    protected $storagePath;
+
+    /**
      * The application namespace.
      *
      * @var string
@@ -765,7 +772,22 @@ class Application extends Container
      */
     public function storagePath($path = '')
     {
-        return $this->basePath().'/storage'.($path ? '/'.$path : $path);
+        return ($this->storagePath ?: $this->basePath.DIRECTORY_SEPARATOR.'storage').($path ? '/'.$path : $path);
+    }
+
+    /**
+     * Set the storage directory.
+     *
+     * @param  string  $path
+     * @return $this
+     */
+    public function useStoragePath($path)
+    {
+        $this->storagePath = $path;
+
+        $this->instance('path.storage', $path);
+
+        return $this;
     }
 
     /**
