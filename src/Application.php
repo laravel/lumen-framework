@@ -421,6 +421,12 @@ class Application extends Container
         $this->singleton('filesystem', function () {
             return $this->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem');
         });
+        $this->singleton('filesystem.disk', function () {
+            return $this->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem.disk');
+        });
+        $this->singleton('filesystem.cloud', function () {
+            return $this->loadComponent('filesystems', 'Illuminate\Filesystem\FilesystemServiceProvider', 'filesystem.cloud');
+        });
     }
 
     /**
@@ -922,6 +928,8 @@ class Application extends Container
             'Illuminate\Contracts\Encryption\Encrypter' => 'encrypter',
             'Illuminate\Contracts\Events\Dispatcher' => 'events',
             'Illuminate\Contracts\Filesystem\Factory' => 'filesystem',
+            'Illuminate\Contracts\Filesystem\Filesystem' => 'filesystem.disk',
+            'Illuminate\Contracts\Filesystem\Cloud' => 'filesystem.cloud',
             'Illuminate\Contracts\Hashing\Hasher' => 'hash',
             'log' => 'Psr\Log\LoggerInterface',
             'Illuminate\Contracts\Queue\Factory' => 'queue',
@@ -958,6 +966,10 @@ class Application extends Container
         'db' => 'registerDatabaseBindings',
         'Illuminate\Database\Eloquent\Factory' => 'registerDatabaseBindings',
         'filesystem' => 'registerFilesystemBindings',
+        'filesystem.cloud' => 'registerFilesystemBindings',
+        'filesystem.disk' => 'registerFilesystemBindings',
+        'Illuminate\Contracts\Filesystem\Cloud' => 'registerFilesystemBindings',
+        'Illuminate\Contracts\Filesystem\Filesystem' => 'registerFilesystemBindings',
         'Illuminate\Contracts\Filesystem\Factory' => 'registerFilesystemBindings',
         'encrypter' => 'registerEncrypterBindings',
         'Illuminate\Contracts\Encryption\Encrypter' => 'registerEncrypterBindings',
