@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Traits\Macroable;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResponseFactory
@@ -37,6 +38,19 @@ class ResponseFactory
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
     {
         return new JsonResponse($data, $status, $headers, $options);
+    }
+
+    /**
+     * Create a new streamed response instance.
+     *
+     * @param  \Closure  $callback
+     * @param  int  $status
+     * @param  array  $headers
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function stream($callback, $status = 200, array $headers = [])
+    {
+        return new StreamedResponse($callback, $status, $headers);
     }
 
     /**

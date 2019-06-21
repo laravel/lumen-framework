@@ -27,6 +27,18 @@ class ResponseFactoryTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
 
+    public function testStreamDefaultResponse()
+    {
+        $responseFactory = new ResponseFactory();
+        $response = $responseFactory->stream(function () {
+            echo 'hello';
+        });
+
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertFalse($response->getContent());
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
     public function testDownloadDefaultResponse()
     {
         $temp = tempnam(sys_get_temp_dir(), 'fixture');
@@ -60,5 +72,15 @@ class ResponseFactoryTest extends TestCase
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals('{"hello":"world"}', $response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    public function testStreamDeferredCallback()
+    {
+        $responseFactory = new ResponseFactory();
+        $response = $responseFactory->stream(function () {
+            $this->fail();
+        });
+
+        $this->assertFalse($response->getContent());
     }
 }
