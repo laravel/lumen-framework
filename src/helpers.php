@@ -1,13 +1,8 @@
 <?php
 
-use PhpOption\Option;
 use Illuminate\Container\Container;
-use Dotenv\Environment\DotenvFactory;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Dotenv\Environment\Adapter\PutenvAdapter;
-use Dotenv\Environment\Adapter\EnvConstAdapter;
-use Dotenv\Environment\Adapter\ServerConstAdapter;
 
 if (! function_exists('abort')) {
     /**
