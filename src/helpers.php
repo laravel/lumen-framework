@@ -1,13 +1,8 @@
 <?php
 
-use PhpOption\Option;
 use Illuminate\Container\Container;
-use Dotenv\Environment\DotenvFactory;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
-use Dotenv\Environment\Adapter\PutenvAdapter;
-use Dotenv\Environment\Adapter\EnvConstAdapter;
-use Dotenv\Environment\Adapter\ServerConstAdapter;
 
 if (! function_exists('abort')) {
     /**
@@ -145,48 +140,6 @@ if (! function_exists('encrypt')) {
     function encrypt($value)
     {
         return app('encrypter')->encrypt($value);
-    }
-}
-
-if (! function_exists('env')) {
-    /**
-     * Gets the value of an environment variable.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
-     */
-    function env($key, $default = null)
-    {
-        static $variables;
-
-        if ($variables === null) {
-            $variables = (new DotenvFactory([new EnvConstAdapter, new PutenvAdapter, new ServerConstAdapter]))
-                ->createImmutable();
-        }
-
-        return Option::fromValue($variables->get($key))
-            ->map(function ($value) {
-                switch (strtolower($value)) {
-                    case 'true':
-                    case '(true)':
-                        return true;
-                    case 'false':
-                    case '(false)':
-                        return false;
-                    case 'empty':
-                    case '(empty)':
-                        return '';
-                    case 'null':
-                    case '(null)':
-                        return;
-                }
-
-                return $value;
-            })
-            ->getOrCall(function () use ($default) {
-                return value($default);
-            });
     }
 }
 
