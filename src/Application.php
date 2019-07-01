@@ -816,7 +816,7 @@ class Application extends Container
     {
         return false;
     }
-    
+
     /**
      * Determine if the application event are cached.
      *
