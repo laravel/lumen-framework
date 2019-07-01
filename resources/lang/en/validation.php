@@ -32,6 +32,7 @@ return [
     'boolean'              => 'The :attribute field must be true or false.',
     'confirmed'            => 'The :attribute confirmation does not match.',
     'date'                 => 'The :attribute is not a valid date.',
+    'date_equals'          => 'The :attribute must be a date equal to :date.',
     'date_format'          => 'The :attribute does not match the format :format.',
     'different'            => 'The :attribute and :other must be different.',
     'digits'               => 'The :attribute must be :digits digits.',
@@ -39,6 +40,7 @@ return [
     'dimensions'           => 'The :attribute has invalid image dimensions.',
     'distinct'             => 'The :attribute field has a duplicate value.',
     'email'                => 'The :attribute must be a valid email address.',
+    'ends_with'            => 'The :attribute must end with one of the following: :values',
     'exists'               => 'The selected :attribute is invalid.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field is required.',
@@ -59,6 +61,8 @@ return [
     'in_array'             => 'The :attribute field does not exist in :other.',
     'integer'              => 'The :attribute must be an integer.',
     'ip'                   => 'The :attribute must be a valid IP address.',
+    'ipv4'                 => 'The :attribute must be a valid IPv4 address.',
+    'ipv6'                 => 'The :attribute must be a valid IPv6 address.',
     'json'                 => 'The :attribute must be a valid JSON string.',
     'lt' => [
         'numeric' => 'The :attribute must be less than :value.',
@@ -87,6 +91,7 @@ return [
         'array'   => 'The :attribute must have at least :min items.',
     ],
     'not_in'               => 'The selected :attribute is invalid.',
+    'not_regex'            => 'The :attribute format is invalid.',
     'numeric'              => 'The :attribute must be a number.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
@@ -104,11 +109,13 @@ return [
         'string'  => 'The :attribute must be :size characters.',
         'array'   => 'The :attribute must contain :size items.',
     ],
+    'starts_with'          => 'The :attribute must start with one of the following: :values',
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
+    'uuid'                 => 'The :attribute must be a valid UUID.',
 
     /*
     |--------------------------------------------------------------------------
