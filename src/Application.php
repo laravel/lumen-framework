@@ -816,6 +816,16 @@ class Application extends Container
     {
         return false;
     }
+    
+    /**
+     * Determine if the application event are cached.
+     *
+     * @return bool
+     */
+    public function eventsAreCached()
+    {
+        return false;
+    }
 
     /**
      * Determine if the application is running in the console.
