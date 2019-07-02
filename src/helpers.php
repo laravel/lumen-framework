@@ -3,6 +3,8 @@
 use Illuminate\Container\Container;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 if (! function_exists('abort')) {
     /**
@@ -216,6 +218,24 @@ if (! function_exists('redirect')) {
         }
 
         return $redirector->to($to, $status, $headers, $secure);
+    }
+}
+
+if (! function_exists('report')) {
+    /**
+     * Report an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    function report($exception)
+    {
+        if ($exception instanceof Throwable &&
+            ! $exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
+
+        app(ExceptionHandler::class)->report($exception);
     }
 }
 
