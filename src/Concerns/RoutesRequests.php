@@ -13,7 +13,6 @@ use Laravel\Lumen\Routing\Pipeline;
 use Illuminate\Contracts\Support\Responsable;
 use Laravel\Lumen\Http\Request as LumenRequest;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Lumen\Routing\Controller as LumenController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
@@ -285,11 +284,7 @@ trait RoutesRequests
             }
         }
 
-        try {
-            return $this->prepareResponse($this->call($closure, $routeInfo[2]));
-        } catch (HttpResponseException $e) {
-            return $e->getResponse();
-        }
+        return $this->prepareResponse($this->call($closure, $routeInfo[2]));
     }
 
     /**
@@ -371,13 +366,9 @@ trait RoutesRequests
      */
     protected function callControllerCallable(callable $callable, array $parameters = [])
     {
-        try {
-            return $this->prepareResponse(
-                $this->call($callable, $parameters)
-            );
-        } catch (HttpResponseException $e) {
-            return $e->getResponse();
-        }
+        return $this->prepareResponse(
+            $this->call($callable, $parameters)
+        );
     }
 
     /**
