@@ -826,6 +826,16 @@ class Application extends Container
     {
         return false;
     }
+    
+    /**
+     * Determine if the application configurations are cached.
+     *
+     * @return bool
+     */
+    public function configurationIsCached()
+    {
+        return false;
+    }
 
     /**
      * Determine if the application is running in the console.
