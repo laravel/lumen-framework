@@ -818,21 +818,21 @@ class Application extends Container
     }
 
     /**
+     * Determine if the application configuration is cached.
+     *
+     * @return bool
+     */
+    public function configurationIsCached()
+    {
+        return false;
+    }
+    
+    /**
      * Determine if the application events are cached.
      *
      * @return bool
      */
     public function eventsAreCached()
-    {
-        return false;
-    }
-
-    /**
-     * Determine if the application configurations are cached.
-     *
-     * @return bool
-     */
-    public function configurationIsCached()
     {
         return false;
     }
