@@ -826,7 +826,7 @@ class Application extends Container
     {
         return false;
     }
-    
+
     /**
      * Determine if the application configurations are cached.
      *
