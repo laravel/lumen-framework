@@ -136,6 +136,23 @@ trait MakesHttpRequests
     }
 
     /**
+     * Visit the given URI with a OPTION request.
+     *
+     * @param  string  $uri
+     * @param  array  $data
+     * @param  array  $headers
+     * @return $this
+     */
+    public function option($uri, array $data = [], array $headers = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('OPTION', $uri, $data, [], [], $server);
+
+        return $this;
+    }
+
+    /**
      * Send the given request through the application.
      *
      * This method allows you to fully customize the entire Request object.
