@@ -94,11 +94,14 @@ class Handler implements ExceptionHandler
 
         $fe = FlattenException::create($e);
 
-        $handler = new SymfonyExceptionHandler(env('APP_DEBUG', config('app.debug', false)));
+        if ($request->expectsJson()) {
+            $content = json_encode(['exception' => $e->getMessage()]);
+        } else {
+            $handler = new SymfonyExceptionHandler(env('APP_DEBUG', config('app.debug', false)));
+            $content = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
+        }
 
-        $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
-
-        $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
+        $response = new Response($content, $fe->getStatusCode(), $fe->getHeaders());
 
         $response->exception = $e;
 
