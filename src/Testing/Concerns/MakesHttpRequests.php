@@ -19,7 +19,7 @@ trait MakesHttpRequests
     protected $response;
 
     /**
-     * The current URL being viewed.
+     * The current URI being viewed.
      *
      * @var string
      */
@@ -148,6 +148,23 @@ trait MakesHttpRequests
         $server = $this->transformHeadersToServerVars($headers);
 
         $this->call('OPTION', $uri, $data, [], [], $server);
+
+        return $this;
+    }
+
+    /**
+     * Visit the given URI with a HEAD request.
+     *
+     * @param  string  $uri
+     * @param  array  $data
+     * @param  array  $headers
+     * @return $this
+     */
+    public function head($uri, array $data = [], array $headers = [])
+    {
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $this->call('HEAD', $uri, $data, [], [], $server);
 
         return $this;
     }
