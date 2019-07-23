@@ -329,6 +329,17 @@ trait MakesHttpRequests
     }
 
     /**
+     * Assert that the response doesn't contain the given JSON.
+     *
+     * @param  array  $data
+     * @return $this
+     */
+    protected function seeJsonDoesntContains(array $data)
+    {
+        return $this->seeJsonContains($data, true);
+    }
+
+    /**
      * Format the given key and value into a JSON string for expectation checks.
      *
      * @param  string  $key
