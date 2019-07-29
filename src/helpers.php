@@ -3,6 +3,9 @@
 use Illuminate\Container\Container;
 use Laravel\Lumen\Bus\PendingDispatch;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 
 if (! function_exists('abort')) {
     /**
@@ -50,6 +53,19 @@ if (! function_exists('base_path')) {
     function base_path($path = '')
     {
         return app()->basePath().($path ? '/'.$path : $path);
+    }
+}
+
+if (! function_exists('broadcast')) {
+    /**
+     * Begin broadcasting an event.
+     *
+     * @param  mixed|null  $event
+     * @return \Illuminate\Broadcasting\PendingBroadcast
+     */
+    function broadcast($event = null)
+    {
+        return app(BroadcastFactory::class)->event($event);
     }
 }
 
@@ -216,6 +232,24 @@ if (! function_exists('redirect')) {
         }
 
         return $redirector->to($to, $status, $headers, $secure);
+    }
+}
+
+if (! function_exists('report')) {
+    /**
+     * Report an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    function report($exception)
+    {
+        if ($exception instanceof Throwable &&
+            ! $exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
+
+        app(ExceptionHandler::class)->report($exception);
     }
 }
 
