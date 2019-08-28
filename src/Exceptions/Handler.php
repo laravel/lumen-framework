@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Exceptions;
 
 use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -34,6 +35,10 @@ class Handler implements ExceptionHandler
     {
         if ($this->shouldntReport($e)) {
             return;
+        }
+
+        if (method_exists($e, 'report')) {
+            return $e->report();
         }
 
         try {
@@ -82,6 +87,12 @@ class Handler implements ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if (method_exists($e, 'render')) {
+            return $e->render($request);
+        } elseif ($e instanceof Responsable) {
+            return $e->toResponse($request);
+        }
+
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
         } elseif ($e instanceof ModelNotFoundException) {
