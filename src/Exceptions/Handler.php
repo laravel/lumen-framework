@@ -86,6 +86,10 @@ class Handler implements ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        if (method_exists($e, 'render')) {
+            return $e->render($request);
+        }
+
         if ($e instanceof HttpResponseException) {
             return $e->getResponse();
         } elseif ($e instanceof ModelNotFoundException) {
