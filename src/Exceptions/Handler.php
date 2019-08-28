@@ -36,6 +36,10 @@ class Handler implements ExceptionHandler
             return;
         }
 
+        if (method_exists($e, 'report')) {
+            return $e->report();
+        }
+
         try {
             $logger = app('Psr\Log\LoggerInterface');
         } catch (Exception $ex) {
