@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Http\Response;
-use PHPUnit\Framework\TestCase;
 use Laravel\Lumen\Http\ResponseFactory;
+use PHPUnit\Framework\TestCase;
 
 class ResponseFactoryTest extends TestCase
 {

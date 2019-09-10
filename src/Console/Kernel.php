@@ -3,14 +3,14 @@
 namespace Laravel\Lumen\Console;
 
 use Exception;
-use Throwable;
-use RuntimeException;
+use Illuminate\Console\Application as Artisan;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Console\Application as Artisan;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
+use RuntimeException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
 class Kernel implements KernelContract
 {

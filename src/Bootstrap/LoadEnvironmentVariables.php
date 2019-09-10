@@ -3,8 +3,8 @@
 namespace Laravel\Lumen\Bootstrap;
 
 use Dotenv\Dotenv;
-use Illuminate\Support\Env;
 use Dotenv\Exception\InvalidFileException;
+use Illuminate\Support\Env;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class LoadEnvironmentVariables

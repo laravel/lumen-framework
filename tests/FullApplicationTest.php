@@ -1,8 +1,8 @@
 <?php
 
-use Mockery as m;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Http\Request;
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 

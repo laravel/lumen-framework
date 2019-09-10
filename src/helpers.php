@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Container\Container;
-use Laravel\Lumen\Bus\PendingDispatch;
+use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Laravel\Lumen\Bus\PendingDispatch;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 
 if (! function_exists('abort')) {
     /**
