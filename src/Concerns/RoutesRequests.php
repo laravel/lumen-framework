@@ -3,25 +3,25 @@
 namespace Laravel\Lumen\Concerns;
 
 use Closure;
-use Throwable;
 use FastRoute\Dispatcher;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Laravel\Lumen\Routing\Pipeline;
-use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laravel\Lumen\Http\Request as LumenRequest;
 use Laravel\Lumen\Routing\Closure as RoutingClosure;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Laravel\Lumen\Routing\Controller as LumenController;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Laravel\Lumen\Routing\Pipeline;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 trait RoutesRequests
 {

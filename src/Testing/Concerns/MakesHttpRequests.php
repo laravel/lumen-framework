@@ -2,11 +2,11 @@
 
 namespace Laravel\Lumen\Testing\Concerns;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use PHPUnit\Framework\Assert as PHPUnit;
 use Laravel\Lumen\Http\Request as LumenRequest;
+use PHPUnit\Framework\Assert as PHPUnit;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 trait MakesHttpRequests
