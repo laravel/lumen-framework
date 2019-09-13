@@ -16,6 +16,7 @@ use Illuminate\Database\Console\Migrations\RollbackCommand as MigrateRollbackCom
 use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand;
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
+use Illuminate\Database\Console\WipeCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand as ForgetFailedQueueCommand;
@@ -53,6 +54,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'QueueRetry' => 'command.queue.retry',
         'QueueWork' => 'command.queue.work',
         'Seed' => 'command.seed',
+        'Wipe' => 'command.wipe',
         'ScheduleFinish' => 'Illuminate\Console\Scheduling\ScheduleFinishCommand',
         'ScheduleRun' => 'Illuminate\Console\Scheduling\ScheduleRunCommand',
     ];
@@ -377,6 +379,18 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.seed', function ($app) {
             return new SeedCommand($app['db']);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerWipeCommand()
+    {
+        $this->app->singleton('command.wipe', function ($app) {
+            return new WipeCommand($app['db']);
         });
     }
 
