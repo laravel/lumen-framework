@@ -381,7 +381,7 @@ class ConsoleServiceProvider extends ServiceProvider
             return new SeedCommand($app['db']);
         });
     }
-    
+
     /**
      * Register the command.
      *
@@ -393,7 +393,7 @@ class ConsoleServiceProvider extends ServiceProvider
             return new WipeCommand($app['db']);
         });
     }
-    
+
     /**
      * Register the command.
      *
