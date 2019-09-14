@@ -808,26 +808,6 @@ class Application extends Container
     }
 
     /**
-     * Determine if the application routes are cached.
-     *
-     * @return bool
-     */
-    public function routesAreCached()
-    {
-        return false;
-    }
-
-    /**
-     * Determine if the application configuration is cached.
-     *
-     * @return bool
-     */
-    public function configurationIsCached()
-    {
-        return false;
-    }
-
-    /**
      * Determine if the application events are cached.
      *
      * @return bool
