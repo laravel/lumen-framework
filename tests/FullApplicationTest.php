@@ -324,7 +324,6 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('twoOptionals', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('twoOptionals', ['baz' => 1]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1?quz=3', route('twoOptionals', ['baz' => 1, 'quz' => 3]));
-
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('twoOptionalsAndRegex', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('twoOptionalsAndRegex', ['baz' => 1]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1?quz=3', route('twoOptionalsAndRegex', ['baz' => 1, 'quz' => 3]));

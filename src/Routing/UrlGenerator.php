@@ -235,7 +235,7 @@ class UrlGenerator
 
         $parameters = $this->formatParameters($parameters);
 
-        $uri = $this->replaceOptionalParts($uri,$parameters);
+        $uri = $this->replaceOptionalParts($uri, $parameters);
 
         $uri = $this->replaceRouteParameters($uri, $parameters);
 
@@ -249,7 +249,7 @@ class UrlGenerator
     }
 
     /**
-     * handle optional parts in a route
+     * handle optional parts in a route.
      *
      * @param string $uri
      * @param array  $parameters
@@ -266,7 +266,7 @@ class UrlGenerator
                     return '';
                 }
 
-                return (count($matches) === 3) ? $uri . $this->replaceOptionalParts($matches[2], $parameters) : $uri;
+                return (count($matches) === 3) ? $uri.$this->replaceOptionalParts($matches[2], $parameters) : $uri;
             },
             $uri);
     }
