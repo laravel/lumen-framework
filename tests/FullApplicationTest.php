@@ -302,11 +302,16 @@ class FullApplicationTest extends TestCase
         $app->router->get('/foo-bar/{baz}[/{boom}]', ['as' => 'optional', function () {
             //
         }]);
-
         $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}]', ['as' => 'regex', function () {
             //
         }]);
 
+        $app->router->get('/foo-bar/{baz}[/{boom}[/{qux}]]', ['as' => 'twoOptionals', function () {
+            //
+        }]);
+        $app->router->get('/foo-bar/{baz:[0-9]+}[/{boom}[/{qux}]]', ['as' => 'twoOptionalsAndRegex', function () {
+            //
+        }]);
         $this->assertEquals('http://lumen.laravel.com/something', url('something'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
@@ -315,6 +320,14 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('optional', ['baz' => 1]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('regex', ['baz' => 1, 'boom' => 2]));
         $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('regex', ['baz' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2/3', route('twoOptionals', ['baz' => 1, 'boom' => 2, 'qux' => 3]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('twoOptionals', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('twoOptionals', ['baz' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1?quz=3', route('twoOptionals', ['baz' => 1, 'quz' => 3]));
+
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('twoOptionalsAndRegex', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('twoOptionalsAndRegex', ['baz' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1?quz=3', route('twoOptionalsAndRegex', ['baz' => 1, 'quz' => 3]));
     }
 
     public function testGeneratingUrlsForRegexParameters()
