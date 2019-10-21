@@ -364,6 +364,8 @@ class Application extends Container
     protected function registerDatabaseBindings()
     {
         $this->singleton('db', function () {
+            $this->configure('app');
+
             return $this->loadComponent(
                 'database', [
                     'Illuminate\Database\DatabaseServiceProvider',
