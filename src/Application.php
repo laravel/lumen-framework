@@ -364,7 +364,6 @@ class Application extends Container
     protected function registerDatabaseBindings()
     {
         $this->singleton('db', function () {
-            // For Faker\Generator
             $this->configure('app');
 
             return $this->loadComponent(
