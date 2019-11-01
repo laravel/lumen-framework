@@ -2,10 +2,10 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Laravel\Lumen\Application;
+use Illuminate\Contracts\Routing\UrlRoutable;
 
 class UrlGenerator
 {

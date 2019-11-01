@@ -2,10 +2,10 @@
 
 namespace Laravel\Lumen\Http;
 
-use Illuminate\Http\Request as BaseRequest;
+use RuntimeException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use RuntimeException;
+use Illuminate\Http\Request as BaseRequest;
 
 class Request extends BaseRequest
 {

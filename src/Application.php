@@ -2,20 +2,20 @@
 
 namespace Laravel\Lumen;
 
-use Illuminate\Config\Repository as ConfigRepository;
-use Illuminate\Container\Container;
-use Illuminate\Filesystem\Filesystem;
+use RuntimeException;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Composer;
+use Laravel\Lumen\Routing\Router;
+use Illuminate\Container\Container;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
-use Laravel\Lumen\Routing\Router;
-use RuntimeException;
+use Zend\Diactoros\Response as PsrResponse;
+use Illuminate\Config\Repository as ConfigRepository;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Zend\Diactoros\Response as PsrResponse;
 
 class Application extends Container
 {
