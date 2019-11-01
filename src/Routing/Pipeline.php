@@ -2,13 +2,13 @@
 
 namespace Laravel\Lumen\Routing;
 
-use Closure as BaseClosure;
 use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler;
+use Throwable;
+use Closure as BaseClosure;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Throwable;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.

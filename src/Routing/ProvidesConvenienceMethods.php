@@ -3,12 +3,12 @@
 namespace Laravel\Lumen\Routing;
 
 use Closure as BaseClosure;
-use Illuminate\Contracts\Auth\Access\Gate;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Validation\ValidationException;
 
 trait ProvidesConvenienceMethods
 {
