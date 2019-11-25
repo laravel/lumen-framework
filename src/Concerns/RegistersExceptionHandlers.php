@@ -7,7 +7,6 @@ use ErrorException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Laravel\Lumen\Exceptions\Handler;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
