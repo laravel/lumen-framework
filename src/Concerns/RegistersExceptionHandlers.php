@@ -2,13 +2,11 @@
 
 namespace Laravel\Lumen\Concerns;
 
-use Error;
 use ErrorException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Laravel\Lumen\Exceptions\Handler;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\ErrorHandler\Error\FatalError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -102,10 +100,6 @@ trait RegistersExceptionHandlers
     {
         $handler = $this->resolveExceptionHandler();
 
-        if ($e instanceof Error) {
-            $e = new FatalThrowableError($e);
-        }
-
         $handler->report($e);
 
         return $handler->render($this->make('request'), $e);
@@ -120,10 +114,6 @@ trait RegistersExceptionHandlers
     protected function handleUncaughtException(Throwable $e)
     {
         $handler = $this->resolveExceptionHandler();
-
-        if ($e instanceof Error) {
-            $e = new FatalThrowableError($e);
-        }
 
         $handler->report($e);
 
