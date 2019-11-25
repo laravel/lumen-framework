@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\ErrorHandler\ErrorHandler as SymfonyErrorHandler;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
