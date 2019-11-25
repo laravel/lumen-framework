@@ -29,7 +29,7 @@ class Pipeline extends BasePipeline
 
                     return call_user_func($slice($stack, $pipe), $passable);
                 } catch (Throwable $e) {
-                    return $this->handleThrowable($passable, $e);
+                    return $this->handleException($passable, $e);
                 }
             };
         };
@@ -47,19 +47,19 @@ class Pipeline extends BasePipeline
             try {
                 return call_user_func($destination, $passable);
             } catch (Throwable $e) {
-                return $this->handleThrowable($passable, $e);
+                return $this->handleException($passable, $e);
             }
         };
     }
 
     /**
-     * Handle the given throwable.
+     * Handle the given exception.
      *
      * @param  mixed  $passable
      * @param  \Throwable  $e
      * @return mixed
      */
-    protected function handleThrowable($passable, Throwable $e)
+    protected function handleException($passable, Throwable $e)
     {
         if (! $this->container->bound(ExceptionHandler::class) || ! $passable instanceof Request) {
             throw $e;

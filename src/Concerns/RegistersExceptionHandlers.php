@@ -2,22 +2,23 @@
 
 namespace Laravel\Lumen\Concerns;
 
-use Error;
 use ErrorException;
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Laravel\Lumen\Exceptions\Handler;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Debug\Exception\FatalErrorException;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Symfony\Component\ErrorHandler\Error\FatalError;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 trait RegistersExceptionHandlers
 {
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int     $code
+     * @param  int  $code
      * @param  string  $message
-     * @param  array   $headers
+     * @param  array  $headers
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -56,17 +57,27 @@ trait RegistersExceptionHandlers
     }
 
     /**
-     * Handle the application shutdown routine.
+     * Handle the PHP shutdown event.
      *
      * @return void
      */
-    protected function handleShutdown()
+    public function handleShutdown()
     {
-        if (! is_null($error = error_get_last()) && $this->isFatalError($error['type'])) {
-            $this->handleUncaughtException(new FatalErrorException(
-                $error['message'], $error['type'], 0, $error['file'], $error['line']
-            ));
+        if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
+            $this->handleException($this->fatalErrorFromPhpError($error, 0));
         }
+    }
+
+    /**
+     * Create a new fatal error instance from an error array.
+     *
+     * @param  array  $error
+     * @param  int|null  $traceOffset
+     * @return \Symfony\Component\ErrorHandler\Error\FatalError
+     */
+    protected function fatalErrorFromPhpError(array $error, $traceOffset = null)
+    {
+        return new FatalError($error['message'], $error, $traceOffset);
     }
 
     /**
@@ -75,15 +86,9 @@ trait RegistersExceptionHandlers
      * @param  int  $type
      * @return bool
      */
-    protected function isFatalError($type)
+    protected function isFatal($type)
     {
-        $errorCodes = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE];
-
-        if (defined('FATAL_ERROR')) {
-            $errorCodes[] = FATAL_ERROR;
-        }
-
-        return in_array($type, $errorCodes);
+        return in_array($type, [E_COMPILE_ERROR, E_CORE_ERROR, E_ERROR, E_PARSE]);
     }
 
     /**
@@ -92,13 +97,9 @@ trait RegistersExceptionHandlers
      * @param  \Throwable  $e
      * @return Response
      */
-    protected function sendExceptionToHandler($e)
+    protected function sendExceptionToHandler(Throwable $e)
     {
         $handler = $this->resolveExceptionHandler();
-
-        if ($e instanceof Error) {
-            $e = new FatalThrowableError($e);
-        }
 
         $handler->report($e);
 
@@ -111,13 +112,9 @@ trait RegistersExceptionHandlers
      * @param  \Throwable  $e
      * @return void
      */
-    protected function handleUncaughtException($e)
+    protected function handleUncaughtException(Throwable $e)
     {
         $handler = $this->resolveExceptionHandler();
-
-        if ($e instanceof Error) {
-            $e = new FatalThrowableError($e);
-        }
 
         $handler->report($e);
 
@@ -131,14 +128,14 @@ trait RegistersExceptionHandlers
     /**
      * Get the exception handler from the container.
      *
-     * @return mixed
+     * @return \Illuminate\Contracts\Debug\ExceptionHandler
      */
     protected function resolveExceptionHandler()
     {
-        if ($this->bound('Illuminate\Contracts\Debug\ExceptionHandler')) {
-            return $this->make('Illuminate\Contracts\Debug\ExceptionHandler');
+        if ($this->bound(ExceptionHandler::class)) {
+            return $this->make(ExceptionHandler::class);
         } else {
-            return $this->make('Laravel\Lumen\Exceptions\Handler');
+            return $this->make(Handler::class);
         }
     }
 }

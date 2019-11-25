@@ -12,9 +12,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\ErrorHandler\ErrorRenderer\HtmlErrorRenderer;
-use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -46,7 +46,7 @@ class Handler implements ExceptionHandler
         }
 
         try {
-            $logger = app('Psr\Log\LoggerInterface');
+            $logger = app(LoggerInterface::class);
         } catch (Exception $ex) {
             throw $e; // throw the original exception
         }
@@ -116,7 +116,7 @@ class Handler implements ExceptionHandler
      * Prepare a JSON response for the given exception.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable $e
+     * @param  \Throwable  $e
      * @return \Illuminate\Http\JsonResponse
      */
     protected function prepareJsonResponse($request, Throwable $e)
@@ -127,30 +127,6 @@ class Handler implements ExceptionHandler
             $this->isHttpException($e) ? $e->getHeaders() : [],
             JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
         );
-    }
-
-    /**
-     * Prepare a response for the given exception.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable $e
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function prepareResponse($request, Throwable $e)
-    {
-        $fe = FlattenException::createFromThrowable($e);
-
-        $renderer = new HtmlErrorRenderer(env('APP_DEBUG', config('app.debug', false)));
-
-        $content = $renderer->getBody($renderer->render($e));
-
-        $decorated = $this->decorate($content, $renderer->getStylesheet());
-
-        $response = new Response($decorated, $fe->getStatusCode(), $fe->getHeaders());
-
-        $response->exception = $e;
-
-        return $response;
     }
 
     /**
@@ -175,33 +151,37 @@ class Handler implements ExceptionHandler
     }
 
     /**
-     * Get the html response content.
+     * Prepare a response for the given exception.
      *
-     * @param  string  $content
-     * @param  string  $css
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     * @return \Illuminate\Http\Response
+     */
+    protected function prepareResponse($request, Throwable $e)
+    {
+        $debug = env('APP_DEBUG', config('app.debug', false));
+
+        $response = new Response(
+            $this->renderExceptionWithSymfony($e, $debug)
+        );
+
+        $response->exception = $e;
+
+        return $response;
+    }
+
+    /**
+     * Render an exception to a string using Symfony.
+     *
+     * @param  \Throwable  $e
+     * @param  bool  $debug
      * @return string
      */
-    protected function decorate($content, $css)
+    protected function renderExceptionWithSymfony(Throwable $e, $debug)
     {
-        return <<<EOF
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="robots" content="noindex,nofollow" />
-        <style>
-            /* Copyright (c) 2010, Yahoo! Inc. All rights reserved. Code licensed under the BSD License: http://developer.yahoo.com/yui/license.html */
-            html{color:#000;background:#FFF;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0;}table{border-collapse:collapse;border-spacing:0;}fieldset,img{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}li{list-style:none;}caption,th{text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}q:before,q:after{content:'';}abbr,acronym{border:0;font-variant:normal;}sup{vertical-align:text-top;}sub{vertical-align:text-bottom;}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;}input,textarea,select{*font-size:100%;}legend{color:#000;}
-            html { background: #eee; padding: 10px }
-            img { border: 0; }
-            #sf-resetcontent { width:970px; margin:0 auto; }
-            $css
-        </style>
-    </head>
-    <body>
-        $content
-    </body>
-</html>
-EOF;
+        $renderer = new HtmlErrorRenderer($debug);
+
+        return $renderer->getBody($renderer->render($e));
     }
 
     /**

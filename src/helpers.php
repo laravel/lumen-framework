@@ -5,7 +5,7 @@ use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Laravel\Lumen\Bus\PendingDispatch;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
 if (! function_exists('abort')) {
     /**
@@ -242,13 +242,8 @@ if (! function_exists('report')) {
      * @param  \Throwable  $exception
      * @return void
      */
-    function report($exception)
+    function report(Throwable $exception)
     {
-        if ($exception instanceof Throwable &&
-            ! $exception instanceof Exception) {
-            $exception = new FatalThrowableError($exception);
-        }
-
         app(ExceptionHandler::class)->report($exception);
     }
 }
