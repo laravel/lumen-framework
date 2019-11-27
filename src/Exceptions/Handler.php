@@ -162,7 +162,8 @@ class Handler implements ExceptionHandler
         $debug = env('APP_DEBUG', config('app.debug', false));
 
         $response = new Response(
-            $this->renderExceptionWithSymfony($e, $debug)
+            $this->renderExceptionWithSymfony($e, $debug),
+            $this->isHttpException($e) ? $e->getStatusCode() : 500
         );
 
         $response->exception = $e;

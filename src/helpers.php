@@ -5,7 +5,6 @@ use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Laravel\Lumen\Bus\PendingDispatch;
-use Throwable;
 
 if (! function_exists('abort')) {
     /**
