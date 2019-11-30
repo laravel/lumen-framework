@@ -63,9 +63,9 @@ class LoadEnvironmentVariables
     protected function createDotenv()
     {
         return Dotenv::create(
+            Env::getRepository(),
             $this->filePath,
-            $this->fileName,
-            Env::getFactory()
+            $this->fileName
         );
     }
 
