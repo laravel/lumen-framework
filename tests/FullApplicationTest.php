@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Validation\Factory;
+use Illuminate\Http\Response;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Http\Request;
 use Mockery as m;
@@ -26,7 +29,7 @@ class FullApplicationTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('Hello World', $response->getContent());
 
-        $this->assertInstanceOf('Illuminate\Http\Request', $request);
+        $this->assertInstanceOf(Request::class, $request);
     }
 
     public function testBasicSymfonyRequest()
@@ -230,7 +233,7 @@ class FullApplicationTest extends TestCase
     public function testNotFoundResponse()
     {
         $app = new Application;
-        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->get('/', function () {
@@ -245,7 +248,7 @@ class FullApplicationTest extends TestCase
     public function testMethodNotAllowedResponse()
     {
         $app = new Application;
-        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->post('/', function () {
@@ -275,7 +278,7 @@ class FullApplicationTest extends TestCase
     public function testUncaughtExceptionResponse()
     {
         $app = new Application;
-        $app->instance('Illuminate\Contracts\Debug\ExceptionHandler', $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->get('/', function () {
@@ -283,7 +286,7 @@ class FullApplicationTest extends TestCase
         });
 
         $response = $app->handle(Request::create('/', 'GET'));
-        $this->assertInstanceOf('Illuminate\Http\Response', $response);
+        $this->assertInstanceOf(Response::class, $response);
     }
 
     public function testGeneratingUrls()
@@ -623,9 +626,9 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application();
 
-        $validator = $app['Illuminate\Contracts\Validation\Factory'];
+        $validator = $app[Factory::class];
 
-        $this->assertInstanceOf('Illuminate\Contracts\Validation\Factory', $validator);
+        $this->assertInstanceOf(Factory::class, $validator);
     }
 
     public function testCanMergeUserProvidedFacadesWithDefaultOnes()
@@ -816,7 +819,7 @@ class LumenTestPlainMiddleware
     public function handle($request, $next)
     {
         $response = $next($request);
-        $_SERVER['__middleware.response'] = $response instanceof Illuminate\Http\Response;
+        $_SERVER['__middleware.response'] = $response instanceof Response;
 
         return $response;
     }
@@ -857,7 +860,7 @@ class LumenTestTerminateMiddleware
         return $next($request);
     }
 
-    public function terminate($request, Illuminate\Http\Response $response)
+    public function terminate($request, Response $response)
     {
         $response->setContent('TERMINATED');
     }
