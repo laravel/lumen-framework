@@ -17,8 +17,8 @@ class ResponseFactory
      * Return a new response from the application.
      *
      * @param  string  $content
-     * @param  int     $status
-     * @param  array   $headers
+     * @param  int  $status
+     * @param  array  $headers
      * @return \Illuminate\Http\Response
      */
     public function make($content = '', $status = 200, array $headers = [])
@@ -30,9 +30,9 @@ class ResponseFactory
      * Return a new JSON response from the application.
      *
      * @param  mixed  $data
-     * @param  int    $status
+     * @param  int  $status
      * @param  array  $headers
-     * @param  int    $options
+     * @param  int  $options
      * @return \Illuminate\Http\JsonResponse
      */
     public function json($data = [], $status = 200, array $headers = [], $options = 0)
@@ -58,7 +58,7 @@ class ResponseFactory
      *
      * @param  \SplFileInfo|string  $file
      * @param  string  $name
-     * @param  array   $headers
+     * @param  array  $headers
      * @param  null|string  $disposition
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */

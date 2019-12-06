@@ -15,9 +15,9 @@ trait RegistersExceptionHandlers
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int     $code
+     * @param  int  $code
      * @param  string  $message
-     * @param  array   $headers
+     * @param  array  $headers
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
