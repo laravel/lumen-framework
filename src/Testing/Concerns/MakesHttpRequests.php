@@ -366,10 +366,10 @@ trait MakesHttpRequests
      *
      * @param  string  $method
      * @param  string  $uri
-     * @param  array   $parameters
-     * @param  array   $cookies
-     * @param  array   $files
-     * @param  array   $server
+     * @param  array  $parameters
+     * @param  array  $cookies
+     * @param  array  $files
+     * @param  array  $server
      * @param  string  $content
      * @return \Illuminate\Http\Response
      */
