@@ -10,9 +10,9 @@ if (! function_exists('abort')) {
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int     $code
+     * @param  int  $code
      * @param  string  $message
-     * @param  array   $headers
+     * @param  array  $headers
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -163,8 +163,8 @@ if (! function_exists('event')) {
      * Dispatch an event and call the listeners.
      *
      * @param  object|string  $event
-     * @param  mixed   $payload
-     * @param  bool    $halt
+     * @param  mixed  $payload
+     * @param  bool  $halt
      * @return array|null
      */
     function event($event, $payload = [], $halt = false)
@@ -203,7 +203,7 @@ if (! function_exists('info')) {
      * Write some information to the log.
      *
      * @param  string  $message
-     * @param  array   $context
+     * @param  array  $context
      * @return void
      */
     function info($message, $context = [])
@@ -265,8 +265,8 @@ if (! function_exists('response')) {
      * Return a new response from the application.
      *
      * @param  string  $content
-     * @param  int     $status
-     * @param  array   $headers
+     * @param  int  $status
+     * @param  array  $headers
      * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     function response($content = '', $status = 200, array $headers = [])
@@ -314,7 +314,7 @@ if (! function_exists('trans')) {
      * Translate the given message.
      *
      * @param  string|null  $id
-     * @param  array   $replace
+     * @param  array  $replace
      * @param  string|null  $locale
      * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */

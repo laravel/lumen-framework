@@ -112,7 +112,7 @@ class UrlGenerator
      * Generate a secure, absolute URL to the given path.
      *
      * @param  string  $path
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return string
      */
     public function secure($path, $parameters = [])
@@ -219,7 +219,7 @@ class UrlGenerator
      * Get the URL to a named route.
      *
      * @param  string  $name
-     * @param  mixed   $parameters
+     * @param  mixed  $parameters
      * @param  bool|null  $secure
      * @return string
      *
@@ -309,7 +309,7 @@ class UrlGenerator
      * Replace the route parameters with their parameter.
      *
      * @param  string  $route
-     * @param  array $parameters
+     * @param  array  $parameters
      * @return string
      */
     protected function replaceRouteParameters($route, &$parameters = [])
