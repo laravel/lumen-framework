@@ -139,7 +139,7 @@ class Handler implements ExceptionHandler
     {
         $fe = FlattenException::create($e);
 
-        $handler = new SymfonyExceptionHandler(env('APP_DEBUG', config('app.debug', false)));
+        $handler = new SymfonyExceptionHandler(config('app.debug', false));
 
         $decorated = $this->decorate($handler->getContent($fe), $handler->getStylesheet($fe));
 
@@ -158,7 +158,7 @@ class Handler implements ExceptionHandler
      */
     protected function convertExceptionToArray(Exception $e)
     {
-        return env('APP_DEBUG', config('app.debug', false)) ? [
+        return config('app.debug', false) ? [
             'message' => $e->getMessage(),
             'exception' => get_class($e),
             'file' => $e->getFile(),
