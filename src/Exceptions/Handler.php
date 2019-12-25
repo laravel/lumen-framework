@@ -137,7 +137,7 @@ class Handler implements ExceptionHandler
      */
     protected function convertExceptionToArray(Throwable $e)
     {
-        return env('APP_DEBUG', config('app.debug', false)) ? [
+        return config('app.debug', false) ? [
             'message' => $e->getMessage(),
             'exception' => get_class($e),
             'file' => $e->getFile(),
@@ -159,10 +159,8 @@ class Handler implements ExceptionHandler
      */
     protected function prepareResponse($request, Throwable $e)
     {
-        $debug = env('APP_DEBUG', config('app.debug', false));
-
         $response = new Response(
-            $this->renderExceptionWithSymfony($e, $debug),
+            $this->renderExceptionWithSymfony($e, config('app.debug', false)),
             $this->isHttpException($e) ? $e->getStatusCode() : 500
         );
 
