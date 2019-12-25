@@ -49,8 +49,6 @@ abstract class TestCase extends BaseTestCase
      */
     protected function refreshApplication()
     {
-        putenv('APP_ENV=testing');
-
         Facade::clearResolvedInstances();
 
         $this->app = $this->createApplication();
