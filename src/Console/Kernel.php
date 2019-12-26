@@ -69,7 +69,7 @@ class Kernel implements KernelContract
      */
     protected function setRequestForConsole(Application $app)
     {
-        $uri = $app->make('config')->get('app.url', env('APP_URL', 'http://localhost'));
+        $uri = $app->make('config')->get('app.url', 'http://localhost');
 
         $components = parse_url($uri);
 

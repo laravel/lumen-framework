@@ -53,7 +53,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->app = $this->createApplication();
 
-        $url = $this->app->make('config')->get('app.url', env('APP_URL', 'http://localhost'));
+        $url = $this->app->make('config')->get('app.url', 'http://localhost');
 
         $this->app->make('url')->forceRootUrl($url);
 
