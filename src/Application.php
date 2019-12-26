@@ -93,10 +93,6 @@ class Application extends Container
      */
     public function __construct($basePath = null)
     {
-        if (! empty(env('APP_TIMEZONE'))) {
-            date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
-        }
-
         $this->basePath = $basePath;
 
         $this->bootstrapContainer();
