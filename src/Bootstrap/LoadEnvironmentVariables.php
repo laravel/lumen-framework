@@ -37,7 +37,7 @@ class LoadEnvironmentVariables
     }
 
     /**
-     * Setuup the environment variables.
+     * Setup the environment variables.
      *
      * If no environment file exists, we continue silently.
      *
