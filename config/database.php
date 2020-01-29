@@ -66,6 +66,7 @@ return [
             'prefix' => env('DB_PREFIX', ''),
             'schema' => env('DB_SCHEMA', 'public'),
             'sslmode' => env('DB_SSL_MODE', 'prefer'),
+            'timezone' => env('DB_TIMEZONE', 'UTC'),
         ],
 
         'sqlsrv' => [
