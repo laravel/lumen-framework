@@ -14,6 +14,8 @@ use Illuminate\Support\Str;
 use Laravel\Lumen\Routing\Router;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response as NyholmPsrResponse;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -518,16 +520,16 @@ class Application extends Container
      */
     protected function registerPsrRequestBindings()
     {
-        $this->singleton('Psr\Http\Message\ServerRequestInterface', function () {
+        $this->singleton(ServerRequestInterface::class, function ($app) {
             if (class_exists(Psr17Factory::class) && class_exists(PsrHttpFactory::class)) {
                 $psr17Factory = new Psr17Factory;
 
                 return (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))
-                    ->createRequest($this->make('request'));
+                    ->createRequest($app->make('request'));
             }
 
             if (class_exists(ServerRequestFactory::class) && class_exists(DiactorosFactory::class)) {
-                return (new DiactorosFactory)->createRequest($this->make('request'));
+                return (new DiactorosFactory)->createRequest($app->make('request'));
             }
 
             throw new Exception('Unable to resolve PSR request. Please install symfony/psr-http-message-bridge and nyholm/psr7.');
@@ -541,7 +543,7 @@ class Application extends Container
      */
     protected function registerPsrResponseBindings()
     {
-        $this->singleton('Psr\Http\Message\ResponseInterface', function () {
+        $this->singleton(ResponseInterface::class, function () {
             if (class_exists(NyholmPsrResponse::class)) {
                 return new NyholmPsrResponse;
             }
