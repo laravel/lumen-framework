@@ -260,7 +260,7 @@ class UrlGenerator
      */
     public function isValidUrl($path)
     {
-        if (Str::startsWith($path, ['#', '//', 'mailto:', 'tel:', 'http://', 'https://'])) {
+        if (Str::startsWith($path, ['#', '//', 'mailto:', 'tel:', 'sms:', 'http://', 'https://'])) {
             return true;
         }
 
