@@ -242,11 +242,13 @@ trait MakesHttpRequests
     public function seeJson(array $data = null, $negate = false)
     {
         if (is_null($data)) {
-            PHPUnit::assertArraySubset(
-                null, json_decode($this->getContent(), true), false, "JSON was not returned from [{$this->currentUri}]."
-            );
+            $decodedResponse = json_decode($this->response->getContent(), true);
 
-            return $this;
+            if (is_null($decodedResponse) || $decodedResponse === false) {
+                PHPUnit::fail(
+                    "JSON was not returned from [{$this->currentUri}]."
+                );
+            }
         }
 
         return $this->seeJsonContains($data, $negate);
