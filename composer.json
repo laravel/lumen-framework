@@ -52,6 +52,7 @@
         "phpunit/phpunit": "^8.4|^9.0"
     },
     "suggest": {
+        "illuminate/testing": "Required to use the HTTP testing features (^7.0).",
         "laravel/tinker": "Required to use the tinker console command (^2.0).",
         "nyholm/psr7": "Required to use PSR-7 bridging features (^1.2).",
         "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0)."
