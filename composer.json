@@ -33,6 +33,7 @@
         "illuminate/pipeline": "^7.0",
         "illuminate/queue": "^7.0",
         "illuminate/support": "^7.0",
+        "illuminate/testing": "^7.0",
         "illuminate/translation": "^7.0",
         "illuminate/validation": "^7.0",
         "illuminate/view": "^7.0",
@@ -47,12 +48,10 @@
         "vlucas/phpdotenv": "^4.0"
     },
     "require-dev": {
-        "illuminate/testing": "^7.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^8.4|^9.0"
     },
     "suggest": {
-        "illuminate/testing": "Required to use the HTTP testing features (^7.0).",
         "laravel/tinker": "Required to use the tinker console command (^2.0).",
         "nyholm/psr7": "Required to use PSR-7 bridging features (^1.2).",
         "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^2.0)."
