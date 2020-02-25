@@ -5,7 +5,7 @@ namespace Laravel\Lumen\Testing\Concerns;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Testing\PHPUnit;
+use Illuminate\Testing\Assert as PHPUnit;
 use Illuminate\Testing\TestResponse;
 use Laravel\Lumen\Http\Request as LumenRequest;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
