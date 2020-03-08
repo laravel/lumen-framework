@@ -280,7 +280,11 @@ trait RoutesRequests
 
         foreach ($action as $value) {
             if ($value instanceof Closure) {
-                $closure = $value->bindTo(new RoutingClosure);
+                try {
+                    $closure = $value->bindTo(new RoutingClosure);
+                } catch (\ErrorException $exception) {
+                    $closure = $value;
+                }
                 break;
             }
         }

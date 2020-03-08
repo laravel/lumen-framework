@@ -17,7 +17,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->router->get('/', function () {
+        $app->router->get('/', static function () {
             return response('Hello World');
         });
 
