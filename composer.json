@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2.5",
         "illuminate/auth": "^7.0",
         "illuminate/broadcasting": "^7.0",
         "illuminate/bus": "^7.0",
