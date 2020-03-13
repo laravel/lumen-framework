@@ -2,6 +2,7 @@
 
 namespace Laravel\Lumen;
 
+use Exception;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
