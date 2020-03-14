@@ -416,10 +416,10 @@ trait MakesHttpRequests
     /**
      * Assert that the client response has a given code.
      *
-     * @param  int  $code
+     * @param  int  $status
      * @return void
      */
-    public function assertResponseStatus($code)
+    public function assertResponseStatus($status)
     {
         $this->response->assertStatus($status);
     }
