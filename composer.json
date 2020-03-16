@@ -45,6 +45,7 @@
         "symfony/error-handler": "^5.0",
         "symfony/http-kernel": "^5.0",
         "symfony/http-foundation": "^5.0",
+        "symfony/mime": "^5.0",
         "symfony/var-dumper": "^5.0",
         "vlucas/phpdotenv": "^4.0"
     },
