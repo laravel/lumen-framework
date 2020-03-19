@@ -184,7 +184,7 @@ class Handler implements ExceptionHandler
     {
         $renderer = new HtmlErrorRenderer($debug);
 
-        return $renderer->getBody($renderer->render($e));
+        return $renderer->render($e)->getAsString();
     }
 
     /**
