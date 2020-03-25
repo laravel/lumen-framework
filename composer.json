@@ -21,6 +21,7 @@
         "illuminate/bus": "^7.0",
         "illuminate/cache": "^7.0",
         "illuminate/config": "^7.0",
+        "illuminate/console": "^7.0",
         "illuminate/container": "^7.0",
         "illuminate/contracts": "^7.0",
         "illuminate/database": "^7.0",
