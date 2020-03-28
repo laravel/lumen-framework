@@ -249,6 +249,8 @@ trait MakesHttpRequests
                     "JSON was not returned from [{$this->currentUri}]."
                 );
             }
+
+            return $this->seeJsonContains($decodedResponse, $negate);
         }
 
         return $this->seeJsonContains($data, $negate);
