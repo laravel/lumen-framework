@@ -9,6 +9,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Composer;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
@@ -19,6 +20,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class Application extends Container
@@ -74,6 +76,13 @@ class Application extends Container
      * @var string
      */
     protected $storagePath;
+
+    /**
+     * Indicates if the application is running in the console.
+     *
+     * @var bool|null
+     */
+    protected $isRunningInConsole;
 
     /**
      * The application namespace.
@@ -848,7 +857,21 @@ class Application extends Container
      */
     public function runningInConsole()
     {
-        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
+        if ($this->isRunningInConsole === null) {
+            $this->isRunningInConsole = static::isRunningInConsole();
+        }
+
+        return $this->isRunningInConsole;
+    }
+
+    /**
+     * Determine if the application is running in the console.
+     *
+     * @return bool
+     */
+    public static function isRunningInConsole()
+    {
+        return Env::get('APP_RUNNING_IN_CONSOLE') ?? (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg');
     }
 
     /**

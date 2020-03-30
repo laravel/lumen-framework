@@ -5,6 +5,8 @@ namespace Laravel\Lumen\Bootstrap;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidFileException;
 use Illuminate\Support\Env;
+use Laravel\Lumen\Application;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class LoadEnvironmentVariables
@@ -27,10 +29,10 @@ class LoadEnvironmentVariables
      * Create a new loads environment variables instance.
      *
      * @param  string  $path
-     * @param  string|null  $name
+     * @param  string  $name
      * @return void
      */
-    public function __construct($path, $name = null)
+    public function __construct($path, $name = '.env')
     {
         $this->filePath = $path;
         $this->fileName = $name;
@@ -45,6 +47,8 @@ class LoadEnvironmentVariables
      */
     public function bootstrap()
     {
+        $this->checkForSpecificEnvironmentFile();
+
         try {
             $this->createDotenv()->safeLoad();
         } catch (InvalidFileException $e) {
@@ -84,5 +88,48 @@ class LoadEnvironmentVariables
         }
 
         die(1);
+    }
+
+    /**
+     * Detect if a custom environment file matching the APP_ENV exists.
+     *
+     * @return void
+     */
+    protected function checkForSpecificEnvironmentFile()
+    {
+        if (Application::isRunningInConsole() && ($input = new ArgvInput)->hasParameterOption('--env')) {
+            if ($this->setEnvironmentFilePath(
+                $this->fileName.'.'.$input->getParameterOption('--env')
+            )) {
+                return;
+            }
+        }
+
+        $environment = Env::get('APP_ENV');
+
+        if (! $environment) {
+            return;
+        }
+
+        $this->setEnvironmentFilePath(
+            $this->fileName.'.'.$environment
+        );
+    }
+
+    /**
+     * Load a custom environment file.
+     *
+     * @param  string  $file
+     * @return bool
+     */
+    protected function setEnvironmentFilePath($file)
+    {
+        if (file_exists($this->filePath.'/'.$file)) {
+            $this->fileName = $file;
+
+            return true;
+        }
+
+        return false;
     }
 }
