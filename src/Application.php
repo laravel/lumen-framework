@@ -20,7 +20,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class Application extends Container
