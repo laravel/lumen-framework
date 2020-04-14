@@ -2,9 +2,9 @@
 
 namespace Laravel\Lumen;
 
-use Exception;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use Illuminate\Log\LogManager;
@@ -522,7 +522,7 @@ class Application extends Container
                     ->createRequest($app->make('request'));
             }
 
-            throw new Exception('Unable to resolve PSR request. Please install symfony/psr-http-message-bridge and nyholm/psr7.');
+            throw new BindingResolutionException('Unable to resolve PSR request. Please install symfony/psr-http-message-bridge and nyholm/psr7.');
         });
     }
 
@@ -538,7 +538,7 @@ class Application extends Container
                 return new PsrResponse;
             }
 
-            throw new Exception('Unable to resolve PSR response. Please install nyholm/psr7.');
+            throw new BindingResolutionException('Unable to resolve PSR response. Please install nyholm/psr7.');
         });
     }
 
