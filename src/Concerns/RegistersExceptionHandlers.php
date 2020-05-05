@@ -77,7 +77,7 @@ trait RegistersExceptionHandlers
      */
     protected function fatalErrorFromPhpError(array $error, $traceOffset = null)
     {
-        return new FatalError($error['message'], $error, $traceOffset);
+        return new FatalError($error['message'], 0, $error, $traceOffset);
     }
 
     /**
@@ -95,7 +95,7 @@ trait RegistersExceptionHandlers
      * Send the exception to the handler and return the response.
      *
      * @param  \Throwable  $e
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function sendExceptionToHandler(Throwable $e)
     {
