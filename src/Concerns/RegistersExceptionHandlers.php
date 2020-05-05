@@ -95,7 +95,7 @@ trait RegistersExceptionHandlers
      * Send the exception to the handler and return the response.
      *
      * @param  \Throwable  $e
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function sendExceptionToHandler(Throwable $e)
     {
