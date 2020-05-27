@@ -227,7 +227,7 @@ class Application extends Container
 
         foreach ($this->loadedProviders as $p) {
             $this->bootProvider($p);
-        };
+        }
 
         $this->booted = true;
     }
