@@ -225,8 +225,8 @@ class Application extends Container
             return;
         }
 
-        foreach ($this->loadedProviders as $p) {
-            $this->bootProvider($p);
+        foreach ($this->loadedProviders as $provider) {
+            $this->bootProvider($provider);
         }
 
         $this->booted = true;
