@@ -225,9 +225,9 @@ class Application extends Container
             return;
         }
 
-        array_walk($this->loadedProviders, function ($p) {
-            $this->bootProvider($p);
-        });
+        foreach ($this->loadedProviders as $provider) {
+            $this->bootProvider($provider);
+        }
 
         $this->booted = true;
     }
