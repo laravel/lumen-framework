@@ -15,6 +15,7 @@ use Laravel\Lumen\Routing\Closure as RoutingClosure;
 use Laravel\Lumen\Routing\Controller as LumenController;
 use Laravel\Lumen\Routing\Pipeline;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
@@ -265,7 +266,7 @@ trait RoutesRequests
     }
 
     /**
-     * Call the Closure on the array based route.
+     * Call the Closure or invokable on the array based route.
      *
      * @param  array  $routeInfo
      * @return mixed
@@ -280,13 +281,22 @@ trait RoutesRequests
 
         foreach ($action as $value) {
             if ($value instanceof Closure) {
-                $closure = $value->bindTo(new RoutingClosure);
+                $callable = $value->bindTo(new RoutingClosure);
+                break;
+            }
+
+            if (is_object($value) && is_callable($value)) {
+                $callable = $value;
                 break;
             }
         }
 
+        if (! isset($callable)) {
+            throw new RuntimeException('Unable to resolve route handler.');
+        }
+
         try {
-            return $this->prepareResponse($this->call($closure, $routeInfo[2]));
+            return $this->prepareResponse($this->call($callable, $routeInfo[2]));
         } catch (HttpResponseException $e) {
             return $e->getResponse();
         }
