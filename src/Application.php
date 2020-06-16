@@ -282,6 +282,10 @@ class Application extends Container
             return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth.driver');
         });
 
+        $this->singleton('Illuminate\Auth\AuthManager', function () {
+            return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'auth');
+        });
+
         $this->singleton('Illuminate\Contracts\Auth\Access\Gate', function () {
             return $this->loadComponent('auth', 'Illuminate\Auth\AuthServiceProvider', 'Illuminate\Contracts\Auth\Access\Gate');
         });
