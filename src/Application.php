@@ -213,7 +213,7 @@ class Application extends Container
      */
     public function registerDeferredProvider($provider)
     {
-        return $this->register($provider);
+        $this->register($provider);
     }
 
     /**
