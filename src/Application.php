@@ -182,7 +182,7 @@ class Application extends Container
      * Register a service provider with the application.
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
-     * @return \Illuminate\Support\ServiceProvider
+     * @return void
      */
     public function register($provider)
     {
