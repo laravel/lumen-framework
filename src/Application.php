@@ -154,17 +154,6 @@ class Application extends Container
     }
 
     /**
-     * Determine if the given service provider is loaded.
-     *
-     * @param  string  $provider
-     * @return bool
-     */
-    public function providerIsLoaded(string $provider)
-    {
-        return isset($this->loadedProviders[$provider]);
-    }
-
-    /**
      * Get or check the current application environment.
      *
      * @param  mixed
@@ -187,6 +176,17 @@ class Application extends Container
         }
 
         return $env;
+    }
+
+    /**
+     * Determine if the given service provider is loaded.
+     *
+     * @param  string  $provider
+     * @return bool
+     */
+    public function providerIsLoaded(string $provider)
+    {
+        return isset($this->loadedProviders[$provider]);
     }
 
     /**
