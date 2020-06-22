@@ -179,6 +179,17 @@ class Application extends Container
     }
 
     /**
+     * Determine if the given service provider is loaded.
+     *
+     * @param  string  $provider
+     * @return bool
+     */
+    public function providerIsLoaded(string $provider)
+    {
+        return isset($this->loadedProviders[$provider]);
+    }
+
+    /**
      * Register a service provider with the application.
      *
      * @param  \Illuminate\Support\ServiceProvider|string  $provider
