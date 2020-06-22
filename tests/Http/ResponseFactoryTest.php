@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Http\ResponseFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class ResponseFactoryTest extends TestCase
 {
@@ -11,7 +13,7 @@ class ResponseFactoryTest extends TestCase
         $content = 'hello';
         $responseFactory = new ResponseFactory();
         $response = $responseFactory->make($content);
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf(SymfonyResponse::class, $response);
         $this->assertEquals($content, $response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -22,7 +24,7 @@ class ResponseFactoryTest extends TestCase
         $responseFactory = new ResponseFactory();
         $response = $responseFactory->json($content);
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf(SymfonyResponse::class, $response);
         $this->assertEquals('{"hello":"world"}', $response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -34,7 +36,7 @@ class ResponseFactoryTest extends TestCase
             echo 'hello';
         });
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf(SymfonyResponse::class, $response);
         $this->assertFalse($response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
@@ -49,7 +51,7 @@ class ResponseFactoryTest extends TestCase
         $responseFactory = new ResponseFactory();
         $response = $responseFactory->download($temp);
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf(SymfonyResponse::class, $response);
         $this->assertFalse($response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
@@ -59,7 +61,7 @@ class ResponseFactoryTest extends TestCase
     public function testJsonResponseFromArrayableInterface()
     {
         // mock one Arrayable object
-        $content = $this->getMockBuilder('Illuminate\Contracts\Support\Arrayable')
+        $content = $this->getMockBuilder(Arrayable::class)
             ->setMethods(['toArray'])
             ->getMock();
         $content->expects($this->once())
@@ -69,7 +71,7 @@ class ResponseFactoryTest extends TestCase
         $responseFactory = new ResponseFactory();
         $response = $responseFactory->json($content);
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
+        $this->assertInstanceOf(SymfonyResponse::class, $response);
         $this->assertEquals('{"hello":"world"}', $response->getContent());
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
     }
