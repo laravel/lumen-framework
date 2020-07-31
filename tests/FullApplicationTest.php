@@ -349,6 +349,22 @@ class FullApplicationTest extends TestCase
         $this->assertEquals('http://lumen.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
     }
 
+    public function testGeneratingUrlsForResources()
+    {
+        $app = new Application;
+        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
+
+        $app->router->resources(['foo-bar' => 'ResourceControllerTest']);
+
+        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo-bar.index'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/create', route('foo-bar.create'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo-bar.store'));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('foo-bar.show',['foo_bar' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/edit', route('foo-bar.edit',['foo_bar' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('foo-bar.update',['foo_bar' => 1]));
+        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('foo-bar.destroy',['foo_bar' => 1]));
+    }
+
     public function testRegisterServiceProvider()
     {
         $app = new Application;

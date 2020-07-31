@@ -419,6 +419,67 @@ class Router
     }
 
     /**
+     * Register an array of resource controllers.
+     *
+     * @param  array  $resources
+     * @return void
+     */
+    public function resources(array $resources)
+    {
+        foreach ($resources as $name => $controller) {
+            $this->resource($name, $controller);
+        }
+    }
+
+    /**
+     * Route a resource to a controller.
+     *
+     * @param  string  $name
+     * @param  string  $controller
+     * @param  array  $options
+     * @return void
+     */
+    public function resource($name, $controller, array $options = [])
+    {
+        if ($this->app && $this->app->bound(ResourceRegistrar::class)) {
+            $registrar = $this->app->make(ResourceRegistrar::class);
+        } else {
+            $registrar = new ResourceRegistrar($this);
+        }
+
+        $registrar->register($name, $controller, $options);
+    }
+
+    /**
+     * Register an array of API resource controllers.
+     *
+     * @param  array  $resources
+     * @return void
+     */
+    public function apiResources(array $resources)
+    {
+        foreach ($resources as $name => $controller) {
+            $this->apiResource($name, $controller);
+        }
+    }
+
+    /**
+     * Route an API resource to a controller.
+     *
+     * @param  string  $name
+     * @param  string  $controller
+     * @param  array  $options
+     * @return void
+     */
+    public function apiResource($name, $controller, array $options = [])
+    {
+        $this->resource($name, $controller, array_merge([
+            'only' => ['index', 'show', 'store', 'update', 'destroy'],
+        ], $options));
+    }
+
+
+    /**
      * Get the raw routes for the application.
      *
      * @return array
