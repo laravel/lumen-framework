@@ -53,7 +53,7 @@ class Handler implements ExceptionHandler
             throw $e; // throw the original exception
         }
 
-        $logger->error($e, ['exception' => $e]);
+        $logger->error($e->getMessage(), ['exception' => $e]);
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Laravel\Lumen\Routing;
 
 use Closure as BaseClosure;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -181,7 +182,7 @@ trait ProvidesConvenienceMethods
      */
     public function dispatch($job)
     {
-        return app('Illuminate\Contracts\Bus\Dispatcher')->dispatch($job);
+        return app(Dispatcher::class)->dispatch($job);
     }
 
     /**
@@ -193,7 +194,7 @@ trait ProvidesConvenienceMethods
      */
     public function dispatchNow($job, $handler = null)
     {
-        return app('Illuminate\Contracts\Bus\Dispatcher')->dispatchNow($job, $handler);
+        return app(Dispatcher::class)->dispatchNow($job, $handler);
     }
 
     /**

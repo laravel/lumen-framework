@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Database\Eloquent\Factory;
 use Laravel\Lumen\Bus\PendingDispatch;
 
 if (! function_exists('abort')) {
@@ -202,7 +203,7 @@ if (! function_exists('factory')) {
     {
         app('db');
 
-        $factory = app('Illuminate\Database\Eloquent\Factory');
+        $factory = app(Factory::class);
 
         $arguments = func_get_args();
 
