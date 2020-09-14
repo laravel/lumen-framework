@@ -157,7 +157,7 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerMigrateCommand()
     {
         $this->app->singleton('command.migrate', function ($app) {
-            return new MigrateCommand($app['migrator']);
+            return new MigrateCommand($app['migrator'], $app['events']);
         });
     }
 
