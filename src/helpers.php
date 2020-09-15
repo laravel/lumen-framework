@@ -5,7 +5,6 @@ use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Illuminate\Database\Eloquent\Factory;
 use Laravel\Lumen\Bus\PendingDispatch;
 
 if (! function_exists('abort')) {
@@ -22,7 +21,7 @@ if (! function_exists('abort')) {
      */
     function abort($code, $message = '', array $headers = [])
     {
-        return app()->abort($code, $message, $headers);
+        app()->abort($code, $message, $headers);
     }
 }
 
@@ -189,31 +188,6 @@ if (! function_exists('event')) {
     function event($event, $payload = [], $halt = false)
     {
         return app('events')->dispatch($event, $payload, $halt);
-    }
-}
-
-if (! function_exists('factory')) {
-    /**
-     * Create a model factory builder for a given class, name, and amount.
-     *
-     * @param  dynamic  class|class,name|class,amount|class,name,amount
-     * @return \Illuminate\Database\Eloquent\FactoryBuilder
-     */
-    function factory()
-    {
-        app('db');
-
-        $factory = app(Factory::class);
-
-        $arguments = func_get_args();
-
-        if (isset($arguments[1]) && is_string($arguments[1])) {
-            return $factory->of($arguments[0], $arguments[1])->times($arguments[2] ?? null);
-        } elseif (isset($arguments[1])) {
-            return $factory->of($arguments[0])->times($arguments[1]);
-        } else {
-            return $factory->of($arguments[0]);
-        }
     }
 }
 
