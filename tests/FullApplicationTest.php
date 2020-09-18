@@ -4,6 +4,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Application;
+use Laravel\Lumen\Console\ConsoleServiceProvider;
 use Laravel\Lumen\Http\Request;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
@@ -756,6 +757,15 @@ class FullApplicationTest extends TestCase
         });
         $app->handle(Request::create('/'));
         $this->assertTrue($rebound);
+    }
+
+    public function testBatchesTableCommandIsRegistered()
+    {
+        $app = new LumenTestApplication();
+        $app->register(ConsoleServiceProvider::class);
+        $command = $app->make('command.queue.batches-table');
+        $this->assertNotNull($command);
+        $this->assertEquals('queue:batches-table', $command->getName());
     }
 }
 
