@@ -19,6 +19,7 @@ use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Database\Console\WipeCommand;
+use Illuminate\Queue\Console\BatchesTableCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand as ForgetFailedQueueCommand;
@@ -70,6 +71,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'CacheTable' => 'command.cache.table',
         'MigrateMake' => 'command.migrate.make',
         'QueueFailedTable' => 'command.queue.failed-table',
+        'QueueBatchesTable' => 'command.queue.batches-table',
         'QueueTable' => 'command.queue.table',
         'SeederMake' => 'command.seeder.make',
     ];
@@ -345,6 +347,18 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.queue.failed-table', function ($app) {
             return new FailedTableCommand($app['files'], $app['composer']);
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerQueueBatchesTableCommand()
+    {
+        $this->app->singleton('command.queue.batches-table', function ($app) {
+            return new BatchesTableCommand($app['files'], $app['composer']);
         });
     }
 
