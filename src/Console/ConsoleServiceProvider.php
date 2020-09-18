@@ -362,7 +362,6 @@ class ConsoleServiceProvider extends ServiceProvider
         });
     }
 
-
     /**
      * Register the command.
      *
