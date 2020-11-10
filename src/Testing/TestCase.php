@@ -118,7 +118,7 @@ abstract class TestCase extends BaseTestCase
 
         if ($this->app) {
             foreach ($this->beforeApplicationDestroyedCallbacks as $callback) {
-                call_user_func($callback);
+                $callback();
             }
 
             $this->app->flush();

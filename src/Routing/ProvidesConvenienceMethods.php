@@ -107,7 +107,7 @@ trait ProvidesConvenienceMethods
     protected function buildFailedValidationResponse(Request $request, array $errors)
     {
         if (isset(static::$responseBuilder)) {
-            return call_user_func(static::$responseBuilder, $request, $errors);
+            return (static::$responseBuilder)($request, $errors);
         }
 
         return new JsonResponse($errors, 422);
@@ -119,7 +119,7 @@ trait ProvidesConvenienceMethods
     protected function formatValidationErrors(Validator $validator)
     {
         if (isset(static::$errorFormatter)) {
-            return call_user_func(static::$errorFormatter, $validator);
+            return (static::$errorFormatter)($validator);
         }
 
         return $validator->errors()->getMessages();
