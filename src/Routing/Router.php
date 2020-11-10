@@ -59,7 +59,7 @@ class Router
 
         $this->updateGroupStack($attributes);
 
-        call_user_func($callback, $this);
+        $callback($this);
 
         array_pop($this->groupStack);
     }
