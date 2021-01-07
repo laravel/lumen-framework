@@ -10,30 +10,57 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 class LoadEnvironmentVariables
 {
     /**
-     * The directory containing the environment file.
+     * The paths where to look for the environment file(s).
      *
-     * @var string
+     * @var string|string[]
      */
-    protected $filePath;
+    protected $paths;
 
     /**
-     * The name of the environment file.
+     * The name(s) of the environment file(s).
+     * If 'null', the default file name '.env' will be used.
+     * Default: null.
+     *
+     * @var string|string[]|null
+     */
+    protected $names;
+
+    /**
+     * Should file loading short circuit?
+     * Default: true.
+     *
+     * @var bool
+     */
+    protected $shortCircuit;
+
+    /**
+     * The file encoding.
+     * Default: null.
      *
      * @var string|null
      */
-    protected $fileName;
+    protected $fileEncoding;
 
     /**
      * Create a new loads environment variables instance.
      *
-     * @param  string  $path
-     * @param  string|null  $name
+     * @param  string|string[]       $paths
+     * @param  string|string[]|null  $names
+     * @param  bool                  $shortCircuit
+     * @param  string|null           $fileEncoding
+     *
      * @return void
      */
-    public function __construct($path, $name = null)
-    {
-        $this->filePath = $path;
-        $this->fileName = $name;
+    public function __construct(
+        $paths,
+        $names = null,
+        $shortCircuit = true,
+        $fileEncoding = null
+    ) {
+        $this->paths = $paths;
+        $this->names = $names;
+        $this->shortCircuit = $shortCircuit;
+        $this->fileEncoding = $fileEncoding;
     }
 
     /**
@@ -64,8 +91,10 @@ class LoadEnvironmentVariables
     {
         return Dotenv::create(
             Env::getRepository(),
-            $this->filePath,
-            $this->fileName
+            $this->paths,
+            $this->names,
+            $this->shortCircuit,
+            $this->fileEncoding,
         );
     }
 
