@@ -57,8 +57,8 @@ class LoadEnvironmentVariables
         $shortCircuit = true,
         $fileEncoding = null
     ) {
-        $this->paths        = $paths;
-        $this->names        = $names;
+        $this->paths = $paths;
+        $this->names = $names;
         $this->shortCircuit = $shortCircuit;
         $this->fileEncoding = $fileEncoding;
     }
