@@ -16,20 +16,21 @@ trait RegistersExceptionHandlers
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int  $code
+     * @param  int  $statusCode
      * @param  string  $message
      * @param  array  $headers
+     * @param  int  $code
      * @return void
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function abort($code, $message = '', array $headers = [])
+    public function abort($statusCode, $message = '', array $headers = [] , int $code = 0)
     {
         if ($code == 404) {
             throw new NotFoundHttpException($message);
         }
 
-        throw new HttpException($code, $message, null, $headers);
+        throw new HttpException($statusCode, $message, null, $headers , $code);
     }
 
     /**
