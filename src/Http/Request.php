@@ -40,7 +40,7 @@ class Request extends BaseRequest
      */
     public function route($param = null, $default = null)
     {
-        $route = call_user_func($this->getRouteResolver());
+        $route = ($this->getRouteResolver())();
 
         if (is_null($route) || is_null($param)) {
             return $route;
