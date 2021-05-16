@@ -383,7 +383,8 @@ class FullApplicationTest extends TestCase
     public function testApplicationBootsOnlyOnce()
     {
         $app = new Application();
-        $provider = new class($app) extends \Illuminate\Support\ServiceProvider {
+        $provider = new class($app) extends \Illuminate\Support\ServiceProvider
+        {
             public $bootCount = 0;
 
             public function boot()
