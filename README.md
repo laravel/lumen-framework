@@ -1,9 +1,9 @@
 # Lumen Framework (Kernel)
 
 [![Build Status](https://github.com/laravel/lumen-framework/workflows/tests/badge.svg)](https://github.com/laravel/lumen-framework/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
+[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
+[![License](https://img.shields.io/packagist/l/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
 
 > **Note:** This repository contains the core code of the Laravel Lumen framework. If you want to build an application using Laravel Lumen, visit the main [Lumen repository](https://github.com/laravel/lumen).
 
