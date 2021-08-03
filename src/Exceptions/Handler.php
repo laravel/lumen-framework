@@ -44,7 +44,9 @@ class Handler implements ExceptionHandler
         }
 
         if (method_exists($e, 'report')) {
-            return $e->report();
+            if($e->report() !== false) {
+                return;
+            }
         }
 
         try {
