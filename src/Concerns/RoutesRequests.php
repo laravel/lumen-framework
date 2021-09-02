@@ -85,7 +85,7 @@ trait RoutesRequests
     }
 
     /**
-     * Dispatch request and return response
+     * Dispatch request and return response.
      *
      * @param  SymfonyRequest $request
      * @return Response
