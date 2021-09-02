@@ -85,7 +85,10 @@ trait RoutesRequests
     }
 
     /**
-     * {@inheritdoc}
+     * Dispatch request and return response
+     *
+     * @param  SymfonyRequest $request
+     * @return Response
      */
     public function handle(SymfonyRequest $request)
     {
