@@ -10,14 +10,14 @@ class Redirector
     /**
      * The application instance.
      *
-     * @var Application
+     * @var \Laravel\Lumen\Application
      */
     protected $app;
 
     /**
      * Create a new redirector instance.
      *
-     * @param  Application  $app
+     * @param  \Laravel\Lumen\Application  $app
      * @return void
      */
     public function __construct(Application $app)
