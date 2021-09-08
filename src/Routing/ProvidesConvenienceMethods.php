@@ -104,8 +104,8 @@ trait ProvidesConvenienceMethods
     /**
      * Build a response based on the given errors.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  array $errors
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  $errors
      * @return \Illuminate\Http\JsonResponse|mixed
      */
     protected function buildFailedValidationResponse(Request $request, array $errors)
@@ -120,7 +120,7 @@ trait ProvidesConvenienceMethods
     /**
      * Format validation errors.
      *
-     * @param  \Illuminate\Validation\Validator $validator
+     * @param  \Illuminate\Validation\Validator  $validator
      * @return array|mixed
      */
     protected function formatValidationErrors(Validator $validator)

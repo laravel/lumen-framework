@@ -87,7 +87,7 @@ trait RoutesRequests
     /**
      * Dispatch request and return response.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request $request
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function handle(SymfonyRequest $request)
