@@ -234,7 +234,7 @@ class Router
      * Merge the group attributes into the action.
      *
      * @param  array  $action
-     * @param  array  $attributes The group attributes
+     * @param  array  $attributes
      * @return array
      */
     protected function mergeGroupAttributes(array $action, array $attributes)
