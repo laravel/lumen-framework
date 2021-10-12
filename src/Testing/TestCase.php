@@ -123,6 +123,8 @@ abstract class TestCase extends BaseTestCase
 
             $this->app->flush();
             $this->app = null;
+            
+            $this->beforeApplicationDestroyedCallbacks = [];
         }
     }
 
