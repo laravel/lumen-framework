@@ -8,6 +8,7 @@ use Illuminate\Cache\Console\ClearCommand as CacheClearCommand;
 use Illuminate\Cache\Console\ForgetCommand as CacheForgetCommand;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
 use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use Illuminate\Database\Console\DumpCommand;
 use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
 use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
 use Illuminate\Database\Console\Migrations\MigrateCommand;
@@ -19,7 +20,6 @@ use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Database\Console\WipeCommand;
-use Illuminate\Database\Console\DumpCommand;
 use Illuminate\Queue\Console\BatchesTableCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
@@ -431,17 +431,17 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ScheduleRunCommand::class);
     }
-    
+
     /**
      * Register the command.
      *
      * @return void
      */
     protected function registerSchemaDumpCommand()
-    { 
-      $this->app->singleton('command.schema.dump', function () {
-        return new DumpCommand;
-      });
+    {
+        $this->app->singleton('command.schema.dump', function () {
+            return new DumpCommand;
+        });
     }
 
     /**
