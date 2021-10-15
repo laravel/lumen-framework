@@ -19,6 +19,7 @@ use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand
 use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Database\Console\WipeCommand;
+use Illuminate\Database\Console\DumpCommand;
 use Illuminate\Queue\Console\BatchesTableCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
@@ -60,6 +61,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'Wipe' => 'command.wipe',
         'ScheduleFinish' => ScheduleFinishCommand::class,
         'ScheduleRun' => ScheduleRunCommand::class,
+        'SchemaDump' => 'command.schema.dump',
     ];
 
     /**
@@ -428,6 +430,18 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleRunCommand()
     {
         $this->app->singleton(ScheduleRunCommand::class);
+    }
+    
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerSchemaDumpCommand()
+    { 
+      $this->app->singleton('command.schema.dump', function () {
+        return new DumpCommand;
+      });
     }
 
     /**
