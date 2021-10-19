@@ -53,7 +53,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.4.2",
-        "phpunit/phpunit": "^8.5.8|^9.3.3"
+        "phpunit/phpunit": "^8.5.19|^9.5.8"
     },
     "suggest": {
         "laravel/tinker": "Required to use the tinker console command (^2.0).",
