@@ -4,6 +4,7 @@
          bootstrap="tests/bootstrap.php"
          colors="true"
          convertErrorsToExceptions="true"
+         convertDeprecationsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
