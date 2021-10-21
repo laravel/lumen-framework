@@ -4,6 +4,7 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="tests/bootstrap.php"
          colors="true"
+         convertDeprecationsToExceptions="true"
          convertErrorsToExceptions="true"
          convertDeprecationsToExceptions="true"
          convertNoticesToExceptions="true"
