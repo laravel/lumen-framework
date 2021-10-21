@@ -6,7 +6,6 @@
          colors="true"
          convertDeprecationsToExceptions="true"
          convertErrorsToExceptions="true"
-         convertDeprecationsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
