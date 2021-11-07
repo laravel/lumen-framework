@@ -29,9 +29,10 @@ if (! function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string|null  $make
+     * @template T
+     * @param  class-string<T>  $make
      * @param  array  $parameters
-     * @return mixed|\Laravel\Lumen\Application
+     * @return T
      */
     function app($make = null, array $parameters = [])
     {
