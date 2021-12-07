@@ -20,6 +20,7 @@
         "illuminate/broadcasting": "^9.0",
         "illuminate/bus": "^9.0",
         "illuminate/cache": "^9.0",
+        "illuminate/collections": "^9.0",
         "illuminate/config": "^9.0",
         "illuminate/console": "^9.0",
         "illuminate/container": "^9.0",
@@ -30,6 +31,7 @@
         "illuminate/filesystem": "^9.0",
         "illuminate/hashing": "^9.0",
         "illuminate/http": "^9.0",
+        "illuminate/macroable": "^9.0",
         "illuminate/pagination": "^9.0",
         "illuminate/pipeline": "^9.0",
         "illuminate/queue": "^9.0",
@@ -51,7 +53,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.4.2",
-        "phpunit/phpunit": "^9.3.3"
+        "phpunit/phpunit": "^9.5.8"
     },
     "suggest": {
         "laravel/tinker": "Required to use the tinker console command (^2.0).",

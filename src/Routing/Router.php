@@ -148,7 +148,7 @@ class Router
         $oldPrefix = $old['prefix'] ?? null;
 
         if (isset($new['prefix'])) {
-            return trim($oldPrefix, '/').'/'.trim($new['prefix'], '/');
+            return trim($oldPrefix ?? '', '/').'/'.trim($new['prefix'], '/');
         }
 
         return $oldPrefix;
