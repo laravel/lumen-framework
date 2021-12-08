@@ -1015,6 +1015,7 @@ class Application extends Container
             \Illuminate\Contracts\Cache\Factory::class => 'cache',
             \Illuminate\Contracts\Cache\Repository::class => 'cache.store',
             \Illuminate\Contracts\Config\Repository::class => 'config',
+            \Illuminate\Config\Repository::class => 'config',
             \Illuminate\Container\Container::class => 'app',
             \Illuminate\Contracts\Container\Container::class => 'app',
             \Illuminate\Database\ConnectionResolverInterface::class => 'db',
