@@ -174,8 +174,6 @@ class Kernel implements KernelContract
      * @param  string  $command
      * @param  array  $parameters
      * @return void
-     *
-     * @throws \RuntimeException
      */
     public function queue($command, array $parameters = [])
     {

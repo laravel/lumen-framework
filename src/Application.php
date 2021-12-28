@@ -921,8 +921,6 @@ class Application extends Container
      * Get the application namespace.
      *
      * @return string
-     *
-     * @throws \RuntimeException
      */
     public function getNamespace()
     {

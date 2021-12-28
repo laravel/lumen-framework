@@ -275,8 +275,6 @@ trait RoutesRequests
      *
      * @param  array  $routeInfo
      * @return mixed
-     *
-     * @throws \RuntimeException
      */
     protected function callActionOnArrayBasedRoute($routeInfo)
     {
