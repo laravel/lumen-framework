@@ -225,6 +225,8 @@ trait RoutesRequests
      *
      * @param  array  $routeInfo
      * @return mixed
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     protected function handleDispatcherResponse($routeInfo)
     {
@@ -273,6 +275,8 @@ trait RoutesRequests
      *
      * @param  array  $routeInfo
      * @return mixed
+     *
+     * @throws \RuntimeException
      */
     protected function callActionOnArrayBasedRoute($routeInfo)
     {
@@ -310,6 +314,8 @@ trait RoutesRequests
      *
      * @param  array  $routeInfo
      * @return mixed
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     protected function callControllerAction($routeInfo)
     {
