@@ -791,10 +791,10 @@ class Application extends Container
     /**
      * Get the base path for the application.
      *
-     * @param  string|null  $path
+     * @param  string  $path
      * @return string
      */
-    public function basePath($path = null)
+    public function basePath($path = '')
     {
         if (isset($this->basePath)) {
             return $this->basePath.($path ? '/'.$path : $path);
