@@ -190,7 +190,7 @@ trait RoutesRequests
             $request = LumenRequest::capture();
         }
 
-        $this->instance(Request::class, $this->prepareRequest($request));
+        $this->instance('request', $this->prepareRequest($request));
 
         return [$request->getMethod(), '/'.trim($request->getPathInfo(), '/')];
     }
