@@ -162,7 +162,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (9.0.0-dev) (Laravel Components ^9.0)';
+        return 'Lumen (9.0.0) (Laravel Components ^9.0)';
     }
 
     /**
