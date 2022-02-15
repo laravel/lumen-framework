@@ -72,7 +72,7 @@ class Request extends BaseRequest
      * @param  string  $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return Arr::has(
             $this->all() + $this->route()[2],
