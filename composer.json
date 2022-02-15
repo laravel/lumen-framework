@@ -52,7 +52,7 @@
         "vlucas/phpdotenv": "^5.2"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.2",
+        "mockery/mockery": "^1.4.4",
         "phpunit/phpunit": "^9.5.8"
     },
     "suggest": {

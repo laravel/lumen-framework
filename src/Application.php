@@ -791,10 +791,10 @@ class Application extends Container
     /**
      * Get the base path for the application.
      *
-     * @param  string|null  $path
+     * @param  string  $path
      * @return string
      */
-    public function basePath($path = null)
+    public function basePath($path = '')
     {
         if (isset($this->basePath)) {
             return $this->basePath.($path ? '/'.$path : $path);
@@ -1015,6 +1015,7 @@ class Application extends Container
             \Illuminate\Contracts\Cache\Factory::class => 'cache',
             \Illuminate\Contracts\Cache\Repository::class => 'cache.store',
             \Illuminate\Contracts\Config\Repository::class => 'config',
+            \Illuminate\Config\Repository::class => 'config',
             \Illuminate\Container\Container::class => 'app',
             \Illuminate\Contracts\Container\Container::class => 'app',
             \Illuminate\Database\ConnectionResolverInterface::class => 'db',
