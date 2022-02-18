@@ -4,6 +4,8 @@ namespace Laravel\Lumen\Exceptions;
 
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,6 +24,13 @@ use Throwable;
 
 class Handler implements ExceptionHandler
 {
+    public function __construct(
+        private Container $container,
+        private Repository $config,
+    )
+    {
+    }
+
     /**
      * A list of the exception types that should not be reported.
      *
@@ -50,7 +59,7 @@ class Handler implements ExceptionHandler
         }
 
         try {
-            $logger = app(LoggerInterface::class);
+            $logger = $this->container->make(LoggerInterface::class);
         } catch (Exception $ex) {
             throw $e; // throw the original exception
         }
@@ -143,7 +152,7 @@ class Handler implements ExceptionHandler
      */
     protected function convertExceptionToArray(Throwable $e)
     {
-        return config('app.debug', false) ? [
+        return $this->config->get('app.debug', false) ? [
             'message' => $e->getMessage(),
             'exception' => get_class($e),
             'file' => $e->getFile(),
@@ -166,7 +175,7 @@ class Handler implements ExceptionHandler
     protected function prepareResponse($request, Throwable $e)
     {
         $response = new Response(
-            $this->renderExceptionWithSymfony($e, config('app.debug', false)),
+            $this->renderExceptionWithSymfony($e, $this->config->get('app.debug', false)),
             $this->isHttpException($e) ? $e->getStatusCode() : 500,
             $this->isHttpException($e) ? $e->getHeaders() : []
         );

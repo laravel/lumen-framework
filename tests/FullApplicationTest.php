@@ -1,10 +1,12 @@
 <?php
 
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Console\ConsoleServiceProvider;
+use Laravel\Lumen\Exceptions\Handler;
 use Laravel\Lumen\Http\Request;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
@@ -234,8 +236,7 @@ class FullApplicationTest extends TestCase
     public function testNotFoundResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
-        $mock->shouldIgnoreMissing();
+        $app->instance(ExceptionHandler::class, new Handler($app, new Repository()));
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -249,8 +250,7 @@ class FullApplicationTest extends TestCase
     public function testMethodNotAllowedResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
-        $mock->shouldIgnoreMissing();
+        $app->instance(ExceptionHandler::class, new Handler($app, new Repository()));
 
         $app->router->post('/', function () {
             return response('Hello World');
@@ -279,8 +279,7 @@ class FullApplicationTest extends TestCase
     public function testUncaughtExceptionResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
-        $mock->shouldIgnoreMissing();
+        $app->instance(ExceptionHandler::class, new Handler($app, new Repository()));
 
         $app->router->get('/', function () {
             throw new \RuntimeException('app exception');
