@@ -27,8 +27,7 @@ class Handler implements ExceptionHandler
     public function __construct(
         private Container $container,
         private Repository $config,
-    )
-    {
+    ) {
     }
 
     /**
