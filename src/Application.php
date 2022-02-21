@@ -832,6 +832,17 @@ class Application extends Container
     }
 
     /**
+     * Get the path to the language files.
+     *
+     * @param  string  $path
+     * @return string
+     */
+    public function langPath($path = '')
+    {
+        return $this->getLanguagePath().($path != '' ? DIRECTORY_SEPARATOR.$path : '');
+    }
+
+    /**
      * Get the storage path for the application.
      *
      * @param  string|null  $path
