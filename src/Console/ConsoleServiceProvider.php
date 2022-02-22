@@ -59,8 +59,8 @@ class ConsoleServiceProvider extends ServiceProvider
         'QueueWork' => 'command.queue.work',
         'Seed' => 'command.seed',
         'Wipe' => 'command.wipe',
-        'ScheduleFinish' => ScheduleFinishCommand::class,
-        'ScheduleRun' => ScheduleRunCommand::class,
+        'ScheduleFinish' => 'command.schedule.finish',
+        'ScheduleRun' => 'command.schedule.run',
         'SchemaDump' => 'command.schema.dump',
     ];
 
@@ -419,7 +419,9 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     protected function registerScheduleFinishCommand()
     {
-        $this->app->singleton(ScheduleFinishCommand::class);
+        $this->app->singleton('command.schedule.finish', function () {
+            return new ScheduleFinishCommand;
+        });
     }
 
     /**
@@ -429,7 +431,9 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     protected function registerScheduleRunCommand()
     {
-        $this->app->singleton(ScheduleRunCommand::class);
+        $this->app->singleton('command.schedule.run', function () {
+            return new ScheduleRunCommand;
+        });
     }
 
     /**
