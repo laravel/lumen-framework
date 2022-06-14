@@ -33,7 +33,7 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function json($method, $uri, array $data = [], array $headers = [])
     {
@@ -45,11 +45,9 @@ trait MakesHttpRequests
             'Accept' => 'application/json',
         ], $headers);
 
-        $this->call(
+        return $this->call(
             $method, $uri, [], [], [], $this->transformHeadersToServerVars($headers), $content
         );
-
-        return $this;
     }
 
     /**
@@ -57,15 +55,13 @@ trait MakesHttpRequests
      *
      * @param  string  $uri
      * @param  array  $headers
-     * @return $this
+     * @return @return \Illuminate\Testing\TestResponse
      */
     public function get($uri, array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('GET', $uri, [], [], [], $server);
-
-        return $this;
+        return $this->call('GET', $uri, [], [], [], $server);
     }
 
     /**
@@ -74,15 +70,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function post($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('POST', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('POST', $uri, $data, [], [], $server);
     }
 
     /**
@@ -91,15 +85,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function put($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('PUT', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('PUT', $uri, $data, [], [], $server);
     }
 
     /**
@@ -108,15 +100,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function patch($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('PATCH', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('PATCH', $uri, $data, [], [], $server);
     }
 
     /**
@@ -125,15 +115,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function delete($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('DELETE', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('DELETE', $uri, $data, [], [], $server);
     }
 
     /**
@@ -142,15 +130,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function options($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('OPTIONS', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('OPTIONS', $uri, $data, [], [], $server);
     }
 
     /**
@@ -159,15 +145,13 @@ trait MakesHttpRequests
      * @param  string  $uri
      * @param  array  $data
      * @param  array  $headers
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function head($uri, array $data = [], array $headers = [])
     {
         $server = $this->transformHeadersToServerVars($headers);
 
-        $this->call('HEAD', $uri, $data, [], [], $server);
-
-        return $this;
+        return $this->call('HEAD', $uri, $data, [], [], $server);
     }
 
     /**
@@ -176,17 +160,15 @@ trait MakesHttpRequests
      * This method allows you to fully customize the entire Request object.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return $this
+     * @return \Illuminate\Testing\TestResponse
      */
     public function handle(Request $request)
     {
         $this->currentUri = $request->fullUrl();
 
-        $this->response = TestResponse::fromBaseResponse(
+        return $this->response = TestResponse::fromBaseResponse(
             $this->app->prepareResponse($this->app->handle($request))
         );
-
-        return $this;
     }
 
     /**
@@ -344,7 +326,7 @@ trait MakesHttpRequests
      * @param  array  $files
      * @param  array  $server
      * @param  string  $content
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Testing\TestResponse
      */
     public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
