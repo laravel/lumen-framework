@@ -8,6 +8,7 @@ use Illuminate\Cache\Console\ClearCommand as CacheClearCommand;
 use Illuminate\Cache\Console\ForgetCommand as CacheForgetCommand;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
 use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use Illuminate\Console\Scheduling\ScheduleWorkCommand;
 use Illuminate\Database\Console\DumpCommand;
 use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
 use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
@@ -63,6 +64,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'Wipe' => 'command.wipe',
         'ScheduleFinish' => ScheduleFinishCommand::class,
         'ScheduleRun' => ScheduleRunCommand::class,
+        'ScheduleWork' => ScheduleWorkCommand::class,
         'SchemaDump' => 'command.schema.dump',
     ];
 
@@ -444,6 +446,16 @@ class ConsoleServiceProvider extends ServiceProvider
     protected function registerScheduleRunCommand()
     {
         $this->app->singleton(ScheduleRunCommand::class);
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerScheduleWorkCommand()
+    {
+        $this->app->singleton(ScheduleWorkCommand::class);
     }
 
     /**
