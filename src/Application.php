@@ -781,11 +781,12 @@ class Application extends Container
     /**
      * Get the path to the application "app" directory.
      *
+     * @param  string  $path
      * @return string
      */
-    public function path()
+    public function path($path = '')
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'app';
+        return $this->basePath.DIRECTORY_SEPARATOR.'app'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 
     /**
