@@ -62,74 +62,7 @@ trait ProvidesConvenienceMethods
      */
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
-        $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
-
-        if ($validator->fails()) {
-            $this->throwValidationException($request, $validator);
-        }
-
-        return $this->extractInputFromRules($request, $rules);
-    }
-
-    /**
-     * Get the request input based on the given validation rules.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $rules
-     * @return array
-     */
-    protected function extractInputFromRules(Request $request, array $rules)
-    {
-        return $request->only(collect($rules)->keys()->map(function ($rule) {
-            return Str::contains($rule, '.') ? explode('.', $rule)[0] : $rule;
-        })->unique()->toArray());
-    }
-
-    /**
-     * Throw the failed validation exception.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function throwValidationException(Request $request, $validator)
-    {
-        throw new ValidationException($validator, $this->buildFailedValidationResponse(
-            $request, $this->formatValidationErrors($validator)
-        ));
-    }
-
-    /**
-     * Build a response based on the given errors.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  array  $errors
-     * @return \Illuminate\Http\JsonResponse|mixed
-     */
-    protected function buildFailedValidationResponse(Request $request, array $errors)
-    {
-        if (isset(static::$responseBuilder)) {
-            return (static::$responseBuilder)($request, $errors);
-        }
-
-        return new JsonResponse($errors, 422);
-    }
-
-    /**
-     * Format validation errors.
-     *
-     * @param  \Illuminate\Validation\Validator  $validator
-     * @return array|mixed
-     */
-    protected function formatValidationErrors(Validator $validator)
-    {
-        if (isset(static::$errorFormatter)) {
-            return (static::$errorFormatter)($validator);
-        }
-
-        return $validator->errors()->getMessages();
+        return $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes)->validate();
     }
 
     /**
