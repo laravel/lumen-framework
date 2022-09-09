@@ -62,7 +62,49 @@ trait ProvidesConvenienceMethods
      */
     public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
     {
-        return $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes)->validate();
+        $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
+
+        try {
+            return $validator->validate();
+
+        } catch (ValidationException $exception) {
+            $exception->response = $this->buildFailedValidationResponse(
+                $request, $this->formatValidationErrors($validator)
+            );
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * Build a response based on the given errors.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  $errors
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
+    protected function buildFailedValidationResponse(Request $request, array $errors)
+    {
+        if (isset(static::$responseBuilder)) {
+            return (static::$responseBuilder)($request, $errors);
+        }
+
+        return new JsonResponse($errors, 422);
+    }
+
+    /**
+     * Format validation errors.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return array|mixed
+     */
+    protected function formatValidationErrors(Validator $validator)
+    {
+        if (isset(static::$errorFormatter)) {
+            return (static::$errorFormatter)($validator);
+        }
+
+        return $validator->errors()->getMessages();
     }
 
     /**
