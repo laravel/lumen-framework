@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
@@ -64,14 +65,25 @@ trait ProvidesConvenienceMethods
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
 
         try {
-            return $validator->validate();
+            $validated = $validator->validate();
+            if(method_exists($this, 'extractInputFromRules')) {
+                # backwards compatability for deleted trait method
+                $validated = $this->extractInputFromRules($request, $rules);
+            }
         } catch (ValidationException $exception) {
-            $exception->response = $this->buildFailedValidationResponse(
-                $request, $this->formatValidationErrors($validator)
-            );
+            if(method_exists($this, 'throwValidationException')) {
+                # backwards compatability for deleted trait method
+                $this->throwValidationException($request, $validator);
+            } else {
+                $exception->response = $this->buildFailedValidationResponse(
+                    $request, $this->formatValidationErrors($validator)
+                );
 
-            throw $exception;
+                throw $exception;
+            }
         }
+
+        return $validated;
     }
 
     /**
