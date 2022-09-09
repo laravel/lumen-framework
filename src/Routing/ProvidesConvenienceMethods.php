@@ -65,7 +65,6 @@ trait ProvidesConvenienceMethods
 
         try {
             return $validator->validate();
-
         } catch (ValidationException $exception) {
             $exception->response = $this->buildFailedValidationResponse(
                 $request, $this->formatValidationErrors($validator)
