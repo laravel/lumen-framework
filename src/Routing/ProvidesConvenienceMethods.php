@@ -65,13 +65,14 @@ trait ProvidesConvenienceMethods
 
         try {
             $validated = $validator->validate();
+
             if (method_exists($this, 'extractInputFromRules')) {
-                // backwards compatability for deleted trait method
+                // Backwards compatability...
                 $validated = $this->extractInputFromRules($request, $rules);
             }
         } catch (ValidationException $exception) {
             if (method_exists($this, 'throwValidationException')) {
-                // backwards compatability for deleted trait method
+                // Backwards compatability...
                 $this->throwValidationException($request, $validator);
             } else {
                 $exception->response = $this->buildFailedValidationResponse(
