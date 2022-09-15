@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 
@@ -63,27 +64,41 @@ trait ProvidesConvenienceMethods
     {
         $validator = $this->getValidationFactory()->make($request->all(), $rules, $messages, $customAttributes);
 
-        try {
-            $validated = $validator->validate();
-
-            if (method_exists($this, 'extractInputFromRules')) {
-                // Backwards compatability...
-                $validated = $this->extractInputFromRules($request, $rules);
-            }
-        } catch (ValidationException $exception) {
-            if (method_exists($this, 'throwValidationException')) {
-                // Backwards compatability...
-                $this->throwValidationException($request, $validator);
-            } else {
-                $exception->response = $this->buildFailedValidationResponse(
-                    $request, $this->formatValidationErrors($validator)
-                );
-
-                throw $exception;
-            }
+        if ($validator->fails()) {
+            $this->throwValidationException($request, $validator);
         }
 
-        return $validated;
+        return $this->extractInputFromRules($request, $rules);
+    }
+
+    /**
+     * Get the request input based on the given validation rules.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array  $rules
+     * @return array
+     */
+    protected function extractInputFromRules(Request $request, array $rules)
+    {
+        return $request->only(collect($rules)->keys()->map(function ($rule) {
+            return Str::contains($rule, '.') ? explode('.', $rule)[0] : $rule;
+        })->unique()->toArray());
+    }
+
+    /**
+     * Throw the failed validation exception.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function throwValidationException(Request $request, $validator)
+    {
+        throw new ValidationException($validator, $this->buildFailedValidationResponse(
+            $request, $this->formatValidationErrors($validator)
+        ));
     }
 
     /**
