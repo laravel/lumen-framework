@@ -113,14 +113,18 @@ class Kernel implements KernelContract
         try {
             $this->app->boot();
 
-            return $this->getArtisan()->run($input, $output);
+            $status = $this->getArtisan()->run($input, $output);
         } catch (Throwable $e) {
             $this->reportException($e);
 
             $this->renderException($output, $e);
 
-            return 1;
+            $status = 1;
         }
+
+        $this->terminate($input, $status);
+
+        return $status;
     }
 
     /**
@@ -142,7 +146,7 @@ class Kernel implements KernelContract
      */
     public function terminate($input, $status)
     {
-        //
+        $this->app->terminate();
     }
 
     /**

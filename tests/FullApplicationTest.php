@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Console\Command;
+use Illuminate\View\ViewServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
@@ -9,6 +11,8 @@ use Laravel\Lumen\Http\Request;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 class FullApplicationTest extends TestCase
 {
@@ -768,6 +772,59 @@ class FullApplicationTest extends TestCase
         $this->assertNotNull($command);
         $this->assertEquals('queue:batches-table', $command->getName());
     }
+
+    public function testHandlingCommandsTerminatesApplication()
+    {
+        $app = new LumenTestApplication();
+        $app->register(ConsoleServiceProvider::class);
+        $app->register(ViewServiceProvider::class);
+
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $mock->shouldIgnoreMissing();
+
+        $kernel = $app[Laravel\Lumen\Console\Kernel::class];
+
+        (fn () => $kernel->getArtisan())->call($kernel)->resolveCommands(
+            SendEmails::class,
+        );
+
+        $terminated = false;
+        $app->terminating(function () use (&$terminated) {
+            $terminated = true;
+        });
+
+        $input = new ArrayInput(['command' => 'send:emails']);
+
+        $command = $kernel->handle($input, new NullOutput());
+
+        $this->assertTrue($terminated);
+    }
+
+    public function testTerminationTests()
+    {
+        $app = new LumenTestApplication;
+
+        $result = [];
+        $callback1 = function () use (&$result) {
+            $result[] = 1;
+        };
+
+        $callback2 = function () use (&$result) {
+            $result[] = 2;
+        };
+
+        $callback3 = function () use (&$result) {
+            $result[] = 3;
+        };
+
+        $app->terminating($callback1);
+        $app->terminating($callback2);
+        $app->terminating($callback3);
+
+        $app->terminate();
+
+        $this->assertEquals([1, 2, 3], $result);
+    }
 }
 
 class LumenTestService
@@ -882,5 +939,15 @@ class ResponsableResponse implements \Illuminate\Contracts\Support\Responsable
     public function toResponse($request)
     {
         return $request->route('foo');
+    }
+}
+
+class SendEmails extends Command
+{
+    protected $signature = 'send:emails';
+
+    public function handle()
+    {
+        // ..
     }
 }
