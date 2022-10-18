@@ -120,6 +120,8 @@ trait RoutesRequests
         if (count($this->middleware) > 0) {
             $this->callTerminableMiddleware($response);
         }
+
+        $this->app->terminate();
     }
 
     /**
