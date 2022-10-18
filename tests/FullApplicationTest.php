@@ -1,18 +1,18 @@
 <?php
 
 use Illuminate\Console\Command;
-use Illuminate\View\ViewServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
+use Illuminate\View\ViewServiceProvider;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Console\ConsoleServiceProvider;
 use Laravel\Lumen\Http\Request;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class FullApplicationTest extends TestCase
 {
