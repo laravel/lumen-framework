@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\View\Component;
 use Mockery;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
@@ -124,6 +125,10 @@ abstract class TestCase extends BaseTestCase
             $this->app->flush();
             $this->app = null;
         }
+
+        Component::flushCache();
+        Component::forgetComponentsResolver();
+        Component::forgetFactory();
     }
 
     /**
