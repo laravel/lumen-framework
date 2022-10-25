@@ -16,13 +16,16 @@ class Controller
     /**
      * Define a middleware on the controller.
      *
-     * @param  string  $middleware
+     * @param  \Closure|string  $middleware
      * @param  array  $options
      * @return void
      */
     public function middleware($middleware, array $options = [])
     {
-        $this->middleware[$middleware] = $options;
+        $this->middleware[] = [
+            'middleware' => $middleware,
+            'options' => $options
+        ];
     }
 
     /**
