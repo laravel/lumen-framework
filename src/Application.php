@@ -611,11 +611,11 @@ class Application extends Container
      */
     protected function getLanguagePath()
     {
-        if (is_dir($langPath = $this->basePath().'/resources/lang')) {
-            return $langPath;
-        } else {
-            return __DIR__.'/../resources/lang';
+        if (is_dir($directory = $this->resourcePath('lang'))) {
+            return $directory;
         }
+
+        return $this->basePath('lang');
     }
 
     /**
