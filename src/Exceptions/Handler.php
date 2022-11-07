@@ -111,7 +111,7 @@ class Handler implements ExceptionHandler
         } elseif ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);
         } elseif ($e instanceof AuthorizationException) {
-            $e = new HttpException(403, $e->getMessage());
+            $e = new HttpException($e->status() ?? 403, $e->getMessage());
         } elseif ($e instanceof ValidationException && $e->getResponse()) {
             return $e->getResponse();
         }
