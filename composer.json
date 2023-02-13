@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": "^8.1",
+        "composer-runtime-api": "^2.2",
         "illuminate/auth": "^10.0",
         "illuminate/broadcasting": "^10.0",
         "illuminate/bus": "^10.0",
