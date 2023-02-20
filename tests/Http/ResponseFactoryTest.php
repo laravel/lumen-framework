@@ -62,7 +62,7 @@ class ResponseFactoryTest extends TestCase
     {
         // mock one Arrayable object
         $content = $this->getMockBuilder(Arrayable::class)
-            ->setMethods(['toArray'])
+            ->onlyMethods(['toArray'])
             ->getMock();
         $content->expects($this->once())
             ->method('toArray')
