@@ -13,7 +13,7 @@
 >
     <testsuites>
         <testsuite name="Lumen Test Suite">
-        <directory suffix="Test.php">./tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
