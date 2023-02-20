@@ -112,6 +112,13 @@ class Application extends Container
     public $router;
 
     /**
+     * The array of terminating callbacks.
+     *
+     * @var callable[]
+     */
+    protected $terminatingCallbacks = [];
+
+    /**
      * Create a new Lumen application instance.
      *
      * @param  string|null  $basePath
@@ -990,6 +997,16 @@ class Application extends Container
     }
 
     /**
+     * Get the current application fallback locale.
+     *
+     * @return string
+     */
+    public function getFallbackLocale()
+    {
+        return $this['config']->get('app.fallback_locale');
+    }
+
+    /**
      * Set the current application locale.
      *
      * @param  string  $locale
@@ -1010,6 +1027,35 @@ class Application extends Container
     public function isLocale($locale)
     {
         return $this->getLocale() == $locale;
+    }
+
+    /**
+     * Register a terminating callback with the application.
+     *
+     * @param  callable|string  $callback
+     * @return $this
+     */
+    public function terminating($callback)
+    {
+        $this->terminatingCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Terminate the application.
+     *
+     * @return void
+     */
+    public function terminate()
+    {
+        $index = 0;
+
+        while ($index < count($this->terminatingCallbacks)) {
+            $this->call($this->terminatingCallbacks[$index]);
+
+            $index++;
+        }
     }
 
     /**

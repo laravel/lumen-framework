@@ -8,6 +8,7 @@ use Illuminate\Cache\Console\ClearCommand as CacheClearCommand;
 use Illuminate\Cache\Console\ForgetCommand as CacheForgetCommand;
 use Illuminate\Console\Scheduling\ScheduleFinishCommand;
 use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use Illuminate\Console\Scheduling\ScheduleWorkCommand;
 use Illuminate\Database\Console\DumpCommand;
 use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
 use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
@@ -21,6 +22,7 @@ use Illuminate\Database\Console\Seeds\SeedCommand;
 use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use Illuminate\Database\Console\WipeCommand;
 use Illuminate\Queue\Console\BatchesTableCommand;
+use Illuminate\Queue\Console\ClearCommand as ClearQueueCommand;
 use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand as ForgetFailedQueueCommand;
@@ -50,6 +52,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'MigrateReset' => 'command.migrate.reset',
         'MigrateRollback' => 'command.migrate.rollback',
         'MigrateStatus' => 'command.migrate.status',
+        'QueueClear' => 'command.queue.clear',
         'QueueFailed' => 'command.queue.failed',
         'QueueFlush' => 'command.queue.flush',
         'QueueForget' => 'command.queue.forget',
@@ -61,6 +64,7 @@ class ConsoleServiceProvider extends ServiceProvider
         'Wipe' => 'command.wipe',
         'ScheduleFinish' => 'command.schedule.finish',
         'ScheduleRun' => 'command.schedule.run',
+        'ScheduleWork' => 'command.schedule.work',
         'SchemaDump' => 'command.schema.dump',
     ];
 
@@ -261,6 +265,18 @@ class ConsoleServiceProvider extends ServiceProvider
      *
      * @return void
      */
+    protected function registerQueueClearCommand()
+    {
+        $this->app->singleton('command.queue.clear', function () {
+            return new ClearQueueCommand;
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
     protected function registerQueueFailedCommand()
     {
         $this->app->singleton('command.queue.failed', function () {
@@ -433,6 +449,18 @@ class ConsoleServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.schedule.run', function () {
             return new ScheduleRunCommand;
+        });
+    }
+
+    /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerScheduleWorkCommand()
+    {
+        $this->app->singleton('command.schedule.work', function () {
+            return new ScheduleWorkCommand;
         });
     }
 

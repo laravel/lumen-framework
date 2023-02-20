@@ -11,6 +11,10 @@ class HandleExceptionsTest extends TestCase
 {
     use RegistersExceptionHandlers;
 
+    protected $container;
+
+    protected $config;
+
     protected function setUp(): void
     {
         $this->container = new Container;
