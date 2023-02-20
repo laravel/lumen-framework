@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    backupGlobals="false"
-    beStrictAboutTestsThatDoNotTestAnything="false"
-    bootstrap="tests/bootstrap.php"
-    colors="true"
-    processIsolation="false"
-    stopOnError="false"
-    stopOnFailure="false"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
-    cacheDirectory=".phpunit.cache"
-    backupStaticProperties="false"
+<phpunit backupGlobals="false"
+         backupStaticProperties="false"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="tests/bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+         colors="true"
+         processIsolation="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
 >
-  <testsuites>
-    <testsuite name="Lumen Test Suite">
-      <directory suffix="Test.php">./tests</directory>
-    </testsuite>
-  </testsuites>
+    <testsuites>
+        <testsuite name="Lumen Test Suite">
+        <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
