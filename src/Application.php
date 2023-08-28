@@ -790,7 +790,9 @@ class Application extends Container
             $merged = array_merge($defaults, $userAliases);
 
             foreach ($merged as $original => $alias) {
-                class_alias($original, $alias);
+                if (!class_exists($alias)) {
+                    class_alias($original, $alias);
+                }
             }
         }
     }
