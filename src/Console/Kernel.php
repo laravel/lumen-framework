@@ -30,13 +30,6 @@ class Kernel implements KernelContract
     protected $app;
 
     /**
-     * The event dispatcher implementation.
-     *
-     * @var \Illuminate\Contracts\Events\Dispatcher
-     */
-    protected $events;
-
-    /**
      * The Symfony event dispatcher implementation.
      *
      * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface|null
@@ -68,13 +61,11 @@ class Kernel implements KernelContract
      * Create a new console kernel instance.
      *
      * @param  \Laravel\Lumen\Application  $app
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
-    public function __construct(Application $app, Dispatcher $events)
+    public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->events = $events;
 
         if ($this->app->runningInConsole()) {
             $this->setRequestForConsole($this->app);
@@ -125,13 +116,13 @@ class Kernel implements KernelContract
             $this->symfonyDispatcher = new EventDispatcher;
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
-                $this->events->dispatch(
+                $this->app[Dispatcher::class]->dispatch(
                     new CommandStarting($event->getCommand()->getName(), $event->getInput(), $event->getOutput())
                 );
             });
 
             $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
-                $this->events->dispatch(
+                $this->app[Dispatcher::class]->dispatch(
                     new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
                 );
             });

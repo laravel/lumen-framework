@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Console\Events\CommandFinished;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Laravel\Lumen\Application;
@@ -20,11 +22,10 @@ class KernelTest extends \Laravel\Lumen\Testing\TestCase
         $app = new Application();
 
         $app->configure('app');
-        $app->configure('events');
 
         $app->singleton(ExceptionHandlerContract::class, fn () => new ExceptionHandler());
         $app->singleton(ConsoleKernelContract::class, function () use ($app) {
-            return tap(new ConsoleKernel($app, $app['events']), function ($kernel) {
+            return tap(new ConsoleKernel($app), function ($kernel) {
                 $kernel->rerouteSymfonyCommandEvents();
             });
         });
@@ -34,8 +35,7 @@ class KernelTest extends \Laravel\Lumen\Testing\TestCase
 
     public function testItCanRerouteToSymfonyEvent()
     {
-        $this->expectsEvents('Illuminate\Console\Events\CommandStarting');
-        $this->expectsEvents('Illuminate\Console\Events\CommandFinished');
+        $this->expectsEvents([CommandStarting::class, CommandFinished::class]);
 
         $this->artisan('cache:forget', ['key' => 'lumen']);
     }
