@@ -1,12 +1,10 @@
 <?php
 
-use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Illuminate\Support\Facades\Event;
 use Laravel\Lumen\Application;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
+use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 
 class KernelTest extends \Laravel\Lumen\Testing\TestCase
 {
