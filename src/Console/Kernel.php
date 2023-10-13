@@ -3,14 +3,21 @@
 namespace Laravel\Lumen\Console;
 
 use Illuminate\Console\Application as Artisan;
+use Illuminate\Console\Events\CommandFinished;
+use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Console\Scheduling\ScheduleRunCommand;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Exceptions\Handler;
 use RuntimeException;
+use Symfony\Component\Console\ConsoleEvents;
+use Symfony\Component\Console\Event\ConsoleCommandEvent;
+use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Throwable;
 
 class Kernel implements KernelContract
@@ -21,6 +28,20 @@ class Kernel implements KernelContract
      * @var \Laravel\Lumen\Application
      */
     protected $app;
+
+    /**
+     * The event dispatcher implementation.
+     *
+     * @var \Illuminate\Contracts\Events\Dispatcher
+     */
+    protected $events;
+
+    /**
+     * The Symfony event dispatcher implementation.
+     *
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface|null
+     */
+    protected $symfonyDispatcher;
 
     /**
      * The Artisan application instance.
@@ -47,14 +68,18 @@ class Kernel implements KernelContract
      * Create a new console kernel instance.
      *
      * @param  \Laravel\Lumen\Application  $app
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, Dispatcher $events)
     {
         $this->app = $app;
+        $this->events = $events;
 
         if ($this->app->runningInConsole()) {
             $this->setRequestForConsole($this->app);
+        } else {
+            $this->rerouteSymfonyCommandEvents();
         }
 
         $this->app->prepareForConsoleCommand($this->aliases);
@@ -85,6 +110,34 @@ class Kernel implements KernelContract
         $app->instance('request', Request::create(
             $uri, 'GET', [], [], [], $server
         ));
+    }
+
+    /**
+     * Re-route the Symfony command events to their Laravel counterparts.
+     *
+     * @internal
+     *
+     * @return $this
+     */
+    public function rerouteSymfonyCommandEvents()
+    {
+        if (is_null($this->symfonyDispatcher)) {
+            $this->symfonyDispatcher = new EventDispatcher;
+
+            $this->symfonyDispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $event) {
+                $this->events->dispatch(
+                    new CommandStarting($event->getCommand()->getName(), $event->getInput(), $event->getOutput())
+                );
+            });
+
+            $this->symfonyDispatcher->addListener(ConsoleEvents::TERMINATE, function (ConsoleTerminateEvent $event) {
+                $this->events->dispatch(
+                    new CommandFinished($event->getCommand()->getName(), $event->getInput(), $event->getOutput(), $event->getExitCode())
+                );
+            });
+        }
+
+        return $this;
     }
 
     /**
@@ -212,9 +265,14 @@ class Kernel implements KernelContract
     protected function getArtisan()
     {
         if (is_null($this->artisan)) {
-            return $this->artisan = (new Artisan($this->app, $this->app->make('events'), $this->app->version()))
+            $this->artisan = (new Artisan($this->app, $this->app->make('events'), $this->app->version()))
                                 ->resolveCommands($this->getCommands())
                                 ->setContainerCommandLoader();
+
+            if ($this->symfonyDispatcher instanceof EventDispatcher) {
+                $this->artisan->setDispatcher($this->symfonyDispatcher);
+                $this->artisan->setSignalsToDispatchEvent();
+            }
         }
 
         return $this->artisan;
