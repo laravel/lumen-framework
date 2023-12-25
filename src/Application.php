@@ -208,6 +208,26 @@ class Application extends Container
     }
 
     /**
+     * Determine if the application is in the local environment.
+     *
+     * @return bool
+     */
+    public function isLocal()
+    {
+        return $this->environment() === 'local';
+    }
+
+    /**
+     * Determine if the application is in the production environment.
+     *
+     * @return bool
+     */
+    public function isProduction()
+    {
+        return $this->environment() === 'production';
+    }
+
+    /**
      * Determine if the given service provider is loaded.
      *
      * @param  string  $provider
@@ -770,7 +790,9 @@ class Application extends Container
             $merged = array_merge($defaults, $userAliases);
 
             foreach ($merged as $original => $alias) {
-                class_alias($original, $alias);
+                if (! class_exists($alias)) {
+                    class_alias($original, $alias);
+                }
             }
         }
     }
@@ -913,7 +935,7 @@ class Application extends Container
      */
     public function runningUnitTests()
     {
-        return $this->environment() == 'testing';
+        return $this->environment() === 'testing';
     }
 
     /**
@@ -984,6 +1006,7 @@ class Application extends Container
         $this->router = null;
         $this->dispatcher = null;
         static::$instance = null;
+        static::$aliasesRegistered = false;
     }
 
     /**

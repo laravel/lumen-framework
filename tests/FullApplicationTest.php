@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\View\ViewServiceProvider;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Console\ConsoleServiceProvider;
@@ -16,6 +17,11 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 class FullApplicationTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        Facade::clearResolvedInstances();
+    }
+
     protected function tearDown(): void
     {
         m::close();
