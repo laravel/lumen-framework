@@ -1,4 +1,4 @@
-# Lumen Framework (Kernel)
+# Photon Framework (Kernel)
 
 [![Build Status](https://github.com/laravel/lumen-framework/workflows/tests/badge.svg)](https://github.com/laravel/lumen-framework/actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
