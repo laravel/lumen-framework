@@ -6,8 +6,8 @@ body:
       value: "Please read [our full contribution guide](https://laravel.com/docs/contributions#bug-reports) before submitting bug reports. If you notice improper DocBlock, PHPStan, or IDE warnings while using Laravel, do not create a GitHub issue. Instead, please submit a pull request to fix the problem."
   - type: input
     attributes:
-      label: Lumen Version
-      description: Provide the Lumen version that you are using.
+      label: Photon Version
+      description: Provide the Photon version that you are using.
       placeholder: 10.0.0
     validations:
       required: true
@@ -37,4 +37,4 @@ body:
       description: Provide detailed steps to reproduce your issue. If necessary, please provide a GitHub repository to demonstrate your issue using `laravel new bug-report --github="--public"`.
     validations:
       required: true
-      
+
