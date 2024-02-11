@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Testing;
+namespace Photon\Testing;
 
 use Exception;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * The application instance.
      *
-     * @var \Laravel\Lumen\Application
+     * @var \Photon\Application
      */
     protected $app;
 

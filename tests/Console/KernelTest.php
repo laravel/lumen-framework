@@ -4,11 +4,11 @@ use Illuminate\Console\Events\CommandFinished;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Console\Kernel as ConsoleKernel;
-use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Photon\Application;
+use Photon\Console\Kernel as ConsoleKernel;
+use Photon\Exceptions\Handler as ExceptionHandler;
 
-class KernelTest extends \Laravel\Lumen\Testing\TestCase
+class KernelTest extends \Photon\Testing\TestCase
 {
     /**
      * Creates the application.
@@ -37,6 +37,6 @@ class KernelTest extends \Laravel\Lumen\Testing\TestCase
     {
         $this->expectsEvents([CommandStarting::class, CommandFinished::class]);
 
-        $this->artisan('cache:forget', ['key' => 'lumen']);
+        $this->artisan('cache:forget', ['key' => 'photon']);
     }
 }

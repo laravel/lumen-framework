@@ -3,7 +3,7 @@
 use Illuminate\Config\Repository as Config;
 use Illuminate\Container\Container;
 use Illuminate\Log\LogManager;
-use Laravel\Lumen\Concerns\RegistersExceptionHandlers;
+use Photon\Concerns\RegistersExceptionHandlers;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 

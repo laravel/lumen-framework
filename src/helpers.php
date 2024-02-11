@@ -1,11 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+use Illuminate\Broadcasting\PendingBroadcast;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
-use Laravel\Lumen\Bus\PendingDispatch;
+use Photon\Application;
+use Photon\Bus\PendingDispatch;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\HttpKernel;
 
 if (! function_exists('abort')) {
     /**
@@ -14,12 +24,12 @@ if (! function_exists('abort')) {
      * @param  int  $code
      * @param  string  $message
      * @param  array  $headers
-     * @return void
+     * @return never
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws HttpKernel\Exception\HttpException
+     * @throws HttpKernel\Exception\NotFoundHttpException
      */
-    function abort($code, $message = '', array $headers = [])
+    function abort(int $code, string $message = '', array $headers = []): never
     {
         app()->abort($code, $message, $headers);
     }
@@ -29,13 +39,14 @@ if (! function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string|null  $make
-     * @param  array  $parameters
-     * @return mixed|\Laravel\Lumen\Application
+     * @param null|string $make
+     * @param array $parameters
+     * @return mixed|Application
+     * @throws BindingResolutionException
      */
-    function app($make = null, array $parameters = [])
+    function app(null|string $make = null, array $parameters = []): mixed
     {
-        if (is_null($make)) {
+        if (null === $make) {
             return Container::getInstance();
         }
 
@@ -47,12 +58,13 @@ if (! function_exists('auth')) {
     /**
      * Get the available auth instance.
      *
-     * @param  string|null  $guard
-     * @return \Illuminate\Contracts\Auth\Factory|\Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
+     * @param null $guard
+     * @return AuthFactory|Guard|StatefulGuard
+     * @throws BindingResolutionException
      */
-    function auth($guard = null)
+    function auth($guard = null): AuthFactory|Guard|StatefulGuard
     {
-        if (is_null($guard)) {
+        if (null === $guard) {
             return app(AuthFactory::class);
         }
 
@@ -64,10 +76,11 @@ if (! function_exists('base_path')) {
     /**
      * Get the path to the base of the install.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
+     * @throws BindingResolutionException
      */
-    function base_path($path = '')
+    function base_path(string $path = ''): string
     {
         return app()->basePath().($path ? '/'.$path : $path);
     }
@@ -77,10 +90,11 @@ if (! function_exists('broadcast')) {
     /**
      * Begin broadcasting an event.
      *
-     * @param  mixed|null  $event
-     * @return \Illuminate\Broadcasting\PendingBroadcast
+     * @param mixed|null $event
+     * @return PendingBroadcast
+     * @throws BindingResolutionException
      */
-    function broadcast($event = null)
+    function broadcast(mixed $event = null): PendingBroadcast
     {
         return app(BroadcastFactory::class)->event($event);
     }
@@ -90,10 +104,11 @@ if (! function_exists('decrypt')) {
     /**
      * Decrypt the given value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
+     * @throws BindingResolutionException
      */
-    function decrypt($value)
+    function decrypt(string $value): string
     {
         return app('encrypter')->decrypt($value);
     }
@@ -104,9 +119,9 @@ if (! function_exists('dispatch')) {
      * Dispatch a job to its appropriate handler.
      *
      * @param  mixed  $job
-     * @return mixed
+     * @return PendingDispatch
      */
-    function dispatch($job)
+    function dispatch(mixed $job): PendingDispatch
     {
         return new PendingDispatch($job);
     }
@@ -116,11 +131,12 @@ if (! function_exists('dispatch_now')) {
     /**
      * Dispatch a command to its appropriate handler in the current process.
      *
-     * @param  mixed  $job
-     * @param  mixed  $handler
+     * @param mixed $job
+     * @param mixed $handler
      * @return mixed
+     * @throws BindingResolutionException
      */
-    function dispatch_now($job, $handler = null)
+    function dispatch_now(mixed $job, mixed $handler = null): mixed
     {
         return app(Dispatcher::class)->dispatchNow($job, $handler);
     }
@@ -132,13 +148,16 @@ if (! function_exists('config')) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param  array|string|null  $key
-     * @param  mixed  $default
+     * @param null|string|array $key
+     * @param mixed $default
      * @return mixed
+     * @throws BindingResolutionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    function config($key = null, $default = null)
+    function config(null|string|array $key = null, mixed $default = null): mixed
     {
-        if (is_null($key)) {
+        if (null === $key) {
             return app('config');
         }
 
@@ -154,10 +173,11 @@ if (! function_exists('database_path')) {
     /**
      * Get the path to the database directory of the install.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string
+     * @throws BindingResolutionException
      */
-    function database_path($path = '')
+    function database_path(string $path = ''): string
     {
         return app()->databasePath($path);
     }
@@ -167,10 +187,11 @@ if (! function_exists('encrypt')) {
     /**
      * Encrypt the given value.
      *
-     * @param  string  $value
+     * @param string $value
      * @return string
+     * @throws BindingResolutionException
      */
-    function encrypt($value)
+    function encrypt(string $value): string
     {
         return app('encrypter')->encrypt($value);
     }
@@ -180,12 +201,13 @@ if (! function_exists('event')) {
     /**
      * Dispatch an event and call the listeners.
      *
-     * @param  object|string  $event
-     * @param  mixed  $payload
-     * @param  bool  $halt
+     * @param object|string $event
+     * @param array $payload
+     * @param bool $halt
      * @return array|null
+     * @throws BindingResolutionException
      */
-    function event($event, $payload = [], $halt = false)
+    function event(object|string $event, array $payload = [], bool $halt = false): array|null
     {
         return app('events')->dispatch($event, $payload, $halt);
     }
@@ -195,9 +217,10 @@ if (! function_exists('info')) {
     /**
      * Write some information to the log.
      *
-     * @param  string  $message
-     * @param  array  $context
+     * @param string $message
+     * @param array $context
      * @return void
+     * @throws BindingResolutionException
      */
     function info($message, $context = [])
     {
@@ -213,11 +236,11 @@ if (! function_exists('redirect')) {
      * @param  int  $status
      * @param  array  $headers
      * @param  bool|null  $secure
-     * @return \Laravel\Lumen\Http\Redirector|\Illuminate\Http\RedirectResponse
+     * @return \Photon\Http\Redirector|\Illuminate\Http\RedirectResponse
      */
     function redirect($to = null, $status = 302, $headers = [], $secure = null)
     {
-        $redirector = new Laravel\Lumen\Http\Redirector(app());
+        $redirector = new Photon\Http\Redirector(app());
 
         if (is_null($to)) {
             return $redirector;
@@ -284,11 +307,11 @@ if (! function_exists('response')) {
      * @param  string  $content
      * @param  int  $status
      * @param  array  $headers
-     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     * @return \Illuminate\Http\Response|\Photon\Http\ResponseFactory
      */
     function response($content = '', $status = 200, array $headers = [])
     {
-        $factory = new Laravel\Lumen\Http\ResponseFactory;
+        $factory = new Photon\Http\ResponseFactory;
 
         if (func_num_args() === 0) {
             return $factory;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Console;
+namespace Photon\Console;
 
 use Illuminate\Console\Application as Artisan;
 use Illuminate\Console\Events\CommandFinished;
@@ -11,8 +11,8 @@ use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Exceptions\Handler;
+use Photon\Application;
+use Photon\Exceptions\Handler;
 use RuntimeException;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -25,7 +25,7 @@ class Kernel implements KernelContract
     /**
      * The application implementation.
      *
-     * @var \Laravel\Lumen\Application
+     * @var \Photon\Application
      */
     protected $app;
 
@@ -60,7 +60,7 @@ class Kernel implements KernelContract
     /**
      * Create a new console kernel instance.
      *
-     * @param  \Laravel\Lumen\Application  $app
+     * @param  \Photon\Application  $app
      * @return void
      */
     public function __construct(Application $app)
@@ -225,7 +225,7 @@ class Kernel implements KernelContract
      */
     public function queue($command, array $parameters = [])
     {
-        throw new RuntimeException('Queueing Artisan commands is not supported by Lumen.');
+        throw new RuntimeException('Queueing Artisan commands is not supported by Photon.');
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Concerns;
+namespace Photon\Concerns;
 
 use Closure;
 use FastRoute\Dispatcher;
@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Laravel\Lumen\Http\Request as LumenRequest;
-use Laravel\Lumen\Routing\Closure as RoutingClosure;
-use Laravel\Lumen\Routing\Controller as LumenController;
-use Laravel\Lumen\Routing\Pipeline;
+use Photon\Http\Request as LumenRequest;
+use Photon\Routing\Closure as RoutingClosure;
+use Photon\Routing\Controller as LumenController;
+use Photon\Routing\Pipeline;
 use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
 use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -337,7 +337,7 @@ trait RoutesRequests
     }
 
     /**
-     * Send the request through a Lumen controller.
+     * Send the request through a Photon controller.
      *
      * @param  mixed  $instance
      * @param  string  $method

@@ -6,9 +6,9 @@ use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\View\ViewServiceProvider;
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Console\ConsoleServiceProvider;
-use Laravel\Lumen\Http\Request;
+use Photon\Application;
+use Photon\Console\ConsoleServiceProvider;
+use Photon\Http\Request;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -108,7 +108,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestMiddleware']);
+        $app->middleware(['PhotonTestMiddleware']);
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -124,7 +124,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
+        $app->routeMiddleware(['foo' => 'PhotonTestMiddleware', 'passing' => 'PhotonTestPlainMiddleware']);
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -163,7 +163,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestParameterizedMiddleware:foo,bar']);
+        $app->middleware(['PhotonTestParameterizedMiddleware:foo,bar']);
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -179,7 +179,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestParameterizedMiddleware', 'passing' => 'LumenTestPlainMiddleware']);
+        $app->routeMiddleware(['foo' => 'PhotonTestParameterizedMiddleware', 'passing' => 'PhotonTestPlainMiddleware']);
 
         $app->router->get('/', ['middleware' => 'passing|foo:bar,boom', function () {
             return response('Hello World');
@@ -195,7 +195,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestMiddleware']);
+        $app->middleware(['PhotonTestMiddleware']);
         $app->instance('middleware.disable', true);
 
         $app->router->get('/', function () {
@@ -212,7 +212,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestTerminateMiddleware']);
+        $app->middleware(['PhotonTestTerminateMiddleware']);
 
         $app->router->get('/', function () {
             return response('Hello World');
@@ -228,7 +228,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->middleware(['LumenTestTerminateMiddleware']);
+        $app->middleware(['PhotonTestTerminateMiddleware']);
         $app->instance('middleware.disable', true);
 
         $app->router->get('/', function () {
@@ -244,7 +244,7 @@ class FullApplicationTest extends TestCase
     public function testNotFoundResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Photon\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->get('/', function () {
@@ -259,7 +259,7 @@ class FullApplicationTest extends TestCase
     public function testMethodNotAllowedResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Photon\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->post('/', function () {
@@ -289,7 +289,7 @@ class FullApplicationTest extends TestCase
     public function testUncaughtExceptionResponse()
     {
         $app = new Application;
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Photon\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
         $app->router->get('/', function () {
@@ -303,7 +303,7 @@ class FullApplicationTest extends TestCase
     public function testGeneratingUrls()
     {
         $app = new Application;
-        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
+        $app->instance('request', Request::create('http://photon.laravel.com', 'GET'));
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -321,20 +321,20 @@ class FullApplicationTest extends TestCase
             //
         }]);
 
-        $this->assertEquals('http://lumen.laravel.com/something', url('something'));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('optional', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('optional', ['baz' => 1]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('regex', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1', route('regex', ['baz' => 1]));
+        $this->assertEquals('http://photon.laravel.com/something', url('something'));
+        $this->assertEquals('http://photon.laravel.com/foo-bar', route('foo'));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar?baz=1&boom=2', route('foo', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1/2', route('optional', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1', route('optional', ['baz' => 1]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1/2', route('regex', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1', route('regex', ['baz' => 1]));
     }
 
     public function testGeneratingUrlsForRegexParameters()
     {
         $app = new Application;
-        $app->instance('request', Request::create('http://lumen.laravel.com', 'GET'));
+        $app->instance('request', Request::create('http://photon.laravel.com', 'GET'));
 
         $app->router->get('/foo-bar', ['as' => 'foo', function () {
             //
@@ -352,18 +352,18 @@ class FullApplicationTest extends TestCase
             //
         }]);
 
-        $this->assertEquals('http://lumen.laravel.com/something', url('something'));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar', route('foo'));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
-        $this->assertEquals('http://lumen.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
+        $this->assertEquals('http://photon.laravel.com/something', url('something'));
+        $this->assertEquals('http://photon.laravel.com/foo-bar', route('foo'));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1/2', route('bar', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/1/2', route('baz', ['baz' => 1, 'boom' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/{baz:[0-9]+}/{boom:[0-9]+}?ba=1&bo=2', route('baz', ['ba' => 1, 'bo' => 2]));
+        $this->assertEquals('http://photon.laravel.com/foo-bar/5', route('boom', ['baz' => 5]));
     }
 
     public function testRegisterServiceProvider()
     {
         $app = new Application;
-        $provider = new LumenTestServiceProvider($app);
+        $provider = new PhotonTestServiceProvider($app);
         $app->register($provider);
 
         $this->assertTrue(true);
@@ -373,7 +373,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application();
 
-        $provider = new LumenBootableTestServiceProvider($app);
+        $provider = new PhotonBootableTestServiceProvider($app);
         $app->register($provider);
 
         $this->assertFalse($provider->booted);
@@ -384,7 +384,7 @@ class FullApplicationTest extends TestCase
     public function testRegisterServiceProviderAfterBoot()
     {
         $app = new Application();
-        $provider = new LumenBootableTestServiceProvider($app);
+        $provider = new PhotonBootableTestServiceProvider($app);
         $app->boot();
         $app->register($provider);
         $this->assertTrue($provider->booted);
@@ -412,7 +412,7 @@ class FullApplicationTest extends TestCase
     public function testApplicationBootsWhenRequestIsDispatched()
     {
         $app = new Application();
-        $provider = new LumenBootableTestServiceProvider($app);
+        $provider = new PhotonBootableTestServiceProvider($app);
         $app->register($provider);
         $resp = $app->dispatch();
         $this->assertTrue($provider->booted);
@@ -442,7 +442,7 @@ class FullApplicationTest extends TestCase
 
         $app = new Application;
 
-        $app->routeMiddleware(['foo' => 'LumenTestPlainMiddleware']);
+        $app->routeMiddleware(['foo' => 'PhotonTestPlainMiddleware']);
 
         $app->router->get('/', ['middleware' => 'foo', function () {
             return 'Hello World';
@@ -458,7 +458,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->router->get('/show/{id}', 'LumenTestController@show');
+        $app->router->get('/show/{id}', 'PhotonTestController@show');
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
 
@@ -469,10 +469,10 @@ class FullApplicationTest extends TestCase
     public function testBasicControllerDispatchingWithGroup()
     {
         $app = new Application;
-        $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
+        $app->routeMiddleware(['test' => PhotonTestMiddleware::class]);
 
         $app->router->group(['middleware' => 'test'], function ($router) {
-            $router->get('/show/{id}', 'LumenTestController@show');
+            $router->get('/show/{id}', 'PhotonTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
@@ -484,10 +484,10 @@ class FullApplicationTest extends TestCase
     public function testBasicControllerDispatchingWithGroupSuffix()
     {
         $app = new Application;
-        $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
+        $app->routeMiddleware(['test' => PhotonTestMiddleware::class]);
 
         $app->router->group(['suffix' => '.{format:json|xml}'], function ($router) {
-            $router->get('/show/{id}', 'LumenTestController@show');
+            $router->get('/show/{id}', 'PhotonTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/25.xml', 'GET'));
@@ -499,10 +499,10 @@ class FullApplicationTest extends TestCase
     public function testBasicControllerDispatchingWithGroupAndSuffixWithPath()
     {
         $app = new Application;
-        $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
+        $app->routeMiddleware(['test' => PhotonTestMiddleware::class]);
 
         $app->router->group(['suffix' => '/{format:json|xml}'], function ($router) {
-            $router->get('/show/{id}', 'LumenTestController@show');
+            $router->get('/show/{id}', 'PhotonTestController@show');
         });
 
         $response = $app->handle(Request::create('/show/test/json', 'GET'));
@@ -514,8 +514,8 @@ class FullApplicationTest extends TestCase
     public function testBasicControllerDispatchingWithMiddlewareIntercept()
     {
         $app = new Application;
-        $app->routeMiddleware(['test' => LumenTestMiddleware::class]);
-        $app->router->get('/show/{id}', 'LumenTestControllerWithMiddleware@show');
+        $app->routeMiddleware(['test' => PhotonTestMiddleware::class]);
+        $app->router->get('/show/{id}', 'PhotonTestControllerWithMiddleware@show');
 
         $response = $app->handle(Request::create('/show/25', 'GET'));
 
@@ -527,7 +527,7 @@ class FullApplicationTest extends TestCase
     {
         $app = new Application;
 
-        $app->router->get('/action/{id}', 'LumenTestAction');
+        $app->router->get('/action/{id}', 'PhotonTestAction');
 
         $response = $app->handle(Request::create('/action/199', 'GET'));
 
@@ -662,7 +662,7 @@ class FullApplicationTest extends TestCase
 
         $app->router->group(['middleware' => 'middleware1'], function ($router) {
             $router->group(['middleware' => 'middleware2|middleware3'], function ($router) {
-                $router->get('test', 'LumenTestController@show');
+                $router->get('test', 'PhotonTestController@show');
             });
         });
 
@@ -754,9 +754,9 @@ class FullApplicationTest extends TestCase
 
     public function testApplicationClassCanBeOverwritten()
     {
-        $app = new LumenTestApplication();
+        $app = new PhotonTestApplication();
 
-        $this->assertInstanceOf(LumenTestApplication::class, $app->make(Application::class));
+        $this->assertInstanceOf(PhotonTestApplication::class, $app->make(Application::class));
     }
 
     public function testRequestIsReboundOnDispatch()
@@ -772,7 +772,7 @@ class FullApplicationTest extends TestCase
 
     public function testBatchesTableCommandIsRegistered()
     {
-        $app = new LumenTestApplication();
+        $app = new PhotonTestApplication();
         $app->register(ConsoleServiceProvider::class);
         $command = $app->make('command.queue.batches-table');
         $this->assertNotNull($command);
@@ -781,14 +781,14 @@ class FullApplicationTest extends TestCase
 
     public function testHandlingCommandsTerminatesApplication()
     {
-        $app = new LumenTestApplication();
+        $app = new PhotonTestApplication();
         $app->register(ConsoleServiceProvider::class);
         $app->register(ViewServiceProvider::class);
 
-        $app->instance(ExceptionHandler::class, $mock = m::mock('Laravel\Lumen\Exceptions\Handler[report]'));
+        $app->instance(ExceptionHandler::class, $mock = m::mock('Photon\Exceptions\Handler[report]'));
         $mock->shouldIgnoreMissing();
 
-        $kernel = $app[Laravel\Lumen\Console\Kernel::class];
+        $kernel = $app[Photon\Console\Kernel::class];
 
         (fn () => $kernel->getArtisan())->call($kernel)->resolveCommands(
             SendEmails::class,
@@ -808,7 +808,7 @@ class FullApplicationTest extends TestCase
 
     public function testTerminationTests()
     {
-        $app = new LumenTestApplication;
+        $app = new PhotonTestApplication;
 
         $result = [];
         $callback1 = function () use (&$result) {
@@ -833,18 +833,18 @@ class FullApplicationTest extends TestCase
     }
 }
 
-class LumenTestService
+class PhotonTestService
 {
 }
 
-class LumenTestServiceProvider extends Illuminate\Support\ServiceProvider
+class PhotonTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
     public function register()
     {
     }
 }
 
-class LumenBootableTestServiceProvider extends Illuminate\Support\ServiceProvider
+class PhotonBootableTestServiceProvider extends Illuminate\Support\ServiceProvider
 {
     public $booted = false;
 
@@ -854,9 +854,9 @@ class LumenBootableTestServiceProvider extends Illuminate\Support\ServiceProvide
     }
 }
 
-class LumenTestController
+class PhotonTestController
 {
-    public function __construct(LumenTestService $service)
+    public function __construct(PhotonTestService $service)
     {
         //
     }
@@ -867,9 +867,9 @@ class LumenTestController
     }
 }
 
-class LumenTestControllerWithMiddleware extends Laravel\Lumen\Routing\Controller
+class PhotonTestControllerWithMiddleware extends Photon\Routing\Controller
 {
-    public function __construct(LumenTestService $service)
+    public function __construct(PhotonTestService $service)
     {
         $this->middleware('test');
     }
@@ -880,7 +880,7 @@ class LumenTestControllerWithMiddleware extends Laravel\Lumen\Routing\Controller
     }
 }
 
-class LumenTestMiddleware
+class PhotonTestMiddleware
 {
     public function handle($request, $next)
     {
@@ -888,7 +888,7 @@ class LumenTestMiddleware
     }
 }
 
-class LumenTestPlainMiddleware
+class PhotonTestPlainMiddleware
 {
     public function handle($request, $next)
     {
@@ -899,7 +899,7 @@ class LumenTestPlainMiddleware
     }
 }
 
-class LumenTestParameterizedMiddleware
+class PhotonTestParameterizedMiddleware
 {
     public function handle($request, $next, $parameter1, $parameter2)
     {
@@ -907,7 +907,7 @@ class LumenTestParameterizedMiddleware
     }
 }
 
-class LumenTestAction
+class PhotonTestAction
 {
     public function __invoke($id)
     {
@@ -915,11 +915,11 @@ class LumenTestAction
     }
 }
 
-class LumenTestApplication extends Application
+class PhotonTestApplication extends Application
 {
     public function version()
     {
-        return 'Custom Lumen App';
+        return 'Custom Photon App';
     }
 }
 
@@ -927,7 +927,7 @@ class UserFacade
 {
 }
 
-class LumenTestTerminateMiddleware
+class PhotonTestTerminateMiddleware
 {
     public function handle($request, $next)
     {

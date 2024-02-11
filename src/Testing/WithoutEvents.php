@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Testing;
+namespace Photon\Testing;
 
 use Exception;
 

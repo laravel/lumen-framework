@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Http;
+namespace Photon\Http;
 
 use Illuminate\Http\Request as BaseRequest;
 use Illuminate\Support\Arr;

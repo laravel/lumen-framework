@@ -2,7 +2,7 @@
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Response;
-use Laravel\Lumen\Http\ResponseFactory;
+use Photon\Http\ResponseFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 

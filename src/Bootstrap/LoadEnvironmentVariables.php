@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen\Bootstrap;
+namespace Photon\Bootstrap;
 
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidFileException;

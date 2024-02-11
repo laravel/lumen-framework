@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Http\JsonResponse;
-use Laravel\Lumen\Application;
-use Laravel\Lumen\Http\Request;
-use Laravel\Lumen\Testing\Concerns\MakesHttpRequests;
+use Photon\Application;
+use Photon\Http\Request;
+use Photon\Testing\Concerns\MakesHttpRequests;
 use PHPUnit\Framework\TestCase;
 
 class MakesHttpRequestsTest extends TestCase

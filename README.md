@@ -1,28 +1,17 @@
-# Lumen Framework (Kernel)
+# Photon Framework
 
-[![Build Status](https://github.com/laravel/lumen-framework/workflows/tests/badge.svg)](https://github.com/laravel/lumen-framework/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
+This is a community fork of the original Lumen framework by the Laravel team.
 
-> **Note:** This repository contains the core code of the Laravel Lumen framework. If you want to build an application using Laravel Lumen, visit the main [Lumen repository](https://github.com/laravel/lumen).
+We miss it, and want to see more leveraging of APIs in PHP over full-stack frameworks only.
 
-## Lumen PHP Framework
+## Changes
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+- Stricter Type casting
+- PHP 8.3 minimum version
+- More modern PHP features adopted.
 
-## Official Documentation
+## Future plans
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+- Support for Laravel Octane
+- Adopting Laravel Generators
 
-## Contributing
-
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-Please review [our security policy](https://github.com/laravel/lumen/security/policy) on how to report security vulnerabilities.
-
-## License
-
-Laravel Lumen is open-sourced software licensed under the [MIT license](LICENSE.md).

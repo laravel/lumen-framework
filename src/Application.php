@@ -1,6 +1,6 @@
 <?php
 
-namespace Laravel\Lumen;
+namespace Photon;
 
 use Illuminate\Auth\AuthManager;
 use Illuminate\Auth\AuthServiceProvider;
@@ -32,8 +32,8 @@ use Illuminate\Support\Str;
 use Illuminate\Translation\TranslationServiceProvider;
 use Illuminate\Validation\ValidationServiceProvider;
 use Illuminate\View\ViewServiceProvider;
-use Laravel\Lumen\Console\ConsoleServiceProvider;
-use Laravel\Lumen\Routing\Router;
+use Photon\Console\ConsoleServiceProvider;
+use Photon\Routing\Router;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response as PsrResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -107,7 +107,7 @@ class Application extends Container
     /**
      * The Router instance.
      *
-     * @var \Laravel\Lumen\Routing\Router
+     * @var \Photon\Routing\Router
      */
     public $router;
 
@@ -119,7 +119,7 @@ class Application extends Container
     protected $terminatingCallbacks = [];
 
     /**
-     * Create a new Lumen application instance.
+     * Create a new Photon application instance.
      *
      * @param  string|null  $basePath
      * @return void
@@ -169,7 +169,7 @@ class Application extends Container
      */
     public function version()
     {
-        return 'Lumen (10.0.2) (Laravel Components ^10.0)';
+        return 'Photon 0.0.1';
     }
 
     /**
@@ -1114,9 +1114,9 @@ class Application extends Container
             \Illuminate\Redis\Connections\Connection::class => 'redis.connection',
             \Illuminate\Contracts\Redis\Connection::class => 'redis.connection',
             'request' => \Illuminate\Http\Request::class,
-            \Laravel\Lumen\Routing\Router::class => 'router',
+            \Photon\Routing\Router::class => 'router',
             \Illuminate\Contracts\Translation\Translator::class => 'translator',
-            \Laravel\Lumen\Routing\UrlGenerator::class => 'url',
+            \Photon\Routing\UrlGenerator::class => 'url',
             \Illuminate\Contracts\Validation\Factory::class => 'validator',
             \Illuminate\Contracts\View\Factory::class => 'view',
         ];
