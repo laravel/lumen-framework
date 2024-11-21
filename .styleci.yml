@@ -1,5 +1,7 @@
 php:
   preset: laravel
-  version: 8.1
+  version: 8.2
+  enabled:
+    - nullable_type_declarations
 js: true
 css: true
