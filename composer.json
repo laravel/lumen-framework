@@ -54,8 +54,8 @@
         "vlucas/phpdotenv": "^5.4.1"
     },
     "require-dev": {
-        "mockery/mockery": "^1.4.4",
-        "phpunit/phpunit": "10.5.3"
+        "mockery/mockery": "^1.6.10",
+        "phpunit/phpunit": "^10.5.35"
     },
     "suggest": {
         "laravel/tinker": "Required to use the tinker console command (^2.7).",
