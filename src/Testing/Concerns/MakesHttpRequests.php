@@ -195,7 +195,7 @@ trait MakesHttpRequests
      * @param  array|null  $data
      * @return $this
      */
-    protected function shouldReturnJson(array $data = null)
+    protected function shouldReturnJson(?array $data = null)
     {
         return $this->receiveJson($data);
     }
@@ -239,7 +239,7 @@ trait MakesHttpRequests
      * @param  bool  $negate
      * @return $this
      */
-    public function seeJson(array $data = null, $negate = false)
+    public function seeJson(?array $data = null, $negate = false)
     {
         if (is_null($data)) {
             $decodedResponse = json_decode($this->response->getContent(), true);
@@ -262,7 +262,7 @@ trait MakesHttpRequests
      * @param  array|null  $data
      * @return $this
      */
-    public function dontSeeJson(array $data = null)
+    public function dontSeeJson(?array $data = null)
     {
         return $this->seeJson($data, true);
     }
@@ -274,7 +274,7 @@ trait MakesHttpRequests
      * @param  array|null  $responseData
      * @return $this
      */
-    public function seeJsonStructure(array $structure = null, $responseData = null)
+    public function seeJsonStructure(?array $structure = null, $responseData = null)
     {
         $this->response->assertJsonStructure($structure, $responseData);
 
