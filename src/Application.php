@@ -519,6 +519,7 @@ class Application extends Container
     {
         $this->singleton(LoggerInterface::class, function () {
             $this->register(ContextServiceProvider::class);
+
             $this->configure('logging');
 
             return new LogManager($this);
