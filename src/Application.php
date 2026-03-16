@@ -22,6 +22,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemServiceProvider;
 use Illuminate\Hashing\HashServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Log\Context\ContextServiceProvider;
 use Illuminate\Log\LogManager;
 use Illuminate\Pagination\PaginationServiceProvider;
 use Illuminate\Queue\QueueServiceProvider;
@@ -517,6 +518,7 @@ class Application extends Container
     protected function registerLogBindings()
     {
         $this->singleton(LoggerInterface::class, function () {
+            $this->register(ContextServiceProvider::class);
             $this->configure('logging');
 
             return new LogManager($this);
