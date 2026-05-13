@@ -496,7 +496,7 @@ class Application extends Container
     /**
      * Prepare the given request instance for use with the application.
      *
-     * @param  \Symfony\Component\HttpFoundation\Request $request
+     * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @return \Illuminate\Http\Request
      */
     protected function prepareRequest(SymfonyRequest $request)
