@@ -130,7 +130,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @param  string  $table
      * @param  array  $data
-     * @param  string|null $onConnection
+     * @param  string|null  $onConnection
      * @return $this
      */
     protected function seeInDatabase($table, array $data, $onConnection = null)
@@ -149,7 +149,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @param  string  $table
      * @param  array  $data
-     * @param  string|null $onConnection
+     * @param  string|null  $onConnection
      * @return $this
      */
     protected function missingFromDatabase($table, array $data, $onConnection = null)
@@ -162,7 +162,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @param  string  $table
      * @param  array  $data
-     * @param  string|null $onConnection
+     * @param  string|null  $onConnection
      * @return $this
      */
     protected function notSeeInDatabase($table, array $data, $onConnection = null)
